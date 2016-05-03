@@ -11,7 +11,7 @@ app.get('/', function (req, res) { //GET Requests received on root
    filePath = __dirname + '/public/index.html'
    if (fs.existsSync(filePath))
    {
-      res.sendfile(filePath);
+      res.sendFile(filePath);
    }
    else
    {
