@@ -18,7 +18,7 @@ exports.main = function(req, res){
       }
    } else {
       res.statusCode = 406;
-      res.write('406 - Content-Type: ' + req.get('content-type') + ' not acceptable');
+      res.write('406 - Not Acceptable: ' + req.get('content-type') + ' not acceptable');
       res.end();
    }
 
