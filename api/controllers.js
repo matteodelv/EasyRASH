@@ -3,17 +3,23 @@ var fs = require('fs');
 'use strict';
 
 exports.main = function(req, res){
-   //res.send("You requested paper " + req.params.id);
-   filePath = path.resolve('rash/examples/evaluating-citation-functions-in-cito.html');
-   //res.write(filePath);
-   if (fs.existsSync(filePath))
-   {
-      res.sendFile(filePath);
-   }
-   else
-   {
-      res.statusCode = 404;
-      res.write('404 sorry not found');
+   if (req.accepts(['application/xhtml+xml', 'text/html'])){
+      filePath = path.resolve('storage/papers/' + req.params.id + '.html');
+      //res.write(filePath);
+      if (fs.existsSync(filePath))
+      {
+         res.sendFile(filePath);
+      }
+      else
+      {
+         res.statusCode = 404;
+         res.write('404 sorry not found');
+         res.end();
+      }
+   } else {
+      res.statusCode = 406;
+      res.write('406 - Content-Type: ' + req.get('content-type') + ' not acceptable');
       res.end();
    }
+
 }
