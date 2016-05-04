@@ -2,10 +2,10 @@ var path = require('path');
 var fs = require('fs');
 'use strict';
 
-exports.main = function(req, res){
+//Responds with a paper given the parameter
+exports.getPaper = function(req, res){
    if (req.accepts(['application/xhtml+xml', 'text/html'])){
       filePath = path.resolve('storage/papers/' + req.params.id + '.html');
-      //res.write(filePath);
       if (fs.existsSync(filePath))
       {
          res.sendFile(filePath);
@@ -18,8 +18,7 @@ exports.main = function(req, res){
       }
    } else {
       res.statusCode = 406;
-      res.write('406 - Not Acceptable: ' + req.get('content-type') + ' not acceptable');
+      res.write('406 - Not acceptable: ' + req.get('content-type') + ' not acceptable');
       res.end();
    }
-
 }
