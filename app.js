@@ -5,6 +5,7 @@ var morgan = require('morgan');
 var config = require('./config');
 var bodyParser = require('body-parser');
 
+app.disable('x-powered-by');
 app.set('secret', config.secret);
 
 app.use(bodyParser.urlencoded({ extended: false })); //Used to automatically parse requests body
@@ -15,11 +16,6 @@ app.use('/api', require('./api')) //Routes defined in api folder
 
 app.use('/', express.static('./public')); //serving static files under public folder
 app.use('/api', express.static('./rash')); //serving static files for rash as api root
-
-app.use(function (req, res, next) {
-  res.header("X-powered-by", "Hodor");
-  next()
-})
 
 app.get('/', function (req, res) { //GET Requests received on root
 
