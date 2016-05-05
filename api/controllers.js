@@ -1,7 +1,6 @@
 var path = require('path');
 var fs = require('fs');
 var jwt = require('jsonwebtoken');
-var express = require('express');
 'use strict';
 
 //Responds with a paper given the parameter
