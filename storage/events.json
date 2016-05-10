@@ -1,0 +1,175 @@
+[
+   {
+      "conference": "International Web Comics Conference 2016",
+      "acronym": "IWCC 2016",
+      "chairs": [
+         "Jessica Jones <jessica.jones@alias.com>",
+         "Vanessa Ives <vanessa.ives@hell.com>",
+         "Fabio Vitali <fabio.vitali@unibo.it>"
+      ],
+      "pc_members": [
+         "Silvio Peroni <silvio:peroni@unibo.it>",
+         "Angelo Di Iorio <angelo.diiorio@unibo.it>",
+         "Lyra Belacqua <lyra.belacqua@ox.com>",
+         "Alice Liddell <alice.liddell@whiterabbit.com>",
+         "Arthur Dent <arthur.dent@fish.com>",
+         "Arabella Strange <arabella.strange@york.com>",
+         "John Constantine <john.constantine@hell.com>"
+      ],
+      "submissions": [
+         {
+            "title": "The Microsoft Academic Graph: New Applications and Research Opportunities -- SAVE-SD 2016 Keynote Talk",
+            "authors": [
+               "Alex Wade <alex.wade@example.com>"
+            ],
+            "url": "wade-savesd2016.html",
+            "reviewers": [
+               "Silvio Peroni <silvio:peroni@unibo.it>",
+               "Angelo Di Iorio <angelo.diiorio@unibo.it>"
+            ]
+         },
+         {
+            "title": "Semantic Publishing Challenge: Bootstrapping a Value Chain for Scientific Data ",
+            "authors": [
+               "Sahar Vahdati <vahdati@example.com>",
+               "Anastasia Dimou <anastasia.dimou@example.com>",
+               "Christoph Lange <math.semantic.web@example.com>",
+               "Angelo Di Iorio <angelo.diiorio@unibo.it>"
+            ],
+            "url": "vahdati-savesd2016.html",
+            "reviewers": [
+               "Alice Liddell <alice.liddell@whiterabbit.com>",
+               "Arthur Dent <arthur.dent@fish.com>"
+            ]
+         },
+         {
+            "title": "It ROCS! -- The RASH Online Conversion Service",
+            "authors": [
+               "Angelo Di Iorio <angelo.diiorio@unibo.it>",
+               "Alejandra Gonzalez-Beltran <alejandra.gonzalezbeltran@example.com>",
+               "Francesco Osborne <francesco.osborne@example.com>",
+               "Silvio Peroni <silvio.peroni@unibo.it>",
+               "Francesco Poggi <francesco.poggi5@unibo.it>",
+               "Fabio Vitali <fabio.vitali@unibo.it>"
+            ],
+            "url": "diiorio-www2016.html",
+            "reviewers": [
+               "Arabella Strange <arabella.strange@york.com>",
+               "John Constantine <john.constantine@hell.com>"
+            ]
+         },
+         {
+            "title": "RASH: Research Articles in Simplified HTML -- Documentation - Version 0.5, February 15, 2016",
+            "authors": [
+               "Silvio Peroni <silvio.peroni@unibo.it>"
+            ],
+            "url": "peroni-rashdoc2016.html",
+            "reviewers": [
+               "Lyra Belacqua <lyra.belacqua@ox.com>",
+               "Arthur Dent <arthur.dent@fish.com>"
+            ]
+         },
+         {
+            "title": "Science Bots: A Model for the Future of Scientific Computation?",
+            "authors": [
+               "Tobias Kuhn <tokuhn@example.com>"
+            ],
+            "url": "tuhn-savesd2015.html",
+            "reviewers": [
+               "Silvio Peroni <silvio:peroni@unibo.it>",
+               "Arabella Strange <arabella.strange@york.com>"
+            ]
+         }
+      ]
+   },
+   {
+      "conference": "International Great Books Conference 2016",
+      "acronym": "IGBC 2016",
+      "chairs": [
+         "Arabella Strange <arabella.strange@york.com>",
+         "John Constantine <john.constantine@hell.com>"
+      ],
+      "pc_members": [
+         "Jessica Jones <jessica.jones@alias.com>",
+         "Vanessa Ives <vanessa.ives@hell.com>",
+         "Lyra Belacqua <lyra.belacqua@ox.com>",
+         "Alice Liddell <alice.liddell@whiterabbit.com>",
+         "Arthur Dent <arthur.dent@fish.com>",
+         "Arabella Strange <arabella.strange@york.com>",
+         "John Constantine <john.constantine@hell.com>"
+      ],
+      "submissions": [
+         {
+            "title": "Increasing the Productivity of Scholarship: The Case for Knowledge Graphs -- SAVE-SD 2015 Keynote Talk",
+            "authors": [
+               "Paul Groth <p.groth@example.com>"
+            ],
+            "url": "groth-savesd2015.html",
+            "reviewers": [
+               "Vanessa Ives <vanessa.ives@hell.com>",
+               "Lyra Belacqua <lyra.belacqua@ox.com>"
+            ]
+         },
+         {
+            "title": "Exploring bibliographies for research-related tasks",
+            "authors": [
+               "Angelo Di Iorio <angelo.diiorio@unibo.it>",
+               "Raffaele Giannella <raffaele.giannella@example.com>",
+               "Francesco Poggi <francesco.poggi5@unibo.it>",
+               "Fabio Vitali <fabio.vitali@unibo.it>"
+            ],
+            "url": "diiorio-savesd2015.html",
+            "reviewers": [
+               "Arthur Dent <arthur.dent@fish.com>",
+               "Arabella Strange <arabella.strange@york.com>",
+               "John Constantine <john.constantine@hell.com>"
+            ]
+         },
+         {
+            "title": "The RASH Framework: enabling HTML+RDF submissions in scholarly venues",
+            "authors": [
+               "Angelo Di Iorio <angelo.diiorio@unibo.it>",
+               "Andrea Giovanni Nuzzolese <andrea.nuzzolese@example.com>",
+               "Francesco Osborne <francesco.osborne@example.com>",
+               "Silvio Peroni <silvio.peroni@unibo.it>",
+               "Francesco Poggi <francesco.poggi5@unibo.it>",
+               "Michael Smith <mike@example.com>",
+               "Fabio Vitali <fabio.vitali@unibo.it>",
+               "Jun Zhao <j.zhao5@example.com>"
+            ],
+            "url": "diiorio-iswc2015.html",
+            "reviewers": [
+               "Jessica Jones <jessica.jones@alias.com>",
+               "Vanessa Ives <vanessa.ives@hell.com>"
+            ]
+         },
+         {
+            "title": "Evaluating citation functions in CiTO: cognitive issues -- Preprint of http://dx.doi.org/10.1007/978-3-319-07443-6_39",
+            "authors": [
+               "Paolo Ciancarini <paolo.ciancarini@example.com>",
+               "Angelo Di Iorio <angelo.diiorio@unibo.it>",
+               "Andrea Nuzzolese <andrea.nuzzolese@example.com>",
+               "Silvio Peroni <silvio.peroni@unibo.it>",
+               "Fabio Vitali <fabio.vitali@unibo.it>"
+            ],
+            "url": "ciancarini-eswc2014.html",
+            "reviewers": [
+               "Jessica Jones <jessica.jones@alias.com>",
+               "John Constantine <john.constantine@hell.com>"
+            ]
+         },
+         {
+            "title": "Enhanced Publication Management Systems -- A systemic approach towards modern scientific communication",
+            "authors": [
+               "Alessia Bardi <alessia.bardi@example.com>",
+               "Paolo Manghi <paolo.manghi@example.com>"
+            ],
+            "url": "bardi-savesd2015.html",
+            "reviewers": [
+               "Vanessa Ives <vanessa.ives@hell.com>",
+               "Arabella Strange <arabella.strange@york.com>"
+            ]
+         }
+      ]
+   }
+]

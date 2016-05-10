@@ -1,0 +1,184 @@
+{
+   "Jessica Jones <jessica.jones@alias.com>": {
+      "given_name": "Jessica",
+      "family_name": "Jones",
+      "email": "jessica.jones@alias.com",
+      "pass": "jessica.jones",
+      "sex": "female"
+   },
+   "Vanessa Ives <vanessa.ives@hell.com>": {
+      "given_name": "Vanessa",
+      "family_name": "Ives",
+      "email": "vanessa.ives@hell.com",
+      "pass": "vanessa.ives",
+      "sex": "female"
+   },
+   "Lyra Belacqua <lyra.belacqua@ox.com>": {
+      "given_name": "Lyra",
+      "family_name": "Belacqua",
+      "email": "lyra.belacqua@ox.com",
+      "pass": "lyra.belacqua",
+      "sex": "female"
+   },
+   "Alice Liddell <alice.liddell@whiterabbit.com>": {
+      "given_name": "Alice",
+      "family_name": "Liddell",
+      "email": "alice.liddell@whiterabbit.com",
+      "pass": "alice.liddell",
+      "sex": "female"
+   },
+   "Arthur Dent <arthur.dent@fish.com>": {
+      "given_name": "Arthur",
+      "family_name": "Dent",
+      "email": "arthur.dent@fish.com",
+      "pass": "arthur.dent",
+      "sex": "male"
+   },
+   "Arabella Strange <arabella.strange@york.com>": {
+      "given_name": "Arabella",
+      "family_name": "Strange",
+      "email": "arabella.strange@york.com",
+      "pass": "arabella.strange",
+      "sex": "female"
+   },
+   "John Constantine <john.constantine@hell.com>": {
+      "given_name": "John",
+      "family_name": "Constantine",
+      "email": "john.constantine@hell.com",
+      "pass": "john.constantine",
+      "sex": "male"
+   },
+   "Fabio Vitali <fabio.vitali@unibo.it>": {
+      "given_name": "Fabio",
+      "family_name": "Vitali",
+      "email": "fabio.vitali@unibo.it",
+      "pass": "fabio.vitali",
+      "sex": "male"
+   },
+   "Angelo Di Iorio <angelo.diiorio@unibo.it>": {
+      "given_name": "Angelo",
+      "family_name": "Di Iorio",
+      "email": "angelo.diiorio@unibo.it",
+      "pass": "angelo.diiorio",
+      "sex": "male"
+   },
+   "Silvio Peroni <silvio.peroni@unibo.it>": {
+      "given_name": "Silvio",
+      "family_name": "Peroni",
+      "email": "silvio.peroni@unibo.it",
+      "pass": "silvio.peroni",
+      "sex": "male"
+   },
+   "Alejandra Gonzalez-Beltran <alejandra.gonzalezbeltran@example.com>": {
+      "given_name": "Alejandra",
+      "family_name": "Gonzalez-Beltran",
+      "email":"alejandra.gonzalezbeltran@example.com",
+      "pass": "alejandra.gonzalezbeltran",
+      "sex": "female"
+   },
+   "Alessia Bardi <alessia.bardi@example.com>": {
+      "given_name": "Alessia",
+      "family_name": "Bardi",
+      "email":"alessia.bardi@example.com",
+      "pass": "alessia.bardi",
+      "sex": "female"
+   },
+   "Alex Wade <alex.wade@example.com>": {
+      "given_name": "Alex",
+      "family_name": "Wade",
+      "email":"alex.wade@example.com",
+      "pass": "alex.wade",
+      "sex": "male"
+   },
+   "Anastasia Dimou <anastasia.dimou@example.com>": {
+      "given_name": "Anastasia",
+      "family_name": "Dimou",
+      "email":"anastasia.dimou@example.com",
+      "pass": "anastasia.dimou",
+      "sex": "female"
+   },
+   "Andrea Nuzzolese <andrea.nuzzolese@example.com>": {
+      "given_name": "Andrea",
+      "family_name": "Nuzzolese",
+      "email":"andrea.nuzzolese@example.com",
+      "pass": "andrea.nuzzolese",
+      "sex": "male"
+   },
+   "Francesco Osborne <francesco.osborne@example.com>": {
+      "given_name": "Francesco",
+      "family_name": "Osborne",
+      "email":"francesco.osborne@example.com",
+      "pass": "francesco.osborne",
+      "sex": "male"
+   },
+   "Francesco Poggi <francesco.poggi5@unibo.it>": {
+      "given_name": "Francesco",
+      "family_name": "Poggi",
+      "email":"francesco.poggi5@unibo.it",
+      "pass": "francesco.poggi5",
+      "sex": "male"
+   },
+   "Jun Zhao <j.zhao5@example.com>": {
+      "given_name": "Jun",
+      "family_name": "Zhao",
+      "email":"j.zhao5@example.com",
+      "pass": "j.zhao5",
+      "sex": "female"
+   },
+   "Christoph Lange <math.semantic.web@example.com>": {
+      "given_name": "Christoph",
+      "family_name": "Lange",
+      "email":"math.semantic.web@example.com",
+      "pass": "math.semantic.web",
+      "sex": "male"
+   },
+   "Michael Smith <mike@example.com>": {
+      "given_name": "Michael",
+      "family_name": "Smith",
+      "email":"mike@example.com",
+      "pass": "mike",
+      "sex": "male"
+   },
+   "Paul Groth <p.groth@example.com>": {
+      "given_name": "Paul",
+      "family_name": "Groth",
+      "email":"p.groth@example.com",
+      "pass": "p.groth",
+      "sex": "male"
+   },
+   "Paolo Ciancarini <paolo.ciancarini@example.com>": {
+      "given_name": "Paolo",
+      "family_name": "Ciancarini",
+      "email":"paolo.ciancarini@example.com",
+      "pass": "paolo.ciancarini",
+      "sex": "male"
+   },
+   "Paolo Manghi <paolo.manghi@example.com>": {
+      "given_name": "Paolo",
+      "family_name": "Manghi",
+      "email":"paolo.manghi@example.com",
+      "pass": "paolo.manghi",
+      "sex": "male"
+   },
+   "Raffaele Giannella <raffaele.giannella@example.com>": {
+      "given_name": "Raffaele",
+      "family_name": "Giannella",
+      "email":"raffaele.giannella@example.com",
+      "pass": "raffaele.giannella",
+      "sex": "male"
+   },
+   "Tobias Kuhn <tokuhn@example.com>": {
+      "given_name": "Tobias",
+      "family_name": "Kuhn",
+      "email":"tokuhn@example.com",
+      "pass": "tokuhn",
+      "sex": "male"
+   },
+   "Sahar Vahdati <vahdati@example.com>": {
+      "given_name": "Sahar",
+      "family_name": "Vahdati",
+      "email":"vahdati@example.com",
+      "pass": "vahdati",
+      "sex": "female"
+   }
+}

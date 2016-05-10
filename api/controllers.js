@@ -25,23 +25,27 @@ exports.getPaper = function(req, res){
 }
 
 exports.authenticate = function(req, res){
-   //TODO: Authentication
-   if ('password' != req.body.password) {
-      res.json({ success: false, message: 'Authentication failed. Wrong password.' });
-   } else {
-      var user = {
-         name: "Paolo"
-      };
-      // If user is found and password is right, we create a JWT
-      console.log(app.get('secret'));
-      var token = jwt.sign(user, app.get('secret'), {
-         expiresIn: 1440 // expires in 24 hours
+   fs.readFile('./storage/users.json', 'utf8', (err, data) => {
+      if (err) throw err;
+      var users = JSON.parse(data);
+      var usersArray = Object.keys(users).map(k => { //Returning the objects as an array
+         users[k].key = k; //Adding the key as an bject
+         return users[k];
       });
-      // Return JWT and info as JSON
-      res.json({
-         success: true,
-         message: 'Authentication successful.',
-         token: token
-      });
-   }
+      var user = usersArray.find(u => u.email == req.body.email);
+      if (!user || user.pass != req.body.password) {
+         res.json({ success: false, message: 'Authentication failed. Wrong ' + (!user?'email.':'password.') });
+      } else {
+         // If user is found and password is right, we create a JWT
+         var token = jwt.sign(user, app.get('secret'), {
+            expiresIn: 1440 // expires in 24 hours
+         });
+         // Return JWT and info as JSON
+         res.json({
+            success: true,
+            message: 'Authentication successful.',
+            token: token
+         });
+      }
+   });
 }

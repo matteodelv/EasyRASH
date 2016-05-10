@@ -9,6 +9,10 @@ router.post('/authenticate', controller.authenticate); //POST Requests on /api/a
 
 //JWT Authentication (used for all requests on /api)
 router.use(function(req, res, next) {
+   /*
+   if (req.originalUrl.startsWith('/api/css/')){
+      return next();
+   }*/
    //Check header or url parameters or post parameters for token
    var token = req.body.token || req.query.token || req.headers['x-access-token'] || req.headers['Authorization'];
    // decode token
