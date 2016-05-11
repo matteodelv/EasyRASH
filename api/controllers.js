@@ -37,14 +37,14 @@ exports.authenticate = function(req, res){
          res.json({ success: false, message: 'Authentication failed. Wrong ' + (!user?'email.':'password.') });
       } else {
          // If user is found and password is right, we create a JWT
-         var token = jwt.sign(user, app.get('secret'), {
+         var access_token = jwt.sign(user, app.get('secret'), {
             expiresIn: 1440 // expires in 24 hours
          });
          // Return JWT and info as JSON
          res.json({
             success: true,
             message: 'Authentication successful.',
-            token: token
+            access_token: access_token
          });
       }
    });

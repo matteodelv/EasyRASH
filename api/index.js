@@ -14,11 +14,10 @@ router.use(function(req, res, next) {
       return next();
    }*/
    //Check header or url parameters or post parameters for token
-   var token = req.body.token || req.query.token || req.headers['x-access-token'] || req.headers['Authorization'];
    // decode token
-   if (token) {
+   if (req.token) {
       //Verifies secret and checks exp
-      jwt.verify(token, app.get('secret'), function(err, decoded) {
+      jwt.verify(req.token, app.get('secret'), function(err, decoded) {
          if (err) {
             return res.json({ success: false, message: 'Failed to authenticate token.' });
          } else {

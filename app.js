@@ -4,6 +4,7 @@ app = express();
 var morgan = require('morgan');
 var config = require('./config');
 var bodyParser = require('body-parser');
+var bearerToken = require('express-bearer-token');
 
 app.disable('x-powered-by');
 app.set('secret', config.secret);
@@ -12,6 +13,7 @@ app.use(bodyParser.urlencoded({ extended: false })); //Used to automatically par
 app.use(bodyParser.json());
 app.use(morgan('dev')); //Used to log HTTP requests
 
+app.use('/api', bearerToken());
 app.use('/api', require('./api')) //Routes defined in api folder
 
 app.use('/', express.static('./public')); //serving static files under public folder
