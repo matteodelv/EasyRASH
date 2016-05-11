@@ -7,7 +7,7 @@
    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
    <title>Homepage</title>
 </head>
-<body class="container fluid">
+<body class="container-fluid">
    <h1>Welcome to a static file</h1>
    <ul>
       <li>
@@ -17,10 +17,20 @@
          Authenticate at /api/authenticate with a POST request (email and password)
       </li>
    </ul>
-   <div id="loginpanel">
-      <input type="text" id="email" name="email" value="" placeholder="Email">
-      <input type="password" id="password" name="password" value="" placeholder="Password">
-      <input id="loginbutton" type="submit" name="commit" value="Login" >
+   <div class="row">
+      <div id="loginpanel" class="col-md-3 form-group"   >
+         <div class="form-group">
+            <label for="email">Email address</label>
+            <input type="text" class="form-control" id="email" name="email" value="" placeholder="Email">
+         </div>
+         <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" class="form-control" id="password" name="password" value="" placeholder="Password">
+         </div>
+         <input id="loginbutton" class="btn btn-default" type="submit" name="commit" value="Login" >
+      </div>
+      <div class="col-md-9">
+      </div>
    </div>
 </body>
 <script>
@@ -34,7 +44,7 @@ function auth(){
       },
       success: function (result) {
          localStorage.accessToken = result.access_token;
-         $('#loginpanel').html("<p>Access-Token: "+localStorage.accessToken+"</p>");
+         $('#loginpanel').html("<p>Access-Token: " + localStorage.accessToken + "</p>");
       },
       error: function (result) {
          alert(JSON.parse(result.responseText).message);
@@ -42,14 +52,14 @@ function auth(){
    });
 }
 $("#email").keyup(function(event){
-    if(event.keyCode == 13){
-        auth();
-    }
+   if(event.keyCode == 13){
+      auth();
+   }
 });
 $("#password").keyup(function(event){
-    if(event.keyCode == 13){
-        auth();
-    }
+   if(event.keyCode == 13){
+      auth();
+   }
 });
 $('#loginbutton').click(function() {
    auth();
