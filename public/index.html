@@ -1,19 +1,59 @@
 <!DOCTYPE html>
 <html>
-   <head>
-      <meta charset="utf-8" />
-      <link rel="stylesheet" type="text/css" href="/stylesheets/style.css" />
-      <title>Homepage</title>
-   </head>
-   <body>
-      <h1>Welcome to a static file</h1>
-      <ul>
-         <li>
-            You can find papers at /api/papers/:id
-         </li>
-         <li>
-            Authenticate at /api/authenticate with a POST request (email and password)
-         </li>
-      </ul>
-   </body>
+<head>
+   <meta charset="utf-8" />
+   <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+   <script src="//code.jquery.com/jquery-2.2.3.min.js" integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo=" crossorigin="anonymous"></script>
+   <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+   <title>Homepage</title>
+</head>
+<body class="container fluid">
+   <h1>Welcome to a static file</h1>
+   <ul>
+      <li>
+         You can find papers at /api/papers/:id <a href="/api/papers/ciancarini-eswc2014" >(example here)</a>
+      </li>
+      <li>
+         Authenticate at /api/authenticate with a POST request (email and password)
+      </li>
+   </ul>
+   <div id="loginpanel">
+      <input type="text" id="email" name="email" value="" placeholder="Email">
+      <input type="password" id="password" name="password" value="" placeholder="Password">
+      <input id="loginbutton" type="submit" name="commit" value="Login" >
+   </div>
+</body>
+<script>
+function auth(){
+   $.ajax({
+      url: '/api/authenticate',
+      type: 'POST',
+      data:{
+         email: $('#email').val(),
+         password: $('#password').val()
+      },
+      success: function (result) {
+         localStorage.accessToken = result.access_token;
+         $('#loginpanel').html("<p>Access-Token: "+localStorage.accessToken+"</p>");
+      },
+      error: function (result) {
+         alert(JSON.parse(result.responseText).message);
+      }
+   });
+}
+$("#email").keyup(function(event){
+    if(event.keyCode == 13){
+        auth();
+    }
+});
+$("#password").keyup(function(event){
+    if(event.keyCode == 13){
+        auth();
+    }
+});
+$('#loginbutton').click(function() {
+   auth();
+});
+
+</script>
 </html>

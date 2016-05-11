@@ -34,7 +34,10 @@ exports.authenticate = function(req, res){
       });
       var user = usersArray.find(u => u.email == req.body.email);
       if (!user || user.pass != req.body.password) {
-         res.json({ success: false, message: 'Authentication failed. Wrong ' + (!user?'email.':'password.') });
+         return res.status(401).send({
+            success: false,
+            message: 'Authentication failed. Wrong ' + (!user?'email.':'password.')
+         });
       } else {
          // If user is found and password is right, we create a JWT
          var access_token = jwt.sign(user, app.get('secret'), {

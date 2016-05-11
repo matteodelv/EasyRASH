@@ -39,5 +39,5 @@ app.get('/', function (req, res) { //GET Requests received on root
 });
 
 app.listen(3000, function () {
-   console.log('Example app listening on port 3000!');
+   console.log('Easy RASH listening on port 3000!');
 });
