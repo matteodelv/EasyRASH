@@ -2,9 +2,10 @@ var router = require('express').Router();
 var path = require('path');
 var fs = require('fs');
 
+/*
 router.get('/', function(req, res) {
-  res.json({ products: [] });
-});
+   //return all papers?
+});*/
 //Responds with a paper given the id
 router.get('/:id', function(req, res){
    if (req.accepts(['application/xhtml+xml', 'text/html'])){

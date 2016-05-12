@@ -16,6 +16,7 @@ router.use(function(req, res, next) {
          } else {
             // if everything is good, save to request for use in other routes
             req.decoded = decoded;
+            console.log(decoded);
             next();
          }
       });
@@ -29,5 +30,6 @@ router.use(function(req, res, next) {
 
 //Routing for RESTful api
 router.use('/papers', require('./papers')); //GET Requests for /api/papers, carried out by papersController
+router.use('/users', require('./users'));
 
 module.exports = router;
