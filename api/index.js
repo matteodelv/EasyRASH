@@ -2,19 +2,12 @@
 
 var express = require('express');
 var router = express.Router();
-var controller = require('./controllers');
 var jwt = require('jsonwebtoken');
 
-router.post('/authenticate', controller.authenticate); //POST Requests on /api/authenticate, carried out by controllers.main
-
+router.use('/authenticate', require('./auth')); //POST Requests on /api/authenticate, carried out by usersController
 //JWT Authentication (used for all requests on /api)
 router.use(function(req, res, next) {
-   /*
-   if (req.originalUrl.startsWith('/api/css/')){
-      return next();
-   }*/
-   //Check header or url parameters or post parameters for token
-   // decode token
+   //Decode token
    if (req.token) {
       //Verifies secret and checks exp
       jwt.verify(req.token, app.get('secret'), function(err, decoded) {
@@ -34,6 +27,7 @@ router.use(function(req, res, next) {
    }
 });
 
-router.get('/papers/:id', controller.getPaper); //GET Requests for /api/papers, carried out by controllers.main
+//Routing for RESTful api
+router.use('/papers', require('./papers')); //GET Requests for /api/papers, carried out by papersController
 
 module.exports = router;
