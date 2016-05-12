@@ -13,9 +13,7 @@ router.get('/:id', function(req, res){
          if (err) throw err;
          var users = JSON.parse(data);
          var usersArray = Object.keys(users).map(k => { //Returning the objects as an array
-            users[k].key = k; //Adding the key as an bject
-            users[k].pass = undefined;
-            return users[k];
+            return k;
          });
          res.json(usersArray[+req.params.id]);
       });
