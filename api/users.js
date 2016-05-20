@@ -12,10 +12,9 @@ router.get('/:id', function(req, res){
       fs.readFile('./storage/users.json', 'utf8', (err, data) => {
          if (err) throw err;
          var users = JSON.parse(data);
-         var usersArray = Object.keys(users).map(k => { //Returning the objects as an array
-            return k;
-         });
-         res.json(usersArray[+req.params.id]);
+         var user = users.find(x => x.email.split('@')[0] === req.params.id);
+         res.json(user);
+         console.log("fukc");
       });
    } else res.status(406).send('406 - Not acceptable: ' + req.get('Accept') + ' not acceptable');
 });
