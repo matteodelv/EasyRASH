@@ -8,15 +8,15 @@ router.post('/', function(req, res){
    fs.readFile('./storage/users.json', 'utf8', (err, data) => {
       if (err) throw err;
       var users = JSON.parse(data);
-      var usersArray = Object.keys(users).map(k => { //Returning the objects as an array
+      /*var usersArray = Object.keys(users).map(k => { //Returning the objects as an array
          users[k].key = k; //Adding the key as an bject
          return users[k];
-      });
-      var user = usersArray.find(u => u.email == req.body.email);
+      });*/
+      var user = users.find(u => u.email == req.body.email);
       if (!user || user.pass != req.body.password) {
          return res.status(401).send({
             success: false,
-            message: 'Authentication failed. Wrong ' + (!user?'email.':'password.')
+            message: 'Authentication failed. Wrong email or password'
          });
       } else {
          // If user is found and password is right, we create a JWT
