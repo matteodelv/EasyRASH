@@ -1,23 +1,23 @@
 {
-  "name": "easyrash",
-  "version": "1.0.0",
-  "description": "",
-  "main": "app.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://Veega@bitbucket.org/Veega/easyrash.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "homepage": "https://bitbucket.org/Veega/easyrash#readme",
-  "dependencies": {
-    "body-parser": "^1.15.0",
-    "express": "^4.13.4",
-    "express-bearer-token": "^2.1.0",
-    "jsonwebtoken": "^6.2.0",
-    "morgan": "^1.7.0"
-  }
+   "name": "easyrash",
+   "version": "1.0.0",
+   "description": "",
+   "main": "app.js",
+   "scripts": {
+      "start": "node app"
+   },
+   "repository": {
+      "type": "git",
+      "url": "git+https://Veega@bitbucket.org/Veega/easyrash.git"
+   },
+   "author": "",
+   "license": "ISC",
+   "homepage": "https://bitbucket.org/Veega/easyrash#readme",
+   "dependencies": {
+      "body-parser": "^1.15.0",
+      "express": "^4.13.4",
+      "express-bearer-token": "^2.1.0",
+      "jsonwebtoken": "^6.2.0",
+      "morgan": "^1.7.0"
+   }
 }

@@ -1,69 +1,23 @@
-<!DOCTYPE html>
 <html>
-<head>
-   <meta charset="utf-8" />
-   <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-   <script src="//code.jquery.com/jquery-2.2.3.min.js" integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo=" crossorigin="anonymous"></script>
-   <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
-   <title>Homepage</title>
-</head>
-<body class="container-fluid">
-   <h1>Welcome to a static file</h1>
-   <ul>
-      <li>
-         You can find papers at /api/papers/:id <a href="/api/papers/ciancarini-eswc2014" >(example here)</a>
-      </li>
-      <li>
-         Authenticate at /api/authenticate with a POST request (email and password)
-      </li>
-   </ul>
-   <div class="row">
-      <div id="loginpanel" class="col-md-3 form-group"   >
-         <div class="form-group">
-            <label for="email">Email address</label>
-            <input type="text" class="form-control" id="email" name="email" value="" placeholder="Email">
-         </div>
-         <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" class="form-control" id="password" name="password" value="" placeholder="Password">
-         </div>
-         <input id="loginbutton" class="btn btn-default" type="submit" name="commit" value="Login" >
-      </div>
-      <div class="col-md-9">
-      </div>
-   </div>
-</body>
-<script>
-function auth(){
-   $.ajax({
-      url: '/api/authenticate',
-      type: 'POST',
-      data:{
-         email: $('#email').val(),
-         password: $('#password').val()
-      },
-      success: function (result) {
-         localStorage.accessToken = result.access_token;
-         $('#loginpanel').html("<p>Access-Token: " + localStorage.accessToken + "</p>");
-      },
-      error: function (result) {
-         alert(JSON.parse(result.responseText).message);
-      }
-   });
-}
-$("#email").keyup(function(event){
-   if(event.keyCode == 13){
-      auth();
-   }
-});
-$("#password").keyup(function(event){
-   if(event.keyCode == 13){
-      auth();
-   }
-});
-$('#loginbutton').click(function() {
-   auth();
-});
-
-</script>
+  <head>
+    <title>Angular 2 QuickStart</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="styles.css">
+    <!-- 1. Load libraries -->
+     <!-- Polyfill(s) for older browsers -->
+    <script src="node_modules/core-js/client/shim.min.js"></script>
+    <script src="node_modules/zone.js/dist/zone.js"></script>
+    <script src="node_modules/reflect-metadata/Reflect.js"></script>
+    <script src="node_modules/systemjs/dist/system.src.js"></script>
+    <!-- 2. Configure SystemJS -->
+    <script src="app/systemjs.config.js"></script>
+    <script>
+      System.import('app').catch(function(err){ console.error(err); });
+    </script>
+  </head>
+  <!-- 3. Display the application -->
+  <body>
+    <my-app>Loading...</my-app>
+  </body>
 </html>
