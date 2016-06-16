@@ -18,3 +18,6 @@ h1 {
 .error {
 	color: #f22626;
 }
+.help-inline.error{
+	margin: 0em 2em
+}
