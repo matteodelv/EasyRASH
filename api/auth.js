@@ -27,6 +27,7 @@ router.post('/', function(req, res){
          res.json({
             success: true,
             message: 'Authentication successful.',
+            id: user.id,
             access_token: access_token
          });
       }
