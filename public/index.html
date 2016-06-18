@@ -6,20 +6,13 @@
    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
    <script src="//code.jquery.com/jquery-2.2.3.min.js" integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo=" crossorigin="anonymous"></script>
    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
-   <script src="js/bootstrap-notify.min.js"></script>
+   <script type="text/javascript" src="js/bootstrap-notify.min.js"></script>
+   <script type="text/javascript" src="js/main.js"></script>
+   <script src="js/history.js/scripts/bundled/html4+html5/jquery.history.js"></script>
    <link rel="stylesheet" type="text/css" href="stylesheets/style.css">
    <link rel="stylesheet" type="text/css" href="stylesheets/animate.css">
    <link rel="stylesheet" type="text/css" href="stylesheets/sidebar.css">
    <script type="text/javascript">
-   $.fn.extend({
-      animateCss: function(animationName) {
-         var animationEnd = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
-         $(this).addClass('animated ' + animationName).one(animationEnd, function() {
-            $(this).removeClass('animated ' + animationName);
-         });
-         return $(this);
-      }
-   });
    $.ajaxSetup({
       beforeSend: function(xhr) {
          if (localStorage.accessToken) {
@@ -27,6 +20,7 @@
          }
       }
    });
+
    if (localStorage.accessToken) {
       $.ajax({
          url: '/api/verify',
@@ -68,6 +62,9 @@
                            Authenticate at /api/authenticate with a POST request (email and password)
                         </li>
                      </ul>
+                     <div id="#paper-container">
+                        
+                     </div>
                   </div>
                </div>
             </div>
@@ -75,89 +72,34 @@
       </div>
    </div>
    <!-- Modal -->
-   <div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="login dialog" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+   <div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="loginpanel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
       <div class="modal-dialog">
          <div class="modal-content">
             <!-- Modal Header -->
             <div class="modal-header">
                <h4 class="modal-title" id="myModalLabel">Please login</h4>
             </div>
-            <!-- Modal Body -->
-            <div class="modal-body">
-               <form role="form" id="loginpanel" action="javascript:auth()">
+            <form id="loginpanel" action="javascript:auth()">
+               <!-- Modal Body -->
+               <div class="modal-body">
                   <div class="form-group">
                      <label for="email">Email address</label>
-                     <input type="text" class="form-control" id="email" name="email" value="" placeholder="Email">
+                     <input type="text" class="form-control" id="email" name="email" value="" placeholder="Email" />
                   </div>
                   <div class="form-group">
                      <label for="password">Password</label>
-                     <input type="password" class="form-control" id="password" name="password" value="" placeholder="Password">
+                     <input type="password" class="form-control" id="password" name="password" value="" placeholder="Password" />
                   </div>
-               </form>
-            </div>
-            <!-- Modal Footer -->
-            <div class="modal-footer">
-               <span class="help-inline error"></span>
-               <button type="submit" id="loginbutton" class="btn btn-primary" name="commit" value="Login">Login</button>
-            </div>
+               </div>
+               <!-- Modal Footer -->
+               <div class="modal-footer">
+                  <span class="help-inline error"></span>
+                  <button type="submit" id="loginbutton" class="btn btn-primary" name="commit" value="Login">Login</button>
+               </div>
+            </form>
          </div>
       </div>
+   </div>
 </body>
-<script>
-function auth() {
-   $.ajax({
-      url: '/api/authenticate',
-      type: 'POST',
-      data: {
-         email: $('#email').val(),
-         password: $('#password').val()
-      },
-      success: function(result) {
-         localStorage.accessToken = result.accessToken;
-         $('#login-modal').modal('hide');
-         $.notify({ //http://bootstrap-notify.remabledesigns.com/
-            message: 'Welcome ' + result.id
-         }, {
-            type: 'success',
-            delay: 2000
-         });
-         getPapers();
-      },
-      error: function(result) {
-         $('#loginbutton').animateCss('shake').prev('.help-inline').animateCss('bounceIn').text(JSON.parse(result.responseText).message);
-      }
-   });
-}
-
-function getPapers() {
-   $.ajax({
-      url: '/api/papers/',
-      type: 'GET',
-      success: function(result) {
-         var list = '<li class="sidebar-brand"><a href="#">Submitted</a></li>\n';
-         result.submitted.forEach(article => {
-            list += '<li><a href="'+ article.url +'">'+ article.title +'</a></li>\n'
-         });
-         list += '<li class="sidebar-brand"><a href="#">Reviewable</a></li>\n';
-         result.reviewable.forEach(article => {
-            list += '<li><a href="'+ article.url +'">'+ article.title +'</a></li>\n'
-         });
-         $('#sidebar-wrapper ul').html(list);
-      },
-      error: function(result) {
-         alert(JSON.stringify(result));
-      }
-   });
-}
-
-$("#email, #password").keyup(function(event) {
-   if (event.keyCode == 13) {
-      auth();
-   }
-});
-$('#loginbutton').click(function() {
-   auth();
-});
-</script>
 
 </html>

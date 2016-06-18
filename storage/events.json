@@ -22,9 +22,9 @@
             "authors": [
                "Alex Wade <alex.wade@example.com>"
             ],
-            "url": "wade-savesd2016.html",
+            "url": "wade-savesd2016",
             "reviewers": [
-               "Silvio Peroni <silvio:peroni@unibo.it>",
+               "Silvio Peroni <silvio.peroni@unibo.it>",
                "Angelo Di Iorio <angelo.diiorio@unibo.it>"
             ]
          },
@@ -36,7 +36,7 @@
                "Christoph Lange <math.semantic.web@example.com>",
                "Angelo Di Iorio <angelo.diiorio@unibo.it>"
             ],
-            "url": "vahdati-savesd2016.html",
+            "url": "vahdati-savesd2016",
             "reviewers": [
                "Alice Liddell <alice.liddell@whiterabbit.com>",
                "Arthur Dent <arthur.dent@fish.com>"
@@ -52,7 +52,7 @@
                "Francesco Poggi <francesco.poggi5@unibo.it>",
                "Fabio Vitali <fabio.vitali@unibo.it>"
             ],
-            "url": "diiorio-www2016.html",
+            "url": "diiorio-www2016",
             "reviewers": [
                "Arabella Strange <arabella.strange@york.com>",
                "John Constantine <john.constantine@hell.com>"
@@ -63,7 +63,7 @@
             "authors": [
                "Silvio Peroni <silvio.peroni@unibo.it>"
             ],
-            "url": "peroni-rashdoc2016.html",
+            "url": "peroni-rashdoc2016",
             "reviewers": [
                "Lyra Belacqua <lyra.belacqua@ox.com>",
                "Arthur Dent <arthur.dent@fish.com>"
@@ -74,7 +74,7 @@
             "authors": [
                "Tobias Kuhn <tokuhn@example.com>"
             ],
-            "url": "tuhn-savesd2015.html",
+            "url": "tuhn-savesd2015",
             "reviewers": [
                "Silvio Peroni <silvio:peroni@unibo.it>",
                "Arabella Strange <arabella.strange@york.com>"
@@ -104,7 +104,7 @@
             "authors": [
                "Paul Groth <p.groth@example.com>"
             ],
-            "url": "groth-savesd2015.html",
+            "url": "groth-savesd2015",
             "reviewers": [
                "Vanessa Ives <vanessa.ives@hell.com>",
                "Lyra Belacqua <lyra.belacqua@ox.com>"
@@ -118,7 +118,7 @@
                "Francesco Poggi <francesco.poggi5@unibo.it>",
                "Fabio Vitali <fabio.vitali@unibo.it>"
             ],
-            "url": "diiorio-savesd2015.html",
+            "url": "diiorio-savesd2015",
             "reviewers": [
                "Arthur Dent <arthur.dent@fish.com>",
                "Arabella Strange <arabella.strange@york.com>",
@@ -137,7 +137,7 @@
                "Fabio Vitali <fabio.vitali@unibo.it>",
                "Jun Zhao <j.zhao5@example.com>"
             ],
-            "url": "diiorio-iswc2015.html",
+            "url": "diiorio-iswc2015",
             "reviewers": [
                "Jessica Jones <jessica.jones@alias.com>",
                "Vanessa Ives <vanessa.ives@hell.com>"
@@ -152,7 +152,7 @@
                "Silvio Peroni <silvio.peroni@unibo.it>",
                "Fabio Vitali <fabio.vitali@unibo.it>"
             ],
-            "url": "ciancarini-eswc2014.html",
+            "url": "ciancarini-eswc2014",
             "reviewers": [
                "Jessica Jones <jessica.jones@alias.com>",
                "John Constantine <john.constantine@hell.com>"
@@ -164,7 +164,7 @@
                "Alessia Bardi <alessia.bardi@example.com>",
                "Paolo Manghi <paolo.manghi@example.com>"
             ],
-            "url": "bardi-savesd2015.html",
+            "url": "bardi-savesd2015",
             "reviewers": [
                "Vanessa Ives <vanessa.ives@hell.com>",
                "Arabella Strange <arabella.strange@york.com>"
