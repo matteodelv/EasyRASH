@@ -20,7 +20,7 @@ router.post('/', function(req, res){
          });
       } else {
          // If user is found and password is right, we create a JWT
-         var access_token = jwt.sign(user, app.get('secret'), {
+         var accessToken = jwt.sign(user, app.get('secret'), {
             expiresIn: 1440 // expires in 24 hours
          });
          // Return JWT and info as JSON
@@ -28,7 +28,7 @@ router.post('/', function(req, res){
             success: true,
             message: 'Authentication successful.',
             id: user.id,
-            access_token: access_token
+            accessToken: accessToken
          });
       }
    });

@@ -12,22 +12,22 @@ router.use(function(req, res, next) {
       //Verifies secret and checks exp
       jwt.verify(req.token, app.get('secret'), function(err, decoded) {
          if (err) {
-            return res.json({ success: false, message: 'Failed to authenticate token.' });
+            return res.status(400).json({ success: false, message: 'Failed to authenticate token.', error: err, jwt: req.token });
          } else {
             // if everything is good, save to request for use in other routes
-            req.decoded = decoded;
+            req.jwtPayload = decoded;
             next();
          }
       });
    } else {
-      return res.status(403).send({
+      return res.status(403).json({
          success: false,
          message: 'No token provided.'
       });
    }
 });
 
-router.get('/verify', (res, req) => {
+router.post('/verify', (req, res) => {
    return res.json({ success: true, message: 'Token active and verified.' });
 }); 
 
