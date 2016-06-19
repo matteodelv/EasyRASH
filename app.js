@@ -17,9 +17,8 @@ app.use('/api', bearerToken());
 app.use('/api', require('./api')) //Routes defined in api folder
 
 app.use('/', express.static('./public')); //serving static files under public folder
+app.use('/papers/:id', express.static('./public'));
 app.use('/api', express.static('./rash')); //serving static files for rash as api root
-app.use('/app', express.static('./client/app'));
-app.use('/app', express.static('./client/app/js'));
 app.use('/node_modules', express.static('./client/node_modules'));
 
 app.listen(3000, function () {
