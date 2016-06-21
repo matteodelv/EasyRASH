@@ -11,31 +11,37 @@ $.fn.extend({
 window.onpopstate = function(event) {
    loadCurrentPaperContent()
 };
+var $addedHeadTags; //Contains head tags belonging to a single paper, to be removed when a paper view is replaced
 
-function loadCurrentPaperContent(){
-   if (document.location.pathname === "/"){
+function loadCurrentPaperContent() {
+   if (document.location.pathname === "/") {
+      $addedHeadTags && $addedHeadTags.remove();
       $('#paper-container').empty();
    }
    if (document.location.pathname.startsWith("/papers/")) {
       var parsed = JSON.parse(sessionStorage.papers);
       var papers = parsed.submitted.concat(parsed.reviewable);
-      var paper = papers.find(function(paper){
-         if (document.location.pathname.replace(/\/$/, "").endsWith(paper.url)){
+      var paper = papers.find(function(paper) {
+         if (document.location.pathname.replace(/\/$/, "").endsWith(paper.url)) {
             return paper;
          }
       })
-      if (paper){
-         document.title = paper.title;
-      }
+      paper && $('title').remove();
       $.ajax({
          url: '/api' + document.location.pathname,
          method: 'GET',
          success: function(result) {
-            var rash = $(result).appendTo($('#paper-container').empty());
+            var xmlParsed = $.parseXML(result);
+            var $xml = $(xmlParsed);
+            var $body = $xml.find('body');
+            $addedHeadTags && $addedHeadTags.remove();
+            $addedHeadTags = $xml.find('meta, link, title').not('[rel="stylesheet"]');
+            $('head').append($addedHeadTags);
+            $('#paper-container').empty().append($body);
          },
          error: function(result) {
             $.notify({
-               message: 'Error: ' + result.responseJSON.message
+               message: 'Error: ' + result.responseJSON.message + '-' + result.responseJSON.error.message
             }, {
                type: 'danger',
                delay: 2000
@@ -98,7 +104,7 @@ function getPapers() {
       },
       error: function(result) {
          $.notify({
-            message: 'Error: ' + result
+            message: 'Error: ' + result.responseJSON.message + '-' + result.responseJSON.error.message
          }, {
             type: 'danger',
             delay: 2000
