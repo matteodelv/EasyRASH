@@ -33,10 +33,12 @@ function loadCurrentPaperContent() {
          success: function(result) {
             var xmlParsed = $.parseXML(result);
             var $xml = $(xmlParsed);
-            var $body = $xml.find('body');
+            //Head
             $addedHeadTags && $addedHeadTags.remove();
             $addedHeadTags = $xml.find('meta, link, title').not('[rel="stylesheet"]');
             $('head').append($addedHeadTags);
+            //Body
+            var $body = $xml.find('body');
             $('#paper-container').empty().append($body);
          },
          error: function(result) {

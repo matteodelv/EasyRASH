@@ -18,8 +18,10 @@ app.use('/api', require('./api')) //Routes defined in api folder
 
 app.use('/', express.static('./public')); //serving static files under public folder
 app.use('/papers/:id', express.static('./public'));
-app.use('/api', express.static('./rash')); //serving static files for rash as api root
-app.use('/node_modules', express.static('./client/node_modules'));
+app.use('/papers/img', express.static('./storage/papers/img'));
+app.use('/papers/:id/img', express.static('./storage/papers/img'));
+app.use('/papers/css', express.static('./storage/papers/css'));
+app.use('/api', express.static('./rash')); //serving static files for rash as api root (?)
 
 app.listen(3000, function () {
    console.log('Easy RASH listening on port 3000!');

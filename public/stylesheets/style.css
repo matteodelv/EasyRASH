@@ -4,21 +4,19 @@ body {
 }
 
 h1 {
-    color: #AF34E3;
+    color: #2B2B2B;
 }
 
-#login-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    background: rgba(0, 0, 0, 0.6);
-    z-index: 5;
-    width: 100%;
-    height: 100%;
-}
 .error {
 	color: #f22626;
 }
 .help-inline.error{
 	margin: 0em 2em
+}
+
+body {
+    background: #4D394B;
+}
+#page-content-wrapper * {
+    background: #FFFFFF;
 }

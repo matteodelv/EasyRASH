@@ -12,6 +12,7 @@
    <link rel="stylesheet" type="text/css" href="stylesheets/style.css">
    <link rel="stylesheet" type="text/css" href="stylesheets/animate.css">
    <link rel="stylesheet" type="text/css" href="stylesheets/sidebar.css">
+   <link rel="stylesheet" type="text/css" href="/papers/css/rash.css">
    <script type="text/javascript">
    $.ajaxSetup({
       beforeSend: function(xhr) {
@@ -37,19 +38,20 @@
          $('#login-modal').modal('show');
       });
    }
+
    </script>
    <title>Homepage</title>
 </head>
 
 <body>
-   <div id="wrapper">
-      <div id="sidebar-wrapper">
-         <ul class="sidebar-nav">
-         </ul>
-      </div>
-      <div id="page-content-wrapper">
-         <div class="page-content">
-            <div class="container-fluid">
+   <div class="container-fluid">
+      <div id="wrapper" class="row">
+         <div id="sidebar-wrapper" class="col-md-2 sidebar">
+            <ul id="sidebar" class="sidebar-nav nav nav-pills nav-stacked" >
+            </ul>
+         </div>
+         <div id="page-content-wrapper" class="col-md-10 col-md-offset-2">
+            <div class="page-content">
                <div class="row">
                   <div class="col-md-12">
                      <!-- content of page -->
@@ -63,40 +65,39 @@
                         </li>
                      </ul>
                      <div id="paper-container">
-                        
                      </div>
                   </div>
                </div>
             </div>
          </div>
       </div>
-   </div>
-   <!-- Modal -->
-   <div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="loginpanel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
-      <div class="modal-dialog">
-         <div class="modal-content">
-            <!-- Modal Header -->
-            <div class="modal-header">
-               <h4 class="modal-title" id="myModalLabel">Please login</h4>
+      <!-- Modal -->
+      <div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="loginpanel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+         <div class="modal-dialog">
+            <div class="modal-content">
+               <!-- Modal Header -->
+               <div class="modal-header">
+                  <h4 class="modal-title" id="myModalLabel">Please login</h4>
+               </div>
+               <form id="loginpanel" action="javascript:auth()">
+                  <!-- Modal Body -->
+                  <div class="modal-body">
+                     <div class="form-group">
+                        <label for="email">Email address</label>
+                        <input type="text" class="form-control" id="email" name="email" value="" placeholder="Email" />
+                     </div>
+                     <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" class="form-control" id="password" name="password" value="" placeholder="Password" />
+                     </div>
+                  </div>
+                  <!-- Modal Footer -->
+                  <div class="modal-footer">
+                     <span class="help-inline error"></span>
+                     <button type="submit" id="loginbutton" class="btn btn-primary" name="commit" value="Login">Login</button>
+                  </div>
+               </form>
             </div>
-            <form id="loginpanel" action="javascript:auth()">
-               <!-- Modal Body -->
-               <div class="modal-body">
-                  <div class="form-group">
-                     <label for="email">Email address</label>
-                     <input type="text" class="form-control" id="email" name="email" value="" placeholder="Email" />
-                  </div>
-                  <div class="form-group">
-                     <label for="password">Password</label>
-                     <input type="password" class="form-control" id="password" name="password" value="" placeholder="Password" />
-                  </div>
-               </div>
-               <!-- Modal Footer -->
-               <div class="modal-footer">
-                  <span class="help-inline error"></span>
-                  <button type="submit" id="loginbutton" class="btn btn-primary" name="commit" value="Login">Login</button>
-               </div>
-            </form>
          </div>
       </div>
    </div>

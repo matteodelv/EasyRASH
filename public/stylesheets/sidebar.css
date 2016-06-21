@@ -1,54 +1,45 @@
 @import url(https://fonts.googleapis.com/css?family=Montserrat:400,700);
-
 #wrapper {
     padding-left: 0;
-    -webkit-transition: all 0.5s ease;
-    -moz-transition: all 0.5s ease;
-    -o-transition: all 0.5s ease;
-    transition: all 0.5s ease;
 }
 
-#wrapper.toggled {
-    padding-left: 300px;
+.affix-top, .affix {
+    position: static;
 }
 
-#sidebar-wrapper {
-    z-index: 1000;
-    position: fixed;
-    left: 300px;
-    width: 0;
-    height: 100%;
-    margin-left: -300px;
-    overflow-y: auto;
-    background: #4D394B;
-    -webkit-transition: all 0.5s ease;
-    -moz-transition: all 0.5s ease;
-    -o-transition: all 0.5s ease;
-    transition: all 0.5s ease;
+@media (min-width: 992px) {
+    #sidebar.affix-top {
+        position: static;
+    }
+    #sidebar.affix {
+        position: fixed;
+        top: 100px;
+    }
 }
 
-#wrapper.toggled #sidebar-wrapper {
-    width: 300px;
+#sidebar-wrapper li.active {
+    border: 0 #eee solid;
+    border-right-width: 5px;
 }
 
-#page-content-wrapper {
-    width: 100%;
-    position: absolute;
-    padding: 15px;
-}
-
-#wrapper.toggled #page-content-wrapper {
-    position: absolute;
-    margin-right: -300px;
+@media (min-width: 992px) {
+    .sidebar {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 1000;
+        display: block;
+        overflow-x: hidden;
+        overflow-y: auto;
+        /* Scrollable contents if viewport is shorter than content. */
+    }
 }
 
 /* Sidebar Styles */
 
 .sidebar-nav {
-    position: absolute;
     top: 0;
-    width: 300px;
-    padding: 1em;
     list-style: none;
 }
 
@@ -67,11 +58,10 @@
 .sidebar-nav li a:hover {
     text-decoration: none;
     color: #fff;
-    background: rgba(255,255,255,0.2);
+    background: rgba(255, 255, 255, 0.2);
 }
 
-.sidebar-nav li a:active,
-.sidebar-nav li a:focus {
+.sidebar-nav li a:active, .sidebar-nav li a:focus {
     text-decoration: none;
 }
 
@@ -91,6 +81,8 @@
     background: none;
 }
 
+
+/*
 @media(min-width:768px) {
     #wrapper {
         padding-left: 300px;
@@ -117,4 +109,4 @@
         position: relative;
         margin-right: 0;
     }
-}
+}*/

@@ -13,10 +13,12 @@ router.get('/', function(req, res) {
 			events.forEach(event => {
 				event.submissions.forEach(submission => {
 					//TODO: change full description to ids
-					if (submission.authors.some(author => { return author.indexOf(req.jwtPayload.id) > -1; })) {
+					if (submission.authors.some(author => {
+							return author.indexOf(req.jwtPayload.id) > -1; })) {
 						submittedArticles.push(submission);
 					}
-					if (submission.reviewers.some(reviewer => { return reviewer.indexOf(req.jwtPayload.id) > -1; })) {
+					if (submission.reviewers.some(reviewer => {
+							return reviewer.indexOf(req.jwtPayload.id) > -1; })) {
 						reviewableArticles.push(submission);
 					}
 				});
