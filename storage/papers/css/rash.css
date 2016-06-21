@@ -254,18 +254,7 @@ html {
         size: A4;
         margin: 20mm 0mm 20mm 0mm;
     }
-    body * {
-        visibility: hidden;
-    }
-    #paper-container, #paper-container * {
-        visibility: visible;
-    }
-    #paper-container {
-        position: absolute;
-        left: 0;
-        top: 0;
-    }
-    \ html, body {
+    html, body {
         width: 210mm;
         height: 297mm;
     }

@@ -21,6 +21,8 @@ app.use('/papers/:id', express.static('./public'));
 app.use('/papers/img', express.static('./storage/papers/img'));
 app.use('/papers/:id/img', express.static('./storage/papers/img'));
 app.use('/papers/css', express.static('./storage/papers/css'));
+app.use('/papers/js', express.static('./storage/papers/js'));
+app.use('/papers/fonts', express.static('./storage/papers/fonts'));
 app.use('/api', express.static('./rash')); //serving static files for rash as api root (?)
 
 app.listen(3000, function () {

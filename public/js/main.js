@@ -26,6 +26,7 @@ function loadCurrentPaperContent() {
             return paper;
          }
       })
+     // $('#sidebar li > a[href="/papers/'+paper.url+'"]').parent().addClass('active');
       paper && $('title').remove();
       $.ajax({
          url: '/api' + document.location.pathname,
@@ -39,7 +40,11 @@ function loadCurrentPaperContent() {
             $('head').append($addedHeadTags);
             //Body
             var $body = $xml.find('body');
-            $('#paper-container').empty().append($body);
+            $('#paper-container').empty().append($body.children());
+
+            rasherize();
+
+            $('#paper-container').scrollTop();
          },
          error: function(result) {
             $.notify({

@@ -18,6 +18,7 @@ router.use(function(req, res, next) {
             return res.status(400).json({ success: false, message: 'Failed to authenticate token.', error: err, jwt: req.token });
          } else {
             // if everything is good, save to request for use in other routes
+            //jwt.refresh(decoded, 1440, app.get('secret')); //https://github.com/jppellerin/node-jsonwebtoken/tree/refresh-token
             req.jwtPayload = decoded;
             next();
          }

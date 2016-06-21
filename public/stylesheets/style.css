@@ -1,4 +1,5 @@
-body {
+@import url(https://fonts.googleapis.com/css?family=Montserrat:400,700);
+#sidebar-wrapper {
     font: 14px Helvetica, Arial, sans-serif;
     font-family: 'Montserrat', sans-serif;
 }
@@ -8,15 +9,32 @@ h1 {
 }
 
 .error {
-	color: #f22626;
+    color: #f22626;
 }
-.help-inline.error{
-	margin: 0em 2em
+
+.help-inline.error {
+    margin: 0em 2em
 }
 
 body {
     background: #4D394B;
 }
+
 #page-content-wrapper * {
     background: #FFFFFF;
 }
+/*
+@media print {
+    body * {
+        visibility: collapse;
+    }
+    #paper-container, #paper-container * {
+        visibility: visible;
+    }
+    #paper-container {
+        position: absolute;
+        left: 0;
+        top: 0;
+    }
+    
+}*/

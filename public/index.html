@@ -3,16 +3,16 @@
 
 <head>
    <meta charset="utf-8" />
-   <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+   <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous" />
    <script src="//code.jquery.com/jquery-2.2.3.min.js" integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo=" crossorigin="anonymous"></script>
    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
    <script type="text/javascript" src="js/bootstrap-notify.min.js"></script>
    <script type="text/javascript" src="js/main.js"></script>
-   <script src="js/history.js/scripts/bundled/html4+html5/jquery.history.js"></script>
-   <link rel="stylesheet" type="text/css" href="stylesheets/style.css">
-   <link rel="stylesheet" type="text/css" href="stylesheets/animate.css">
-   <link rel="stylesheet" type="text/css" href="stylesheets/sidebar.css">
-   <link rel="stylesheet" type="text/css" href="/papers/css/rash.css">
+   <script type="text/javascript" src="js/history.js/scripts/bundled/html4+html5/jquery.history.js"></script>
+   <script type="text/javascript" src="/papers/js/rash.js"></script>
+   <link rel="stylesheet" type="text/css" href="stylesheets/style.css" />
+   <link rel="stylesheet" type="text/css" href="stylesheets/animate.css" />
+   <link rel="stylesheet" type="text/css" href="stylesheets/sidebar.css" />
    <script type="text/javascript">
    $.ajaxSetup({
       beforeSend: function(xhr) {
@@ -46,7 +46,7 @@
 <body>
    <div class="container-fluid">
       <div id="wrapper" class="row">
-         <div id="sidebar-wrapper" class="col-md-2 sidebar">
+         <div id="sidebar-wrapper" class="col-md-2 sidebar hidden-print">
             <ul id="sidebar" class="sidebar-nav nav nav-pills nav-stacked" >
             </ul>
          </div>
@@ -55,15 +55,6 @@
                <div class="row">
                   <div class="col-md-12">
                      <!-- content of page -->
-                     <h1>Welcome to a static file</h1>
-                     <ul>
-                        <li>
-                           You can find papers at /api/papers/:id <a href="/api/papers/ciancarini-eswc2014">(example here)</a>
-                        </li>
-                        <li>
-                           Authenticate at /api/authenticate with a POST request (email and password)
-                        </li>
-                     </ul>
                      <div id="paper-container">
                      </div>
                   </div>
