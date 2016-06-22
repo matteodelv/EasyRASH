@@ -22,11 +22,11 @@ function loadCurrentPaperContent() {
       var parsed = JSON.parse(sessionStorage.papers);
       var papers = parsed.submitted.concat(parsed.reviewable);
       var paper = papers.find(function(paper) {
-         if (document.location.pathname.replace(/\/$/, "").endsWith(paper.url)) {
-            return paper;
-         }
-      })
-     // $('#sidebar li > a[href="/papers/'+paper.url+'"]').parent().addClass('active');
+            if (document.location.pathname.replace(/\/$/, "").endsWith(paper.url)) {
+               return paper;
+            }
+         })
+         // $('#sidebar li > a[href="/papers/'+paper.url+'"]').parent().addClass('active');
       paper && $('title').remove();
       $.ajax({
          url: '/api' + document.location.pathname,
@@ -41,10 +41,7 @@ function loadCurrentPaperContent() {
             //Body
             var $body = $xml.find('body');
             $('#paper-container').empty().append($body.children());
-
             rasherize();
-
-            $('#paper-container').scrollTop();
          },
          error: function(result) {
             $.notify({
@@ -89,24 +86,23 @@ function getPapers() {
       method: 'GET',
       success: function(result) {
          sessionStorage.papers = JSON.stringify(result);
-         $('#sidebar-wrapper ul').append('<li class="sidebar-brand"><a href="#">Submitted</a></li>\n');
-         result.submitted.forEach(function(paper) {
-            var urlComplete = '/papers/' + paper.url;
-            var li = $('<li><a href="' + urlComplete + '">' + paper.title + '</a></li>\n').appendTo($('#sidebar-wrapper ul'));
-            li.on('click', function() {
-               redirectToPaper(urlComplete, paper);
-               return false;
-            });
-         });
-         $('#sidebar-wrapper ul').append('<li class="sidebar-brand"><a href="#">Reviewable</a></li>\n');
-         result.reviewable.forEach(function(paper) {
-            var urlComplete = '/papers/' + paper.url;
-            var li = $('<li><a href="' + urlComplete + '">' + paper.title + '</a></li>\n').appendTo($('#sidebar-wrapper ul'));
-            li.on('click', function() {
-               redirectToPaper(urlComplete, paper);
-               return false;
-            });
-         });
+
+         for (var key in result) {
+            if (result.hasOwnProperty(key)) {
+               result[key].forEach(function(paper) {
+                  var urlComplete = '/papers/' + paper.url;
+                  var li = $('<li><a href="' + urlComplete + '">' + paper.title + '</a></li>\n').insertAfter($('#sidebar-wrapper .sidebar-brand.' + key));
+                  li.on('click', function() {
+                     $('html, body').animate({
+                        scrollTop: $('#paper-container').offset().top
+                     }, 'fast');
+                     redirectToPaper(urlComplete, paper);
+                     return false;
+                  });
+               })
+            }
+         }
+
          loadCurrentPaperContent();
       },
       error: function(result) {

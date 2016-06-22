@@ -16,12 +16,16 @@ h1 {
     margin: 0em 2em
 }
 
-body {
+.sidebar {
     background: #4D394B;
 }
 
 #page-content-wrapper * {
     background: #FFFFFF;
+}
+
+#paper-container {
+    min-height: 100vh;
 }
 /*
 @media print {
@@ -38,3 +42,27 @@ body {
     }
     
 }*/
+
+/* Center and fit */
+.paper-center {
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+@media (min-width: 768px) {
+  .paper-center {
+    max-width: 750px;
+  }
+}
+@media (min-width: 992px) {
+  .paper-center {
+    max-width: 970px;
+  }
+}
+@media (min-width: 1200px) {
+  .paper-center {
+    max-width: 1170px;
+  }
+}

@@ -72,33 +72,35 @@ jQuery.fn.extend({
             if (current_path == null) {
                 current_path = "";
             }
-
-            if (currentStyle == "#rash_web_based_layout") { /* Transform to Web layout */
-                //$("link[rel='stylesheet']").remove();
-                //var bootstrap_css = $("<link rel=\"stylesheet\" href=\"" + current_path + "bootstrap.min.css\"/>");
-                //var rash_css = $("<link rel=\"stylesheet\" href=\"" + current_path + "rash.css\"/>");
-                //bootstrap_css.appendTo($("head"));
-                //rash_css.appendTo($("head"));
+            var style = {
+                '#rash_web_based_layout': '<link rel="stylesheet" type="text/css" href="/papers/css/rash.css">',
+                '#rash_lncs_layout': '<link rel="stylesheet" type="text/css" href="/papers/css/lncs.css">'
+            }
+            if (style[currentStyle] && style[currentStyle] !== $layout.selector) {
                 $layout.remove();
-                $layout = $('<link rel="stylesheet" type="text/css" href="/papers/css/rash.css">');
+                $layout = $(style[currentStyle]);
                 $('head').append($layout);
+                if (currentStyle == "#rash_web_based_layout") { /* Transform to Web layout */
+                    //$("link[rel='stylesheet']").remove();
+                    //var bootstrap_css = $("<link rel=\"stylesheet\" href=\"" + current_path + "bootstrap.min.css\"/>");
+                    //var rash_css = $("<link rel=\"stylesheet\" href=\"" + current_path + "rash.css\"/>");
+                    //bootstrap_css.appendTo($("head"));
+                    //rash_css.appendTo($("head"));
 
-                $("#layoutselection").text("Web-based");
-                $(this).hideCSS();
-                $(this).addHeaderHTML();
-                $(this).orderCaptions(false);
-            } else if (currentStyle == "#rash_lncs_layout") { /* Transform to Springer LNCS layout */
-                //$("link[rel='stylesheet']").remove();
-                //var lncs_css = $("<link rel=\"stylesheet\" href=\"" + current_path + "lncs.css\"/>");
-                //lncs_css.appendTo($("head"));
-                $layout.remove();
-                $layout = $('<link rel="stylesheet" type="text/css" href="/papers/css/lncs.css">');
-                $('head').append($layout);
+                    $("#layoutselection").text("Web-based");
+                    $(this).hideCSS();
+                    $(this).addHeaderHTML();
+                    $(this).orderCaptions(false);
+                } else if (currentStyle == "#rash_lncs_layout") { /* Transform to Springer LNCS layout */
+                    //$("link[rel='stylesheet']").remove();
+                    //var lncs_css = $("<link rel=\"stylesheet\" href=\"" + current_path + "lncs.css\"/>");
+                    //lncs_css.appendTo($("head"));
 
-                $("#layoutselection").text("Springer LNCS");
-                $(this).hideCSS();
-                $(this).addHeaderLNCS();
-                $(this).orderCaptions(true, $(tablebox_selector));
+                    $("#layoutselection").text("Springer LNCS");
+                    $(this).hideCSS();
+                    $(this).addHeaderLNCS();
+                    $(this).orderCaptions(true, $(tablebox_selector));
+                }
             }
         }
     },
@@ -309,10 +311,14 @@ var formulabox_selector =
 var listingbox_selector_pre = "pre";
 var listingbox_selector = "figure > " + listingbox_selector_pre;
 
-var $layout = $('<link rel="stylesheet" type="text/css" href="/papers/css/rash.css">');
+var $layout;
 
 function rasherize() {
-    $('head').append($layout);
+    if (!$layout){
+        $layout = $('<link rel="stylesheet" type="text/css" href="/papers/css/rash.css">');
+        $('head').append($layout);
+    }
+    
     /* LaTeX formulas */
     if (typeof MathJax !== 'undefined') {
         var s_delim = 's$s';
@@ -523,7 +529,7 @@ function rasherize() {
     /* Container sections */
     $(
         "#paper-container > section , section[role=doc-abstract] , section[role=doc-acknowledgements] , " +
-        "section[role=doc-bibliography], section[role=doc-footnotes]").addClass("container");
+        "section[role=doc-bibliography], section[role=doc-footnotes]").addClass("paper-center");
     /* /END Container sections */
 
     /* Heading dimensions */
@@ -570,13 +576,13 @@ function rasherize() {
     var currentStyle = document.location.hash;
     $(this).changeCSS(currentStyle);
 
-    /* This will be run only when the status (via hash in the URL) changes */
-    $(window).on('hashchange', function() {
-        var currentStyle = document.location.hash;
-        if (!currentStyle) {
-            currentStyle = "#rash_web_based_layout";
-        }
-        $(this).changeCSS(currentStyle);
-    });
-    /* /END General function for loading CSS */
 }
+/* This will be run only when the status (via hash in the URL) changes */
+$(window).on('hashchange', function() {
+    var currentStyle = document.location.hash;
+    if (!currentStyle) {
+        currentStyle = "#rash_web_based_layout";
+    }
+    $(this).changeCSS(currentStyle);
+});
+/* /END General function for loading CSS */
