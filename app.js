@@ -22,6 +22,7 @@ app.use('/papers/img', express.static('./storage/papers/img'));
 app.use('/papers/:id/img', express.static('./storage/papers/img'));
 app.use('/papers/css', express.static('./storage/papers/css'));
 app.use('/papers/js', express.static('./storage/papers/js'));
+app.use('/js', express.static('./node_modules/babel-es6-polyfill'));
 app.use('/papers/fonts', express.static('./storage/papers/fonts'));
 app.use('/api', express.static('./rash')); //serving static files for rash as api root (?)
 

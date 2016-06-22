@@ -95,7 +95,7 @@ function getPapers() {
                   li.on('click', function() {
                      $('html, body').animate({
                         scrollTop: $('#paper-container').offset().top
-                     }, 'fast');
+                     }, 400);
                      redirectToPaper(urlComplete, paper);
                      return false;
                   });

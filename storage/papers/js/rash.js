@@ -105,10 +105,10 @@ jQuery.fn.extend({
         }
     },
     toggleCSS: function() {
-        $(".footer ul").toggle();
+        $("#paper-container .footer ul").toggle();
     },
     hideCSS: function() {
-        $(".footer ul").hide();
+        $("#paper-container .footer ul").hide();
     },
     addHeaderHTML: function() {
         /* Reset header */
