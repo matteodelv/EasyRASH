@@ -13,12 +13,10 @@ router.get('/', function(req, res) {
 			events.forEach(event => {
 				event.submissions.forEach(submission => {
 					//TODO: change full description to ids
-					if (submission.authors.some(author => {
-							return author.indexOf(req.jwtPayload.id) > -1; })) {
+					if (submission.authors.some(author => author === req.jwtPayload.id)) {
 						submittedArticles.push(submission);
 					}
-					if (submission.reviewers.some(reviewer => {
-							return reviewer.indexOf(req.jwtPayload.id) > -1; })) {
+					if (submission.reviewers.some(reviewer => reviewer === req.jwtPayload.id)) {
 						reviewableArticles.push(submission);
 					}
 				});
@@ -34,10 +32,25 @@ router.get('/', function(req, res) {
 //Responds with a paper given the id
 router.get('/:id', function(req, res) {
 	if (req.accepts(['application/xhtml+xml', 'text/html'])) {
-		var filePath = path.resolve('storage/papers/' + req.params.id + '.html');
-		if (fs.existsSync(filePath)) {
-			res.sendFile(filePath);
+		var eventsFilePath = path.resolve('storage/events.json');
+		if (fs.existsSync(eventsFilePath)) {
+			fs.readFile(eventsFilePath, (err, data) => {
+				var events = JSON.parse(data);
+				var eligible = events.some(event =>
+					event.submissions.some(submission => {
+						return submission.url === req.params.id &&
+							(submission.authors.some(author => author === req.jwtPayload.id) || submission.reviewers.some(reviewer => reviewer === req.jwtPayload.id))
+					})
+				);
+				var filePath = path.resolve('storage/papers/' + req.params.id + '.html');
+				if (eligible) {
+					if (fs.existsSync(filePath)) {
+						res.sendFile(filePath);
+					} else res.status(404).send('404 sorry not found');
+				} else res.status(403).send('403 Forbidden');
+			});
 		} else res.status(404).send('404 sorry not found');
+
 	} else res.status(406).send('406 - Not acceptable: ' + req.get('Accept') + ' not acceptable');
 });
 

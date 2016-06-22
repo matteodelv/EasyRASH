@@ -45,7 +45,7 @@ function loadCurrentPaperContent() {
          },
          error: function(result) {
             $.notify({
-               message: 'Error: ' + result.responseJSON.message + '-' + result.responseJSON.error.message
+               message: result.responseJSON ? 'Error: ' + result.responseJSON.message + '-' + result.responseJSON.error.message : 'Error: ' + result.responseText
             }, {
                type: 'danger',
                delay: 2000
