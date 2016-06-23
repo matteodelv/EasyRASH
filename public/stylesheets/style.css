@@ -19,7 +19,7 @@ body {
   margin: 0em 2em
 }
 
-#paper-container {
+.paper-container {
   min-height: 100vh;
 }
 

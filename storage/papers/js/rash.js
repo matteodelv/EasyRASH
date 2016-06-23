@@ -105,10 +105,10 @@ jQuery.fn.extend({
         }
     },
     toggleCSS: function() {
-        $("#paper-container .footer ul").toggle();
+        $(".paper-container .footer ul").toggle();
     },
     hideCSS: function() {
-        $("#paper-container .footer ul").hide();
+        $(".paper-container .footer ul").hide();
     },
     addHeaderHTML: function() {
         /* Reset header */
@@ -117,7 +117,7 @@ jQuery.fn.extend({
 
         /* Header title */
         var header = $("<header class=\"page-header paper-center cgen\"></header>");
-        header.prependTo($("#paper-container"));
+        header.prependTo($(".paper-container"));
         var title_string = "";
         if ($("head title").html()) {
             var title_split = $("head title").html().split(" -- ");
@@ -323,7 +323,7 @@ function rasherize() {
     if (typeof MathJax !== 'undefined') {
         var s_delim = 's$s';
         var e_delim = 'e$e';
-        $('#paper-container').attr("class", "nomath");
+        $('.paper-container').attr("class", "nomath");
         $('span[role=math]').each(function() {
             $(this).attr("class", "math");
             $(this).html(s_delim + $(this).html() + e_delim);
@@ -419,7 +419,7 @@ function rasherize() {
     /* /END Captions */
 
     /* References */
-    $("#paper-container a[href]").each(function() {
+    $(".paper-container a[href]").each(function() {
         if ($.trim($(this).text()) == '') {
             var cur_id = $(this).attr("href");
             referenced_element = $(cur_id);
@@ -528,7 +528,7 @@ function rasherize() {
 
     /* Container sections */
     $(
-        "#paper-container > section , section[role=doc-abstract] , section[role=doc-acknowledgements] , " +
+        ".paper-container > section , section[role=doc-abstract] , section[role=doc-acknowledgements] , " +
         "section[role=doc-bibliography], section[role=doc-footnotes]").addClass("paper-center");
     /* /END Container sections */
 
@@ -554,11 +554,11 @@ function rasherize() {
 
     /* Footer */
     var footer = $('<footer class="footer hidden-print cgen hidden-xs">' +
-        "<p><span>Words: " + $("#paper-container").countWords() + "</span>" +
-        "<span>Figures: " + $("#paper-container").countElements(figurebox_selector) + "</span>" +
-        "<span>Tables: " + $("#paper-container").countElements(tablebox_selector) + "</span>" +
-        "<span>Formulas: " + $("#paper-container").countElements(formulabox_selector) + "</span>" +
-        "<span>Listings: " + $("#paper-container").countElements(listingbox_selector) + "</span></p>" +
+        "<p><span>Words: " + $(".paper-container").countWords() + "</span>" +
+        "<span>Figures: " + $(".paper-container").countElements(figurebox_selector) + "</span>" +
+        "<span>Tables: " + $(".paper-container").countElements(tablebox_selector) + "</span>" +
+        "<span>Formulas: " + $(".paper-container").countElements(formulabox_selector) + "</span>" +
+        "<span>Listings: " + $(".paper-container").countElements(listingbox_selector) + "</span></p>" +
         "<div class=\"btn-group dropup\">" +
         "<button type=\"button\" class=\"btn btn-default dropdown-toggle\" data-toggle=\"dropdown\" " +
         "aria-expanded=\"false\" onClick=\"$(this).toggleCSS()\">" +
@@ -569,7 +569,7 @@ function rasherize() {
         "</ul>" +
         "</div>" +
         "</p></footer>");
-    footer.appendTo($("#paper-container"))
+    footer.appendTo($(".paper-container"))
         /* /END Footer */
 
     /* General function for loading CSS */

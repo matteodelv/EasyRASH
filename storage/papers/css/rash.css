@@ -18,7 +18,7 @@ Under the following terms:
 
 /* Font */
 
-#paper-container {
+.paper-container {
     font-size: 12pt;
 }
 
@@ -28,15 +28,15 @@ Under the following terms:
 
 /* Footnote counters */
 
-#paper-container {
+.paper-container {
     counter-reset: fn_pointer;
 }
 
-#paper-container section[role=doc-footnotes] {
+.paper-container section[role=doc-footnotes] {
     counter-reset: fn;
 }
 
-#paper-container section[role=doc-footnotes] > section[role=doc-footnote]:before {
+.paper-container section[role=doc-footnotes] > section[role=doc-footnote]:before {
     counter-increment: fn;
     content: counter(fn);
     float: left;
@@ -49,51 +49,51 @@ Under the following terms:
 
 /* Figure, table and formula */
 
-#paper-container img {
+.paper-container img {
     max-width: 90%;
     height: auto;
 }
 
-#paper-container table {
+.paper-container table {
     max-width: 90%;
 }
 
-#paper-container figure {
+.paper-container figure {
     margin-top: 2em;
     margin-bottom: 2em;
     text-align: center;
 }
 
-#paper-container figure > p:not(mathml|math) {
+.paper-container figure > p:not(mathml|math) {
     margin-bottom: 0px;
 }
 
-#paper-container figure img:not([role=math]), figure svg {
+.paper-container figure img:not([role=math]), figure svg {
     border: 1px solid black;
 }
 
-#paper-container figure > pre {
+.paper-container figure > pre {
     text-align: left;
 }
 
-#paper-container figcaption {
+.paper-container figcaption {
     margin-top: 5px;
 }
 
-#paper-container table {
+.paper-container table {
     margin: 0 auto;
 }
 
-#paper-container td, th {
+.paper-container td, th {
     border: 1px solid black;
     padding: 5px;
 }
 
-#paper-container td p {
+.paper-container td p {
     margin-bottom: 0px;
 }
 
-#paper-container th {
+.paper-container th {
     background-color: #606060;
     color: white;
     text-align: center;
@@ -105,56 +105,56 @@ Under the following terms:
 
 /* Heading counters */
 
-#paper-container {
+.paper-container {
     counter-reset: h1;
 }
 
-#paper-container h1 {
+.paper-container h1 {
     counter-reset: h2;
 }
 
-#paper-container h2 {
+.paper-container h2 {
     counter-reset: h3;
 }
 
-#paper-container h3 {
+.paper-container h3 {
     counter-reset: h4;
 }
 
-#paper-container h4 {
+.paper-container h4 {
     counter-reset: h5;
 }
 
-#paper-container h5 {
+.paper-container h5 {
     counter-reset: h6;
 }
 
-#paper-container section:not([role=doc-abstract]):not([role=doc-bibliography]):not([role=doc-acknowledgements]):not([role=doc-footnotes]) h1:before {
+.paper-container section:not([role=doc-abstract]):not([role=doc-bibliography]):not([role=doc-acknowledgements]):not([role=doc-footnotes]) h1:before {
     counter-increment: h1;
     content: counter(h1) ". ";
 }
 
-#paper-container section:not([role=doc-abstract]):not([role=doc-bibliography]):not([role=doc-acknowledgements]):not([role=doc-footnotes]) h2:before {
+.paper-container section:not([role=doc-abstract]):not([role=doc-bibliography]):not([role=doc-acknowledgements]):not([role=doc-footnotes]) h2:before {
     counter-increment: h2;
     content: counter(h1) "." counter(h2) ". ";
 }
 
-#paper-container section:not([role=doc-abstract]):not([role=doc-bibliography]):not([role=doc-acknowledgements]):not([role=doc-footnotes]) h3:before {
+.paper-container section:not([role=doc-abstract]):not([role=doc-bibliography]):not([role=doc-acknowledgements]):not([role=doc-footnotes]) h3:before {
     counter-increment: h3;
     content: counter(h1) "." counter(h2) "." counter(h3) ". ";
 }
 
-#paper-container section:not([role=doc-abstract]):not([role=doc-bibliography]):not([role=doc-acknowledgements]):not([role=doc-footnotes]) h4:before {
+.paper-container section:not([role=doc-abstract]):not([role=doc-bibliography]):not([role=doc-acknowledgements]):not([role=doc-footnotes]) h4:before {
     counter-increment: h4;
     content: counter(h1) "." counter(h2) "." counter(h3) "." counter(h4) ". ";
 }
 
-#paper-container section:not([role=doc-abstract]):not([role=doc-bibliography]):not([role=doc-acknowledgements]):not([role=doc-footnotes]) h5:before {
+.paper-container section:not([role=doc-abstract]):not([role=doc-bibliography]):not([role=doc-acknowledgements]):not([role=doc-footnotes]) h5:before {
     counter-increment: h5;
     content: counter(h1) "." counter(h2) "." counter(h3) "." counter(h4) "." counter(h5) ". ";
 }
 
-#paper-container section:not([role=doc-abstract]):not([role=doc-bibliography]):not([role=doc-acknowledgements]):not([role=doc-footnotes]) h6:before {
+.paper-container section:not([role=doc-abstract]):not([role=doc-bibliography]):not([role=doc-acknowledgements]):not([role=doc-footnotes]) h6:before {
     counter-increment: h6;
     content: counter(h1) "." counter(h2) "." counter(h3) "." counter(h4) "." counter(h5) "." counter(h6) ". ";
 }
@@ -165,7 +165,7 @@ Under the following terms:
 
 /* Header */
 
-#paper-container .title {
+.paper-container .title {
     font-size: 300%;
 }
 
@@ -180,12 +180,12 @@ html {
     min-height: 100%;
 }
 
-#paper-container {
+.paper-container {
     /* Margin bottom by footer height */
     margin-bottom: 60px;
 }
 
-#paper-container .footer {
+.paper-container .footer {
     font-size: 11pt;
     position: fixed;
     bottom: 0;
@@ -196,20 +196,20 @@ html {
     padding: 20px;
 }
 
-#paper-container .footer span, .footer div {
+.paper-container .footer span, .footer div {
     margin-left: 30px;
 }
 
-#paper-container #layoutselection {
+.paper-container #layoutselection {
     margin-left: 0px;
     margin-right: 5px;
 }
 
-#paper-container .footer div {
+.paper-container .footer div {
     margin-top: -5px;
 }
 
-#paper-container .footer p {
+.paper-container .footer p {
     display: inline;
     margin: auto;
 }
@@ -220,7 +220,7 @@ html {
 
 /* Not cited */
 
-#paper-container .notcited {
+.paper-container .notcited {
     color: lightgrey;
     font-style: italic;
     cursor: help;
@@ -232,16 +232,16 @@ html {
 
 /* Error */
 
-#paper-container .error {
+.paper-container .error {
     color: red;
     font-weight: bold;
 }
 
-#paper-container .error:before {
+.paper-container .error:before {
     content: "[[";
 }
 
-#paper-container .error:after {
+.paper-container .error:after {
     content: "]]";
 }
 

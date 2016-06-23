@@ -52,7 +52,7 @@ function loadCurrentPaperContent() {
    
    if (document.location.pathname === "/") {
       $addedHeadTags && $addedHeadTags.remove();
-      $('#paper-container').empty();
+      $('.paper-container').empty();
    }
 
    if (document.location.pathname.startsWith("/papers/")) {
@@ -78,12 +78,12 @@ function loadCurrentPaperContent() {
             $('head').append($addedHeadTags);
             //Body
             var $body = $xml.find('body');
-            $('#paper-container').empty().append($body.children());
+            $('.paper-container').empty().append($body.children());
             rasherize();
             $('.sections-sidebar>ul').empty();
             var $root = $('html, body');
             $('.sections-sidebar>ul').append($('<li class="active"><a href="#top">' + $("head title").html().split(" -- ")[0] + '</a></li>'));
-            $('#paper-container>section[id]').each(function(index) {
+            $('.paper-container>section[id]').each(function(index) {
                var $link = $('<a href="#' + $(this).attr('id') + '">' + $(this).find('h1').eq(0).text() + '</a>');
                $('.sections-sidebar>ul').append($('<li></li>').append($link));
                if ($('section[id]', $(this)).size()) {

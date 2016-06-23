@@ -1,28 +1,3 @@
-#wrapper {
-    padding-left: 0;
-}
-
-
-/*
-.affix-top, .affix {
-    position: static;
-}
-
-@media (min-width: 992px) {
-    #sidebar.affix-top {
-        position: static;
-    }
-    #sidebar.affix {
-        position: fixed;
-        top: 100px;
-    }
-}*/
-
-#sidebar-wrapper li.active {
-    border: 0 #eee solid;
-    border-right-width: 5px;
-}
-
 @media (min-width: 992px) {
     .sidebar {
         position: fixed;
