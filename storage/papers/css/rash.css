@@ -186,6 +186,7 @@ html {
 }
 
 #paper-container .footer {
+    font-size: 11pt;
     position: fixed;
     bottom: 0;
     width: 100%;
@@ -210,6 +211,7 @@ html {
 
 #paper-container .footer p {
     display: inline;
+    margin: auto;
 }
 
 

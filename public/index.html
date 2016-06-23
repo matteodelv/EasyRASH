@@ -39,16 +39,15 @@
          $('#login-modal').modal('show');
       });
    }
-
    </script>
    <title>Homepage</title>
 </head>
 
-<body>
-   <div class="container-fluid">
+<body data-spy="scroll" data-target="#nav-scroll-spy">
+   <div class="container-fluid" id="top">
       <div id="wrapper" class="row">
          <div id="sidebar-wrapper" class="col-md-2 sidebar hidden-print">
-            <ul id="sidebar" class="sidebar-nav nav nav-pills nav-stacked" >
+            <ul id="sidebar" class="sidebar-nav nav nav-pills nav-stacked">
                <li class="sidebar-brand submitted"><a href="#">Submitted</a></li>
                <li class="sidebar-brand reviewable"><a href="#">Reviewable</a></li>
             </ul>
@@ -56,10 +55,16 @@
          <div id="page-content-wrapper" class="col-md-10 col-md-offset-2">
             <div class="page-content">
                <div class="row">
-                  <div class="col-md-12">
+                  <div class="col-md-10">
                      <!-- content of page -->
                      <div id="paper-container">
                      </div>
+                  </div>
+                  <div class="col-md-2" role="complementary">
+                     <nav class="sections-sidebar hidden-print hidden-xs hidden-sm" id="nav-scroll-spy">
+                        <ul class="nav nav-stacked" data-spy="affix" >
+                        </ul>
+                     </nav>
                   </div>
                </div>
             </div>

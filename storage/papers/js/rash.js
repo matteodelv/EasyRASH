@@ -116,7 +116,7 @@ jQuery.fn.extend({
         $("p.keywords").remove();
 
         /* Header title */
-        var header = $("<header class=\"page-header container cgen\"></header>");
+        var header = $("<header class=\"page-header paper-center cgen\"></header>");
         header.prependTo($("#paper-container"));
         var title_string = "";
         if ($("head title").html()) {
@@ -553,7 +553,7 @@ function rasherize() {
     /* /END Bibliography */
 
     /* Footer */
-    var footer = $("<footer class=\"footer hidden-print cgen\">" +
+    var footer = $('<footer class="footer hidden-print cgen hidden-xs">' +
         "<p><span>Words: " + $("#paper-container").countWords() + "</span>" +
         "<span>Figures: " + $("#paper-container").countElements(figurebox_selector) + "</span>" +
         "<span>Tables: " + $("#paper-container").countElements(tablebox_selector) + "</span>" +

@@ -11,6 +11,16 @@ $.fn.extend({
 window.onpopstate = function(event) {
    loadCurrentPaperContent()
 };
+
+// Stop the animation if the user scrolls. Defaults on .stop() should be fine
+var $viewport = $('html, body');
+$viewport.bind("scroll mousedown DOMMouseScroll mousewheel keyup", function(e) {
+   if (e.which > 0 || e.type === "mousedown" || e.type === "mousewheel") {
+      // This identifies the scroll as a user action, stops the animation, then unbinds the event straight after (optional)
+      $viewport.stop().unbind('scroll mousedown DOMMouseScroll mousewheel keyup');
+   }
+});
+
 var $addedHeadTags; //Contains head tags belonging to a single paper, to be removed when a paper view is replaced
 
 function loadCurrentPaperContent() {
@@ -26,7 +36,6 @@ function loadCurrentPaperContent() {
                return paper;
             }
          })
-         // $('#sidebar li > a[href="/papers/'+paper.url+'"]').parent().addClass('active');
       paper && $('title').remove();
       $.ajax({
          url: '/api' + document.location.pathname,
@@ -42,6 +51,45 @@ function loadCurrentPaperContent() {
             var $body = $xml.find('body');
             $('#paper-container').empty().append($body.children());
             rasherize();
+            $('.sections-sidebar>ul').empty();
+            var $root = $('html, body');
+            $('.sections-sidebar>ul').append($('<li class="active"><a href="#top">' + $("head title").html().split(" -- ")[0] + '</a></li>'));
+            $('#paper-container>section[id]').each(function(index) {
+               var $link = $('<a href="#' + $(this).attr('id') + '">' + $(this).find('h1').eq(0).text() + '</a>');
+               $('.sections-sidebar>ul').append($('<li></li>').append($link));
+               if ($('section[id]', $(this)).size()) {
+                  var $sub = $('<ul class="nav"></ul>');
+                  $('section[id]', $(this)).each(function(index) {
+                     var $sublink = $('<li><a href="#' + $(this).attr('id') + '">' + $(this).find('h2').eq(0).text() + '</a></li>');
+                     if ($sublink.text()){
+                        $sub.append($sublink);
+                     }
+                  });
+                  $('.sections-sidebar>ul>li:last-child').append($sub);
+               }
+
+            });
+            $('.sections-sidebar>ul a').each(function(index) {
+               $(this).on('click', function(event) {
+                  var href = $(this).attr('href');
+                  event.preventDefault();
+                  $root.animate({
+                     scrollTop: $(href).offset().top
+                  }, 400, function() {
+                     history.pushState({}, '', href);
+                  });
+                  return false;
+               });
+            });
+            var scrollTarget = window.location.hash ? $(window.location.hash).offset().top : $('#top').offset().top;
+            if (scrollTarget !== $(window).scrollTop()) {
+               $root.animate({
+                  scrollTop: scrollTarget
+               }, 400);
+            }
+            $('[data-spy="scroll"]').each(function() {
+               var $spy = $(this).scrollspy('refresh');
+            });
          },
          error: function(result) {
             $.notify({
@@ -91,11 +139,8 @@ function getPapers() {
             if (result.hasOwnProperty(key)) {
                result[key].forEach(function(paper) {
                   var urlComplete = '/papers/' + paper.url;
-                  var li = $('<li><a href="' + urlComplete + '">' + paper.title + '</a></li>\n').insertAfter($('#sidebar-wrapper .sidebar-brand.' + key));
+                  var li = $('<li><a href="' + urlComplete + '">' + paper.title.split(" -- ")[0] + '</a></li>\n').insertAfter($('#sidebar-wrapper .sidebar-brand.' + key));
                   li.on('click', function() {
-                     $('html, body').animate({
-                        scrollTop: $('#paper-container').offset().top
-                     }, 400);
                      redirectToPaper(urlComplete, paper);
                      return false;
                   });

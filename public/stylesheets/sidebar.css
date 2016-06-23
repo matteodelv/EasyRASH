@@ -2,6 +2,8 @@
     padding-left: 0;
 }
 
+
+/*
 .affix-top, .affix {
     position: static;
 }
@@ -14,7 +16,7 @@
         position: fixed;
         top: 100px;
     }
-}
+}*/
 
 #sidebar-wrapper li.active {
     border: 0 #eee solid;
@@ -35,7 +37,16 @@
     }
 }
 
+
 /* Sidebar Styles */
+
+.sidebar {
+    background: #4D394B;
+}
+
+.sidebar-nav, .sections-sidebar {
+    font-family: 'Montserrat', sans-serif;
+}
 
 .sidebar-nav {
     top: 0;
@@ -51,16 +62,16 @@
 .sidebar-nav li a, .sidebar-nav li a:focus {
     text-decoration: none;
     color: #999999;
-    background:transparent;
+    background: transparent;
 }
 
-.sidebar-nav li a:hover{
+.sidebar-nav li a:hover {
     text-decoration: none;
     color: #fff;
     background: rgba(255, 255, 255, 0.2);
 }
 
-.sidebar-nav li a:active{
+.sidebar-nav li a:active {
     background: #fff;
     color: #999999;
 }
@@ -80,4 +91,66 @@
 .sidebar-nav > .sidebar-brand a:hover {
     color: #fff;
     background: none;
+}
+
+
+/* Scroll Spy sidebar */
+
+.sections-sidebar>ul.nav {
+    top: 20px;
+    position: fixed;
+    max-height: 100%;
+    overflow-y: auto;
+}
+
+.sections-sidebar>.nav>li>a {
+    padding-left: 20px;
+    background-color: transparent;
+}
+
+.sections-sidebar>.nav>.active:focus>a, .sections-sidebar>.nav>.active:hover>a, .sections-sidebar>.nav>.active>a {
+    padding-left: 18px;
+    font-weight: 700;
+    color: #4D394B;
+    background-color: transparent;
+    border-left: 2px solid #4D394B;
+}
+
+.sections-sidebar>.nav>li:hover>a {
+    padding-left: 19px;
+    color: #4D394B;
+    background-color: transparent;
+    border-left: 1px solid #4D394B;
+}
+/* Scroll Spy sidebar Sub sections */
+.sections-sidebar>.nav>li>ul {
+    display: none;
+}
+
+.sections-sidebar>.nav>.active>ul {
+    display: initial;
+}
+
+.sections-sidebar>.nav>li>.nav>li>a {
+    background-color: transparent;
+    font-size: 10pt;
+    padding-left: 40px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    padding-right: 4px;
+}
+
+.sections-sidebar>.nav>li>.nav>.active:focus>a, .sections-sidebar>.nav>li>.nav>.active:hover>a, .sections-sidebar>.nav>li>.nav>.active>a {
+    font-weight: 700;
+    color: #4D394B;
+    background-color: transparent;
+    padding-left: 38px;
+    border-left: 2px solid #4D394B;
+}
+
+.sections-sidebar>.nav>li>.nav>li:hover>a {
+    background-color: transparent;
+    color: #4D394B;
+    padding-left: 39px;
+    border-left: 1px solid #4D394B;
 }
