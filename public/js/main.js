@@ -8,6 +8,31 @@ $.fn.extend({
    }
 });
 
+$.ajaxSetup({
+   beforeSend: function(xhr) {
+      if (localStorage.accessToken) {
+         xhr.setRequestHeader('Authorization', 'Bearer ' + localStorage.accessToken);
+      }
+   }
+});
+
+if (localStorage.accessToken) {
+   $.ajax({
+      url: '/api/verify',
+      type: 'POST',
+      success: function(result) {
+         getPapers();
+      },
+      error: function(result) {
+         $('#login-modal').modal('show');
+      }
+   });
+} else {
+   $(window).load(function() {
+      $('#login-modal').modal('show');
+   });
+}
+
 window.onpopstate = function(event) {
    loadCurrentPaperContent()
 };
@@ -24,23 +49,27 @@ $viewport.bind("scroll mousedown DOMMouseScroll mousewheel keyup", function(e) {
 var $addedHeadTags; //Contains head tags belonging to a single paper, to be removed when a paper view is replaced
 
 function loadCurrentPaperContent() {
+   
    if (document.location.pathname === "/") {
       $addedHeadTags && $addedHeadTags.remove();
       $('#paper-container').empty();
    }
+
    if (document.location.pathname.startsWith("/papers/")) {
       var parsed = JSON.parse(sessionStorage.papers);
       var papers = parsed.submitted.concat(parsed.reviewable);
       var paper = papers.find(function(paper) {
-            if (document.location.pathname.replace(/\/$/, "").endsWith(paper.url)) {
-               return paper;
-            }
-         })
+         if (document.location.pathname.replace(/\/$/, "").endsWith(paper.url)) {
+            return paper;
+         }
+      })
       paper && $('title').remove();
+      
       $.ajax({
          url: '/api' + document.location.pathname,
          method: 'GET',
          success: function(result) {
+            
             var xmlParsed = $.parseXML(result);
             var $xml = $(xmlParsed);
             //Head
@@ -61,7 +90,7 @@ function loadCurrentPaperContent() {
                   var $sub = $('<ul class="nav"></ul>');
                   $('section[id]', $(this)).each(function(index) {
                      var $sublink = $('<li><a href="#' + $(this).attr('id') + '">' + $(this).find('h2').eq(0).text() + '</a></li>');
-                     if ($sublink.text()){
+                     if ($sublink.text()) {
                         $sub.append($sublink);
                      }
                   });
@@ -81,7 +110,7 @@ function loadCurrentPaperContent() {
                   return false;
                });
             });
-            var scrollTarget = window.location.hash ? $(window.location.hash).offset().top : $('#top').offset().top;
+            var scrollTarget = window.location.hash && $(window.location.hash).offset() ? $(window.location.hash).offset().top : $('#top').offset().top;
             if (scrollTarget !== $(window).scrollTop()) {
                $root.animate({
                   scrollTop: scrollTarget
@@ -115,7 +144,8 @@ function auth() {
          localStorage.accessToken = result.accessToken;
          $('#login-modal').modal('hide');
          $.notify({ //http://bootstrap-notify.remabledesigns.com/
-            message: 'Welcome ' + result.id
+            message: 'Welcome ' + result.id,
+            mouse_over: 'pause'
          }, {
             type: 'success',
             delay: 2000
@@ -133,6 +163,7 @@ function getPapers() {
       url: '/api/papers/',
       method: 'GET',
       success: function(result) {
+         
          sessionStorage.papers = JSON.stringify(result);
 
          for (var key in result) {
@@ -152,7 +183,7 @@ function getPapers() {
       },
       error: function(result) {
          $.notify({
-            message: 'Error: ' + result.responseJSON.message + '-' + result.responseJSON.error.message
+            message: result.responseJSON ? 'Error: ' + result.responseJSON.message + '-' + result.responseJSON.error.message : 'Error: ' + result.responseText
          }, {
             type: 'danger',
             delay: 2000

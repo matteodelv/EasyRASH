@@ -3,6 +3,7 @@
 
 <head>
    <meta charset="utf-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1" />
    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous" />
    <script type="text/javascript" src="/js/browser-polyfill.js"></script>
    <script src="//code.jquery.com/jquery-2.2.3.min.js" integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo=" crossorigin="anonymous"></script>
@@ -14,58 +15,38 @@
    <link rel="stylesheet" type="text/css" href="stylesheets/style.css" />
    <link rel="stylesheet" type="text/css" href="stylesheets/animate.css" />
    <link rel="stylesheet" type="text/css" href="stylesheets/sidebar.css" />
-   <script type="text/javascript">
-   $.ajaxSetup({
-      beforeSend: function(xhr) {
-         if (localStorage.accessToken) {
-            xhr.setRequestHeader('Authorization', 'Bearer ' + localStorage.accessToken);
-         }
-      }
-   });
-
-   if (localStorage.accessToken) {
-      $.ajax({
-         url: '/api/verify',
-         type: 'POST',
-         success: function(result) {
-            getPapers();
-         },
-         error: function(result) {
-            $('#login-modal').modal('show');
-         }
-      });
-   } else {
-      $(window).load(function() {
-         $('#login-modal').modal('show');
-      });
-   }
-   </script>
    <title>Homepage</title>
 </head>
 
-<body data-spy="scroll" data-target="#nav-scroll-spy">
-   <div class="container-fluid" id="top">
+<body data-spy="scroll" data-target="#nav-scroll-spy" data-offset="20">
+   <div class="container-fluid banner">
+      <div class="col-md-offset-2">
+         <div class="banner-text">Easy RASH</div>
+      </div>   
+   </div>
+   <div class="container-fluid" >
       <div id="wrapper" class="row">
          <div id="sidebar-wrapper" class="col-md-2 sidebar hidden-print">
+            <div class="profile-panel">
+               
+            </div>
             <ul id="sidebar" class="sidebar-nav nav nav-pills nav-stacked">
                <li class="sidebar-brand submitted"><a href="#">Submitted</a></li>
                <li class="sidebar-brand reviewable"><a href="#">Reviewable</a></li>
             </ul>
          </div>
          <div id="page-content-wrapper" class="col-md-10 col-md-offset-2">
-            <div class="page-content">
+            <div id="top" class="page-content">
                <div class="row">
                   <div class="col-md-10">
                      <!-- content of page -->
                      <div id="paper-container">
                      </div>
                   </div>
-                  <div class="col-md-2" role="complementary">
-                     <nav class="sections-sidebar hidden-print hidden-xs hidden-sm" id="nav-scroll-spy">
-                        <ul class="nav nav-stacked" data-spy="affix" >
-                        </ul>
-                     </nav>
-                  </div>
+                  <nav class="col-md-2 sections-sidebar hidden-print hidden-xs hidden-sm" id="nav-scroll-spy">
+                     <ul class="nav nav-stacked" data-spy="affix" data-offset-top="150">
+                     </ul>
+                  </nav>
                </div>
             </div>
          </div>
@@ -92,7 +73,7 @@
                   </div>
                   <!-- Modal Footer -->
                   <div class="modal-footer">
-                     <span class="help-inline error"></span>
+                     <span class="help-inline error-message"></span>
                      <button type="submit" id="loginbutton" class="btn btn-primary" name="commit" value="Login">Login</button>
                   </div>
                </form>

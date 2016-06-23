@@ -76,8 +76,8 @@ jQuery.fn.extend({
                 '#rash_web_based_layout': '<link rel="stylesheet" type="text/css" href="/papers/css/rash.css">',
                 '#rash_lncs_layout': '<link rel="stylesheet" type="text/css" href="/papers/css/lncs.css">'
             }
-            if (style[currentStyle] && style[currentStyle] !== $layout.selector) {
-                $layout.remove();
+            if (!$layout || style[currentStyle] && style[currentStyle] !== $layout.selector) {
+                $layout && $layout.remove();
                 $layout = $(style[currentStyle]);
                 $('head').append($layout);
                 if (currentStyle == "#rash_web_based_layout") { /* Transform to Web layout */
@@ -419,7 +419,7 @@ function rasherize() {
     /* /END Captions */
 
     /* References */
-    $("a[href]").each(function() {
+    $("#paper-container a[href]").each(function() {
         if ($.trim($(this).text()) == '') {
             var cur_id = $(this).attr("href");
             referenced_element = $(cur_id);

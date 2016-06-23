@@ -1,46 +1,53 @@
 @import url(https://fonts.googleapis.com/css?family=Montserrat:400,700);
+body {
+  position: relative;
+}
 
 .affix {
-      top: 0px;
-  }
+  top: 20px;
+}
 
-.error {
-    color: #f22626;
+.affix-top {
+  margin-top: 20px;
+}
+
+.error-message {
+  color: #f22626;
 }
 
 .help-inline.error {
-    margin: 0em 2em
+  margin: 0em 2em
 }
-
-/*#page-content-wrapper * {
-    background: #FFFFFF;
-}*/
 
 #paper-container {
-    min-height: 100vh;
+  min-height: 100vh;
 }
-/*
-@media print {
-    body * {
-        visibility: collapse;
-    }
-    #paper-container, #paper-container * {
-        visibility: visible;
-    }
-    #paper-container {
-        position: absolute;
-        left: 0;
-        top: 0;
-    }
-    
-}*/
+
+.banner {
+  background: #47abf7;
+  height: 150px;
+}
+
+.banner>*{
+  height: 100%;
+}
+
+.banner-text {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 40pt;
+  text-transform: uppercase;
+  color: #FFF;
+  padding: auto 0.5em;
+}
+
 
 /* Center and fit */
+
 .paper-center {
-    padding-right: 15px;
-    padding-left: 15px;
-    margin-right: auto;
-    margin-left: auto;
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
 }
 
 @media (min-width: 768px) {
@@ -48,11 +55,13 @@
     max-width: 750px;
   }
 }
+
 @media (min-width: 992px) {
   .paper-center {
     max-width: 970px;
   }
 }
+
 @media (min-width: 1200px) {
   .paper-center {
     max-width: 1170px;
