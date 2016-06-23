@@ -141,7 +141,7 @@ function userReady(fullname){
    getPapers();
 }
 
-function logIn() {
+function signIn() {
    $.ajax({
       url: '/api/authenticate',
       method: 'POST',

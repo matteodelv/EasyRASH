@@ -3,7 +3,7 @@ body {
   position: relative;
 }
 
-.banner-text, .profile-panel, .sidebar-nav, .sections-sidebar{
+.banner-text, .profile-panel, .sidebar-nav, .sections-sidebar {
   font-family: 'Montserrat', sans-serif;
 }
 
@@ -27,10 +27,17 @@ body {
   min-height: 100vh;
 }
 
+#loginpanel .tab-pane{
+  margin-top: 20px;
+}
+
+div.form-group.col-md-6 + div.form-group.col-md-6{
+  padding-left: 0;
+}
 
 /* Profile panel */
 
-.profile-panel{
+.profile-panel {
   margin: 2em;
 }
 
@@ -92,3 +99,14 @@ body {
     max-width: 1170px;
   }
 }
+
+/*
+.paper-container section:hover {
+  box-shadow: 0 0 6px #4D394B;
+}
+
+.paper-container section {
+  box-shadow: 0 0 0 0 #000;
+  transition: all 100ms ease-out;
+  border-radius: 5px;
+}*/
