@@ -28,6 +28,7 @@ router.post('/', function(req, res){
             success: true,
             message: 'Authentication successful.',
             id: user.id,
+            fullname: user.given_name + ' ' + user.family_name,
             accessToken: accessToken
          });
       }

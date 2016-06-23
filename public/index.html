@@ -27,8 +27,9 @@
    <div class="container-fluid" >
       <div id="wrapper" class="row">
          <div id="sidebar-wrapper" class="col-md-2 sidebar hidden-print">
-            <div class="profile-panel">
-               
+            <div class="profile-panel hidden">
+               <h4 class="name"></h4>
+               <button class="btn" onclick="javascript:logOut()">Log out</button>
             </div>
             <ul id="sidebar" class="sidebar-nav nav nav-pills nav-stacked">
                <li class="sidebar-brand submitted"><a href="#">Submitted</a></li>
@@ -59,7 +60,7 @@
                <div class="modal-header">
                   <h4 class="modal-title" id="myModalLabel">Please login</h4>
                </div>
-               <form id="loginpanel" action="javascript:auth()">
+               <form id="loginpanel" action="javascript:logIn()">
                   <!-- Modal Body -->
                   <div class="modal-body">
                      <div class="form-group">

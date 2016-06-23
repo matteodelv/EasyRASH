@@ -21,7 +21,7 @@ if (localStorage.accessToken) {
       url: '/api/verify',
       type: 'POST',
       success: function(result) {
-         getPapers();
+         userReady(result.fullname);
       },
       error: function(result) {
          $('#login-modal').modal('show');
@@ -33,8 +33,8 @@ if (localStorage.accessToken) {
    });
 }
 
-window.onpopstate = function(event) {
-   loadCurrentPaperContent()
+window.onstatechange = function(event) {
+   loadCurrentPaperContent();
 };
 
 // Stop the animation if the user scrolls. Defaults on .stop() should be fine
@@ -49,7 +49,7 @@ $viewport.bind("scroll mousedown DOMMouseScroll mousewheel keyup", function(e) {
 var $addedHeadTags; //Contains head tags belonging to a single paper, to be removed when a paper view is replaced
 
 function loadCurrentPaperContent() {
-   
+
    if (document.location.pathname === "/") {
       $addedHeadTags && $addedHeadTags.remove();
       $('.paper-container').empty();
@@ -64,12 +64,12 @@ function loadCurrentPaperContent() {
          }
       })
       paper && $('title').remove();
-      
+
       $.ajax({
          url: '/api' + document.location.pathname,
          method: 'GET',
          success: function(result) {
-            
+
             var xmlParsed = $.parseXML(result);
             var $xml = $(xmlParsed);
             //Head
@@ -121,6 +121,9 @@ function loadCurrentPaperContent() {
             });
          },
          error: function(result) {
+            if (result.responseJSON && result.responseJSON.error.name === "TokenExpiredError") {
+               $('#login-modal').modal('show');
+            }
             $.notify({
                message: result.responseJSON ? 'Error: ' + result.responseJSON.message + '-' + result.responseJSON.error.message : 'Error: ' + result.responseText
             }, {
@@ -132,7 +135,13 @@ function loadCurrentPaperContent() {
    }
 }
 
-function auth() {
+function userReady(fullname){
+   $('.profile-panel').removeClass('hidden').animateCss('bounceIn');
+   $('.profile-panel>h4').text(fullname);
+   getPapers();
+}
+
+function logIn() {
    $.ajax({
       url: '/api/authenticate',
       method: 'POST',
@@ -150,7 +159,7 @@ function auth() {
             type: 'success',
             delay: 2000
          });
-         getPapers();
+         userReady(result.fullname);
       },
       error: function(result) {
          $('#loginbutton').animateCss('shake').prev('.help-inline').animateCss('bounceIn').text(JSON.parse(result.responseText).message);
@@ -158,12 +167,17 @@ function auth() {
    });
 }
 
+function logOut(){
+   localStorage.accessToken = null;
+   window.location.replace("/");
+   return false;
+}
+
 function getPapers() {
    $.ajax({
       url: '/api/papers/',
       method: 'GET',
       success: function(result) {
-         
          sessionStorage.papers = JSON.stringify(result);
 
          for (var key in result) {

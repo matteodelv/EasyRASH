@@ -32,7 +32,7 @@ router.use(function(req, res, next) {
 });
 
 router.post('/verify', (req, res) => {
-   return res.json({ success: true, message: 'Token active and verified.' });
+   return res.json({ success: true, message: 'Token active and verified.', id: req.jwtPayload.id, fullname: req.jwtPayload.given_name + ' ' + req.jwtPayload.family_name });
 }); 
 
 //Routing for RESTful api

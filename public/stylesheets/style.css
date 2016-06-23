@@ -3,6 +3,10 @@ body {
   position: relative;
 }
 
+.banner-text, .profile-panel, .sidebar-nav, .sections-sidebar{
+  font-family: 'Montserrat', sans-serif;
+}
+
 .affix {
   top: 20px;
 }
@@ -16,24 +20,45 @@ body {
 }
 
 .help-inline.error {
-  margin: 0em 2em
+  margin: 0em 2em;
 }
 
 .paper-container {
   min-height: 100vh;
 }
 
-.banner {
-  background: #47abf7;
-  height: 150px;
+
+/* Profile panel */
+
+.profile-panel{
+  margin: 2em;
 }
 
-.banner>*{
+.profile-panel>.btn {
+  margin: 0.2em;
+}
+
+.profile-panel>.name {
+  margin: auto 0.2em;
+  color: #E5E5E5;
+  display: inline;
+}
+
+
+/* Banner */
+
+.banner {
+  box-sizing: border-box;
+  background: #47abf7;
+  height: 150px;
+  border-bottom: 5px solid #125384;
+}
+
+.banner>* {
   height: 100%;
 }
 
 .banner-text {
-  font-family: 'Montserrat', sans-serif;
   font-size: 40pt;
   text-transform: uppercase;
   color: #FFF;

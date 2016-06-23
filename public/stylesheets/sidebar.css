@@ -19,10 +19,6 @@
     background: #4D394B;
 }
 
-.sidebar-nav, .sections-sidebar {
-    font-family: 'Montserrat', sans-serif;
-}
-
 .sidebar-nav {
     top: 0;
     list-style: none;
