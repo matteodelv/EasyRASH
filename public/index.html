@@ -58,23 +58,23 @@
             <div class="modal-content">
                <!-- Modal Header -->
                <div class="modal-header">
-                  <h4 class="modal-title" id="myModalLabel">Please sign in or sign up</h4>
+                  <h4 class="modal-title" id="myModalLabel">Please log in or sign up</h4>
                </div>
                <div id="loginpanel">
                   <!-- Modal Body -->
                   <div class="modal-body tab-content">
                      <ul class="nav nav-tabs">
-                        <li class="active"><a data-toggle="tab" href="#signin">Sign in</a></li>
+                        <li class="active"><a data-toggle="tab" href="#login">Log in</a></li>
                         <li><a data-toggle="tab" href="#signup">Sign up</a></li>
                      </ul>
-                     <form id="signin" class="form ws-validate tab-pane fade in active" action="javascript:signIn()">
+                     <form id="login" class="form ws-validate tab-pane fade in active" action="javascript:logIn()">
                         <div class="form-group">
-                           <label for="email">Email address</label>
-                           <input type="email" class="form-control" id="email" name="email" value="" placeholder="Email" required="required" />
+                           <label for="loginemail">Email address</label>
+                           <input type="email" id="loginemail" class="form-control" name="email" value="" placeholder="Email" required="required" />
                         </div>
                         <div class="form-group">
-                           <label for="password">Password</label>
-                           <input type="password" class="form-control" id="password" name="password" value="" placeholder="Password" required="required" />
+                           <label for="loginpassword">Password</label>
+                           <input type="password" id="loginpassword" class="form-control" name="password" value="" placeholder="Password" required="required" />
                         </div>
                         <div class="modal-footer">
                            <span class="help-inline error-message"></span>
@@ -84,25 +84,35 @@
                      <form id="signup" class="form ws-validate tab-pane fade" action="javascript:signUp()">
                         <div class="row">
                            <div class="form-group col-md-6">
-                              <label for="name">Name</label>
-                              <input type="text" class="form-control" id="name" name="name" value="" placeholder="Name" required="required" />
+                              <label for="signupname">Name</label>
+                              <input type="text" id="signupname" class="form-control" name="name" value="" placeholder="Name" required="required" />
                            </div>
                            <div class="form-group col-md-6">
-                              <label for="surname">Surname</label>
-                              <input type="text" class="form-control" id="surname" name="surname" value="" placeholder="Surname" required="required" />
+                              <label for="signupsurname">Surname</label>
+                              <input type="text" id="signupsurname" class="form-control" name="surname" value="" placeholder="Surname" required="required" />
+                           </div>
+                        </div>
+                        <div class="row">
+                           <div class="form-group col-md-9">
+                              <label for="singupusername">Username</label>
+                              <input type="text" id="singupusername" class="form-control" name="username" value="" placeholder="Username" required="required" />
+                           </div>
+                           <div class="form-group col-md-3">
+                              <label for="signupsex">Sex</label>
+                              <select class="form-control" id="signupsex" name="sex">
+                                 <option value="unspecified">Not specified</option>
+                                 <option value="male">Male</option>
+                                 <option value="female">Female</option>
+                              </select>
                            </div>
                         </div>
                         <div class="form-group">
-                           <label for="username">Username</label>
-                           <input type="text" class="form-control" id="username" name="username" value="" placeholder="Username" required="required" />
+                           <label for="signupemail">Email address</label>
+                           <input type="email" id="signupemail" class="form-control" name="email" value="" placeholder="Email" required="required" />
                         </div>
                         <div class="form-group">
-                           <label for="email">Email address</label>
-                           <input type="email" class="form-control" id="email" name="email" value="" placeholder="Email" required="required" />
-                        </div>
-                        <div class="form-group">
-                           <label for="password">Password</label>
-                           <input type="password" class="form-control" id="password" name="password" value="" placeholder="Password" required="required" />
+                           <label for="signuppassword">Password</label>
+                           <input type="password" id="signuppassword" class="form-control" name="password" value="" placeholder="Password" required="required" />
                         </div>
                         <div class="modal-footer">
                            <span class="help-inline error-message"></span>

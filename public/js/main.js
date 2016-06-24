@@ -96,7 +96,6 @@ function loadCurrentPaperContent() {
                   });
                   $('.sections-sidebar>ul>li:last-child').append($sub);
                }
-
             });
             $('.sections-sidebar>ul a').each(function(index) {
                $(this).on('click', function(event) {
@@ -135,20 +134,21 @@ function loadCurrentPaperContent() {
    }
 }
 
-function userReady(fullname){
+function userReady(fullname) {
    $('.profile-panel').removeClass('hidden').animateCss('bounceIn');
    $('.profile-panel>h4').text(fullname);
    getPapers();
 }
 
-function signIn() {
+function logIn() {
+   var data = {};
+   $('#login input[name]').each(function(index){
+      data[$(this).attr('name')] = $(this).val();
+   });
    $.ajax({
-      url: '/api/authenticate',
+      url: '/api/authentication/signin',
       method: 'POST',
-      data: {
-         email: $('#email').val(),
-         password: $('#password').val()
-      },
+      data: data,
       success: function(result) {
          localStorage.accessToken = result.accessToken;
          $('#login-modal').modal('hide');
@@ -167,7 +167,34 @@ function signIn() {
    });
 }
 
-function logOut(){
+function signUp(){
+   var data = {};
+   $('#signup input[name], #signup select[name]').each(function(index){
+      data[$(this).attr('name')] = $(this).val();
+   });
+   $.ajax({
+      url: '/api/authentication/signup',
+      method: 'POST',
+      data: data,
+      success: function(result) {
+         $('.nav-tabs a[href="#login"]').tab('show');
+         $('.nav-tabs a[href="#signup"]').addClass('hidden');
+         $('#login').prepend($('<div class="alert alert-warning" role="alert">We sent an email to '+data.email+'. Check it to validate your account.</div>'));
+         $.notify({ //http://bootstrap-notify.remabledesigns.com/
+            message: 'Check your email to validate your account.',
+            mouse_over: 'pause'
+         }, {
+            type: 'warning',
+            delay: 5000
+         });
+      },
+      error: function(result) {
+         $('#signupbutton').animateCss('shake').prev('.help-inline').animateCss('bounceIn').text(JSON.parse(result.responseText).message);
+      }
+   });
+}
+
+function logOut() {
    localStorage.accessToken = null;
    window.location.replace("/");
    return false;

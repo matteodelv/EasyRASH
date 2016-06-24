@@ -26,6 +26,6 @@ app.use('/js', express.static('./node_modules/babel-es6-polyfill'));
 app.use('/papers/fonts', express.static('./storage/papers/fonts'));
 app.use('/api', express.static('./rash')); //serving static files for rash as api root (?)
 
-app.listen(3000, function () {
-   console.log('Easy RASH listening on port 3000!');
+server = app.listen(3000, "localhost", function () {
+   console.log('Easy RASH listening on port ' + server.address().port + ' hosting at ' + server.address().address);
 });

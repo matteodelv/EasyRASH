@@ -4,7 +4,7 @@ var express = require('express');
 var router = express.Router();
 var jwt = require('jsonwebtoken');
 
-router.use('/authenticate', require('./auth')); //POST Requests on /api/authenticate
+router.use('/authentication', require('./authentication')); //POST Requests on /api/authenticate
 //JWT Authentication (used for all requests on /api)
 router.use(function(req, res, next) {
    //Decode token
