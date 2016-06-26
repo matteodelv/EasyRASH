@@ -140,36 +140,78 @@ function userReady(fullname) {
    getPapers();
 }
 
+$(document).ready(function() {
+	responsiveFooter();
+	$(window).resize(responsiveFooter);
+	
+	$(".scrollToTop").click(function() {
+		$("html, body").animate({scrollTop: 0}, 200);
+		return false;
+	});
+	
+	$("#signUpModal").on("hidden.bs.modal", function(e) {
+		console.log("on hidden.bs.modal");
+		$("#signUpForm")[0].reset();
+	});
+});
+
+var responsiveFooter = function() {
+	if ($(window).width() < 768) {
+		$(".footer").css("padding-bottom", "20px");
+		$(".footer p").removeClass("pull-left");
+		$(".footer a").removeClass("pull-right");
+		$(".footer .container").addClass("text-center");
+	}
+	else {
+		$(".footer").css("padding-bottom", "0px");
+		$(".footer p").addClass("pull-left");
+		$(".footer a").addClass("pull-right");
+		$(".footer .container").removeClass("text-center");
+	}
+}
+
 function logIn() {
-   var data = {};
-   $('#login input[name]').each(function(index){
-      data[$(this).attr('name')] = $(this).val();
-   });
-   $.ajax({
-      url: '/api/authentication/signin',
-      method: 'POST',
-      data: data,
-      success: function(result) {
-         localStorage.accessToken = result.accessToken;
-         $('#login-modal').modal('hide');
-         $.notify({ //http://bootstrap-notify.remabledesigns.com/
-            message: 'Welcome ' + result.id,
-            mouse_over: 'pause'
-         }, {
-            type: 'success',
-            delay: 2000
-         });
-         userReady(result.fullname);
-      },
-      error: function(result) {
-         $('#loginbutton').animateCss('shake').prev('.help-inline').animateCss('bounceIn').text(JSON.parse(result.responseText).message);
-      }
-   });
+	var data = {};
+	$('#loginForm input[name]').each(function(index){
+		data[$(this).attr('name')] = $(this).val();
+	});
+	$.ajax({
+		url: '/api/authentication/signin',
+		method: 'POST',
+		data: data,
+		success: function(result) {
+			localStorage.accessToken = result.accessToken;
+			// $('#login-modal').modal('hide');
+			$.notify({ //http://bootstrap-notify.remabledesigns.com/
+				message: 'Welcome ' + result.id + ". Redirecting to User Panel...",
+				icon: "fa fa-check"
+			}, {
+				type: 'success',
+				delay: 3000,
+				mouse_over: "pause"
+			});
+			userReady(result.fullname);
+		},
+		error: function(result) {
+			//$('#loginbutton').animateCss('shake').prev('.help-inline').animateCss('bounceIn').text(JSON.parse(result.responseText).message);
+			$('#submitButtonLogin').animateCss('shake');
+			$.notify({
+				message: JSON.parse(result.responseText).message,
+				icon: "fa fa-exclamation-triangle"
+			}, {
+				type: "danger",
+				delay: 3000,
+				mouse_over: "pause"
+			});
+			$("#emailFieldLogin").val("");
+			$("#passFieldLogin").val("");
+		}
+	});
 }
 
 function signUp(){
    var data = {};
-   $('#signup input[name], #signup select[name]').each(function(index){
+   $('#signUpForm input[name], #signUpForm select[name]').each(function(index){
       data[$(this).attr('name')] = $(this).val();
    });
    $.ajax({
@@ -177,19 +219,21 @@ function signUp(){
       method: 'POST',
       data: data,
       success: function(result) {
-         $('.nav-tabs a[href="#login"]').tab('show');
-         $('.nav-tabs a[href="#signup"]').addClass('hidden');
-         $('#login').prepend($('<div class="alert alert-warning" role="alert">We sent an email to '+data.email+'. Check it to validate your account.</div>'));
-         $.notify({ //http://bootstrap-notify.remabledesigns.com/
-            message: 'Check your email to validate your account.',
-            mouse_over: 'pause'
+         //$('.nav-tabs a[href="#login"]').tab('show');
+         //$('.nav-tabs a[href="#signup"]').addClass('hidden');
+         //$('#signUpForm .modal-body').prepend($('<div class="alert alert-warning" role="alert">We sent an email to '+data.email+'. Check it to validate your account.</div>'));
+         $("#signUpModal").modal("hide");
+		 $.notify({ //http://bootstrap-notify.remabledesigns.com/
+            message: 'We sent an email to '+data.email+'. Read it and follow the instructions to validate your account',
+			 icon: "fa fa-envelope"
          }, {
             type: 'warning',
+            mouse_over: 'pause',
             delay: 5000
          });
-      },
+      }, // TODO: Error graphic management to be tested
       error: function(result) {
-         $('#signupbutton').animateCss('shake').prev('.help-inline').animateCss('bounceIn').text(JSON.parse(result.responseText).message);
+         $('#submitButtonSignUp').animateCss('shake').prev('.help-inline').animateCss('bounceIn').text(JSON.parse(result.responseText).message);
       }
    });
 }
