@@ -1,0 +1,64 @@
+/*
+	TODO: Fix @font-face not showing on iOS devices
+*/
+body {
+	font-family:"Catamaran", "Helvetica Neue", Helvetica, sans-serif !important;
+	font-weight:400;
+	font-style:normal;
+}
+.navbar {
+	margin-bottom:0px;
+}
+.jumbotron {
+	background:#000 url("../img/landing.jpg") no-repeat center center;
+	background-size:cover;
+	color:#FFF;
+	padding-top:0px;
+	padding-bottom:0px;
+}
+.jumbotron p {
+	font-weight:100;
+}
+.backgroundOverlay {
+	background:rgba(0,0,0,0.3);
+	padding-top:110px;
+	padding-bottom:110px;
+}
+.lightBox {
+	padding:25px;
+	background:rgba(0,0,0,0.3);
+	border-radius:3px;
+	-webkit-border-radius:3px;
+	-moz-border-radius:3px;
+}
+.row-xs-flex-center {
+    display:flex;
+    align-items:center;
+}
+@media ( min-width:768px ) {
+    .row-sm-flex-center {
+        display:flex;
+        align-items:center;
+    }
+}
+@media ( min-width: 992px ) {
+    .row-md-flex-center {
+        display:flex;
+        align-items:center;
+    }
+}
+@media ( min-width: 1200px ) {
+    .row-lg-flex-center {
+        display:flex;
+        align-items:center;
+    }
+}
+.footer {
+	background:#F8F8F8;
+	border-top:1px solid #E7E7E7;
+	padding-top:20px;
+	margin-top:30px;
+}
+.footer p {
+	margin-bottom:20px;
+}
