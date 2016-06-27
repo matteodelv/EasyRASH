@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+   <script type="text/javascript" src="/js/browser-polyfill.js"></script>
+   <script src="//code.jquery.com/jquery-2.2.3.min.js" integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo=" crossorigin="anonymous"></script>
+   <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+   <script type="text/javascript" src="/js/bootstrap-notify.min.js"></script>
+   <script type="text/javascript" src="/js/main.js"></script>
+   <script type="text/javascript" src="/js/history.js/scripts/bundled/html4+html5/jquery.history.js"></script>
+   <script type="text/javascript" src="/papers/js/rash.js"></script>
+	<script type="text/javascript" src="https://use.fontawesome.com/5042c30d9c.js"></script>
+   <link rel="stylesheet" type="text/css" href="stylesheets/style.css">
+   <link rel="stylesheet" type="text/css" href="stylesheets/animate.css">
+   <link rel="stylesheet" type="text/css" href="stylesheets/sidebar.css">
+	<link rel="stylesheet" type="text/css" href="stylesheets/fonts.css">
+   <title>Homepage</title>
+</head>
+
+<body data-spy="scroll" data-target="#nav-scroll-spy" data-offset="20">
+   <div class="container-fluid banner">
+      <div class="col-md-offset-2">
+         <div class="banner-text">Easy RASH</div>
+      </div>
+   </div>
+   <div class="container-fluid">
+      <div id="wrapper" class="row">
+         <div id="sidebar-wrapper" class="col-md-2 sidebar hidden-print">
+            <div class="profile-panel hidden">
+               <h4 class="name"></h4>
+               <button class="btn" onclick="javascript:logOut()">Log out</button>
+            </div>
+            <ul id="sidebar" class="sidebar-nav nav nav-pills nav-stacked">
+               <li class="sidebar-brand submitted"><a href="#">Submitted</a></li>
+               <li class="sidebar-brand reviewable"><a href="#">Reviewable</a></li>
+            </ul>
+         </div>
+         <div id="page-content-wrapper" class="col-md-10 col-md-offset-2">
+            <div id="top" class="page-content">
+               <div class="row">
+                  <div class="col-md-10">
+                     <!-- content of page -->
+                     <div id="paper-container" class="paper-container">
+                     </div>
+                  </div>
+                  <nav class="col-md-2 sections-sidebar hidden-print hidden-xs hidden-sm" id="nav-scroll-spy">
+                     <ul class="nav nav-stacked" data-spy="affix" data-offset-top="150">
+                     </ul>
+                  </nav>
+               </div>
+            </div>
+         </div>
+      </div>
+      <!-- SignIn SignUp Modal -->
+      <div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="loginpanel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+         <div class="modal-dialog">
+            <div class="modal-content">
+               <!-- Modal Header -->
+               <div class="modal-header">
+                  <h4 class="modal-title" id="myModalLabel">Please log in or sign up</h4>
+               </div>
+               <div id="loginpanel">
+                  <!-- Modal Body -->
+                  <div class="modal-body tab-content">
+                     <ul class="nav nav-tabs">
+                        <li class="active"><a data-toggle="tab" href="#login">Log in</a></li>
+                        <li><a data-toggle="tab" href="#signup">Sign up</a></li>
+                     </ul>
+                     <form id="login" class="form ws-validate tab-pane fade in active" action="javascript:logIn()">
+                        <div class="form-group">
+                           <label for="loginemail">Email address</label>
+                           <input type="email" id="loginemail" class="form-control" name="email" value="" placeholder="Email" required="required" />
+                        </div>
+                        <div class="form-group">
+                           <label for="loginpassword">Password</label>
+                           <input type="password" id="loginpassword" class="form-control" name="password" value="" placeholder="Password" required="required" />
+                        </div>
+                        <div class="modal-footer">
+                           <span class="help-inline error-message"></span>
+                           <button type="submit" id="loginbutton" class="btn btn-primary" name="login">Login</button>
+                        </div>
+                     </form>
+                     <form id="signup" class="form ws-validate tab-pane fade" action="javascript:signUp()">
+                        <div class="row">
+                           <div class="form-group col-md-6">
+                              <label for="signupname">Name</label>
+                              <input type="text" id="signupname" class="form-control" name="name" value="" placeholder="Name" required="required" />
+                           </div>
+                           <div class="form-group col-md-6">
+                              <label for="signupsurname">Surname</label>
+                              <input type="text" id="signupsurname" class="form-control" name="surname" value="" placeholder="Surname" required="required" />
+                           </div>
+                        </div>
+                        <div class="row">
+                           <div class="form-group col-md-9">
+                              <label for="singupusername">Username</label>
+                              <input type="text" id="singupusername" class="form-control" name="username" value="" placeholder="Username" required="required" />
+                           </div>
+                           <div class="form-group col-md-3">
+                              <label for="signupsex">Sex</label>
+                              <select class="form-control" id="signupsex" name="sex">
+                                 <option value="unspecified">Not specified</option>
+                                 <option value="male">Male</option>
+                                 <option value="female">Female</option>
+                              </select>
+                           </div>
+                        </div>
+                        <div class="form-group">
+                           <label for="signupemail">Email address</label>
+                           <input type="email" id="signupemail" class="form-control" name="email" value="" placeholder="Email" required="required" />
+                        </div>
+                        <div class="form-group">
+                           <label for="signuppassword">Password</label>
+                           <input type="password" id="signuppassword" class="form-control" name="password" value="" placeholder="Password" required="required" />
+                        </div>
+                        <div class="modal-footer">
+                           <span class="help-inline error-message"></span>
+                           <button type="submit" id="signupbutton" class="btn btn-primary" name="signup">Sign up</button>
+                        </div>
+                     </form>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</body>
+
+</html>
