@@ -12,7 +12,7 @@ router.post('/signin', function(req, res) {
    fs.readFile('./storage/users.json', 'utf8', (err, data) => {
       if (err) throw err;
       var users = JSON.parse(data);
-      var user = users.find(u => u.email.toLowerCase() === req.body.email.toLowerCase());
+      var user = users.find(u => u.email.toLowerCase() === (req.body.email || "").toLowerCase());
       if (!user || user.pass != req.body.password) {  
          return res.status(401).json({
             success: false,
@@ -26,7 +26,7 @@ router.post('/signin', function(req, res) {
          // Return JWT and info as JSON
          res.json({
             success: true,
-            message: 'Authentication successful.',
+            message: 'Authentication successfulNaN',
             id: user.id,
             fullname: user.given_name + ' ' + user.family_name,
             accessToken: accessToken

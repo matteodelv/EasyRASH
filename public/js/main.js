@@ -172,7 +172,7 @@ var responsiveFooter = function() {
 
 function logIn() {
 	var data = {};
-	$('#loginForm input[name]').each(function(index){
+	$('#login input[name]').each(function(index){
 		data[$(this).attr('name')] = $(this).val();
 	});
 	$.ajax({
@@ -181,7 +181,7 @@ function logIn() {
 		data: data,
 		success: function(result) {
 			localStorage.accessToken = result.accessToken;
-			// $('#login-modal').modal('hide');
+			$('#login-modal').modal('hide');
 			$.notify({ //http://bootstrap-notify.remabledesigns.com/
 				message: 'Welcome ' + result.id + ". Redirecting to User Panel...",
 				icon: "fa fa-check"
@@ -193,7 +193,7 @@ function logIn() {
 			userReady(result.fullname);
 		},
 		error: function(result) {
-			//$('#loginbutton').animateCss('shake').prev('.help-inline').animateCss('bounceIn').text(JSON.parse(result.responseText).message);
+			$('#loginbutton').animateCss('shake').prev('.help-inline').animateCss('bounceIn').text(JSON.parse(result.responseText).message);
 			$('#submitButtonLogin').animateCss('shake');
 			$.notify({
 				message: JSON.parse(result.responseText).message,
@@ -211,7 +211,7 @@ function logIn() {
 
 function signUp(){
    var data = {};
-   $('#signUpForm input[name], #signUpForm select[name]').each(function(index){
+   $('#signup input[name], #signUpForm select[name]').each(function(index){
       data[$(this).attr('name')] = $(this).val();
    });
    $.ajax({
@@ -219,9 +219,9 @@ function signUp(){
       method: 'POST',
       data: data,
       success: function(result) {
-         //$('.nav-tabs a[href="#login"]').tab('show');
-         //$('.nav-tabs a[href="#signup"]').addClass('hidden');
-         //$('#signUpForm .modal-body').prepend($('<div class="alert alert-warning" role="alert">We sent an email to '+data.email+'. Check it to validate your account.</div>'));
+         $('.nav-tabs a[href="#login"]').tab('show');
+         $('.nav-tabs a[href="#signup"]').addClass('hidden');
+         $('#signUpForm .modal-body').prepend($('<div class="alert alert-warning" role="alert">We sent an email to '+data.email+'. Check it to validate your account.</div>'));
          $("#signUpModal").modal("hide");
 		 $.notify({ //http://bootstrap-notify.remabledesigns.com/
             message: 'We sent an email to '+data.email+'. Read it and follow the instructions to validate your account',
