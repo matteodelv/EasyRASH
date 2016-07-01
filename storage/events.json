@@ -126,6 +126,22 @@
             ]
          },
          {
+            "title": "Example paper for comments",
+            "authors": [
+               "angelo.diiorio",
+               "raffaele.giannella",
+               "francesco.poggi5",
+               "fabio.vitali",
+               "silvio.peroni"
+            ],
+            "url": "example-annotations",
+            "reviewers": [
+               "arthur.dent",
+               "arabella.strange",
+               "john.constantine"
+            ]
+         },
+         {
             "title": "The RASH Framework: enabling HTML+RDF submissions in scholarly venues",
             "authors": [
                "angelo.diiorio",

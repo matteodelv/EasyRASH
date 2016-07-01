@@ -1,3 +1,4 @@
+//JQuery animation of an element
 $.fn.extend({
 	animateCss: function(animationName) {
 		var animationEnd = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
@@ -8,6 +9,7 @@ $.fn.extend({
 	}
 });
 
+//Add authorization header before each request
 $.ajaxSetup({
 	beforeSend: function(xhr) {
 		if (localStorage.accessToken) {
@@ -16,6 +18,7 @@ $.ajaxSetup({
 	}
 });
 
+//Verify if user agent has a valid token, if not show login form
 if (localStorage.accessToken) {
 	$.ajax({
 		url: '/api/verify',
@@ -33,6 +36,7 @@ if (localStorage.accessToken) {
 	});
 }
 
+//When the user agent's url changes load the new paper
 window.onstatechange = function(event) {
 	loadCurrentPaperContent();
 };
@@ -47,7 +51,8 @@ $viewport.bind("scroll mousedown DOMMouseScroll mousewheel keyup", function(e) {
 });
 
 var $addedHeadTags; //Contains head tags belonging to a single paper, to be removed when a paper view is replaced
-
+var annotations; //Contains RASH annotations
+//Loads the content of the current paper in the appropriate div
 function loadCurrentPaperContent() {
 
 	if (document.location.pathname === "/") {
@@ -69,17 +74,17 @@ function loadCurrentPaperContent() {
 			url: '/api' + document.location.pathname,
 			method: 'GET',
 			success: function(result) {
-
 				var xmlParsed = $.parseXML(result);
 				var $xml = $(xmlParsed);
 				//Head
 				$addedHeadTags && $addedHeadTags.remove();
-				$addedHeadTags = $xml.find('meta, link, title').not('[rel="stylesheet"]');
+				$addedHeadTags = $xml.find('meta, link, title, script[type="application/ld+json"]').not('[rel="stylesheet"]');
 				$('head').append($addedHeadTags);
 				//Body
 				var $body = $xml.find('body');
 				$('.paper-container').empty().append($body.children());
-				rasherize();
+				rasherize(); //Add extra paper elements
+				//Scroll Spy sections
 				$('.sections-sidebar>ul').empty();
 				var $root = $('html, body');
 				$('.sections-sidebar>ul').append($('<li class="active"><a href="#top">' + $("head title").html().split(" -- ")[0] + '</a></li>'));
@@ -118,6 +123,13 @@ function loadCurrentPaperContent() {
 				$('[data-spy="scroll"]').each(function() {
 					var $spy = $(this).scrollspy('refresh');
 				});
+				//END: Scroll Spy Sections
+
+				//Comments and reviews
+				annotations = [];
+				$addedHeadTags.filter('script[type="application/ld+json"]').each(function() {
+					annotations.push(JSON.parse($(this).html()));
+				});
 			},
 			error: function(result) {
 				if (result.responseJSON && result.responseJSON.error.name === "TokenExpiredError") {
@@ -150,11 +162,10 @@ $(document).ready(function() {
 	});
 
 	$("#signUpModal").on("hidden.bs.modal", function(e) {
-		console.log("on hidden.bs.modal");
 		$("#signUpForm")[0].reset();
 	});
 });
-
+//TODO: Move to a different file
 var responsiveFooter = function() {
 	if ($(window).width() < 768) {
 		$(".footer").css("padding-bottom", "20px");
@@ -243,13 +254,14 @@ function logOut() {
 	return false;
 }
 
+//Gets the papers of the logged in user
 function getPapers() {
 	$.ajax({
 		url: '/api/papers/',
 		method: 'GET',
 		success: function(result) {
 			sessionStorage.papers = JSON.stringify(result);
-
+			//Populating sidebar
 			for (var key in result) {
 				if (result.hasOwnProperty(key)) {
 					result[key].forEach(function(paper) {
