@@ -31,6 +31,7 @@ router.get('/', function(req, res) {
 
 //Responds with a paper given the id
 router.get('/:id', function(req, res) {
+	//Filter out comments by permissions: /(<script type="application\/ld\+json">)((.|\n)*?)<\/script>/igm
 	if (req.accepts(['application/xhtml+xml', 'text/html'])) {
 		var eventsFilePath = path.resolve('storage/events.json');
 		if (fs.existsSync(eventsFilePath)) {
