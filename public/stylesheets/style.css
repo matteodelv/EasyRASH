@@ -103,6 +103,18 @@ div.form-group + div.form-group{
 	}
 }
 
+*::-webkit-scrollbar {
+     width: 6px!important; 
+}
+
+*::-webkit-scrollbar-track {
+     background: rgba(0,0,0,.05); 
+}
+
+*::-webkit-scrollbar-thumb {
+     background-color: rgba(255,255,255,.4); 
+}
+
 /*
 .paper-container section:hover {
 	box-shadow: 0 0 6px #4D394B;
