@@ -19,6 +19,7 @@
       "submissions": [
          {
             "title": "The Microsoft Academic Graph: New Applications and Research Opportunities -- SAVE-SD 2016 Keynote Talk",
+            "status": "accepted",
             "authors": [
                "alex.wade"
             ],
@@ -30,6 +31,7 @@
          },
          {
             "title": "Semantic Publishing Challenge: Bootstrapping a Value Chain for Scientific Data ",
+            "status": "pending",
             "authors": [
                "vahdati",
                "anastasia.dimou",
@@ -44,6 +46,7 @@
          },
          {
             "title": "It ROCS! -- The RASH Online Conversion Service",
+            "status": "pending",
             "authors": [
                "angelo.diiorio",
                "alejandra.gonzalezbeltran",
@@ -60,6 +63,7 @@
          },
          {
             "title": "RASH: Research Articles in Simplified HTML -- Documentation - Version 0.5, February 15, 2016",
+            "status": "rejected",
             "authors": [
                "silvio.peroni"
             ],
@@ -101,6 +105,7 @@
       "submissions": [
          {
             "title": "Increasing the Productivity of Scholarship: The Case for Knowledge Graphs -- SAVE-SD 2015 Keynote Talk",
+            "status": "rejected",
             "authors": [
                "p.groth"
             ],
@@ -112,6 +117,7 @@
          },
          {
             "title": "Exploring bibliographies for research-related tasks",
+            "status": "toBeAmended",
             "authors": [
                "angelo.diiorio",
                "raffaele.giannella",
@@ -127,6 +133,7 @@
          },
          {
             "title": "Example paper for comments",
+            "status": "pending",
             "authors": [
                "angelo.diiorio",
                "raffaele.giannella",
@@ -143,6 +150,7 @@
          },
          {
             "title": "The RASH Framework: enabling HTML+RDF submissions in scholarly venues",
+            "status": "toBeAmended",
             "authors": [
                "angelo.diiorio",
                "andrea.nuzzolese",
@@ -161,6 +169,7 @@
          },
          {
             "title": "Evaluating citation functions in CiTO: cognitive issues -- Preprint of http://dx.doi.org/10.1007/978-3-319-07443-6_39",
+            "status": "accepted",
             "authors": [
                "paolo.ciancarini",
                "angelo.diiorio",
@@ -176,6 +185,7 @@
          },
          {
             "title": "Enhanced Publication Management Systems -- A systemic approach towards modern scientific communication",
+            "status": "accepted",
             "authors": [
                "alessia.bardi",
                "paolo.manghi"

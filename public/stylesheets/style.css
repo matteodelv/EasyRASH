@@ -1,10 +1,12 @@
+@import 'https://fonts.googleapis.com/css?family=Raleway:500,700';
+
 body {
 	position: relative;
 }
 
 .banner-text, .profile-panel, .sidebar-nav, .sections-sidebar {
-	font-family: 'Catamaran', "Helvetica Neue", Helvetica, sans-serif;
-	font-weight:400;
+	font-family: 'Raleway', sans-serif;
+	font-weight:500;
 	font-style:normal;
 }
 
