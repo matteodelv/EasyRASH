@@ -19,22 +19,25 @@ $.ajaxSetup({
 });
 
 //Verify if user agent has a valid token, if not show login form
-if (localStorage.accessToken) {
-	$.ajax({
-		url: '/api/verify',
-		type: 'POST',
-		success: function(result) {
-			userReady(result.fullname);
-		},
-		error: function(result) {
+window.onload = function() {
+	if (localStorage.accessToken) {
+		$.ajax({
+			url: '/api/verify',
+			type: 'POST',
+			success: function(result) {
+				userReady(result.fullname);
+			},
+			error: function(result) {
+				$('#login-modal').modal('show');
+			}
+		});
+	} else {
+		$(window).load(function() {
 			$('#login-modal').modal('show');
-		}
-	});
-} else {
-	$(window).load(function() {
-		$('#login-modal').modal('show');
-	});
-}
+		});
+	}
+};
+
 
 //When the user agent's url changes load the new paper
 window.onstatechange = function(event) {
@@ -78,7 +81,7 @@ function loadCurrentPaperContent() {
 				var $xml = $(xmlParsed);
 				//Head
 				$addedHeadTags && $addedHeadTags.remove();
-				$addedHeadTags = $xml.find('meta, link, title, script[type="application/ld+json"]').not('[rel="stylesheet"]');
+				$addedHeadTags = $xml.find('meta, link, title, script[type="application/ld+json"]').not('link[rel="stylesheet"]');
 				$('head').append($addedHeadTags);
 				//Body
 				var $body = $xml.find('body');
