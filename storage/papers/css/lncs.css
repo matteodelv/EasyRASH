@@ -128,6 +128,8 @@ Computer Modern Unicode fonts are from http://canopus.iacp.dvo.ru/~panov/cm-unic
 .paper-container code, .paper-container pre {
     font-family: "CMU Serif Monospace", monospace !important;
     font-size: 8pt;
+    background-color: transparent;
+    border-radius: 0;
 }
 
 .paper-container pre {
@@ -459,13 +461,13 @@ html{
     margin-right: 5px;
 }
 .paper-container .footer div {
+    margin-top: 0px;
     position: relative;
     vertical-align: middle;
     display: inline;
 }
 .paper-container .footer > p {
     float: left;
-    width: 60%;
     padding: 0;
     text-align: left;
 }
@@ -473,6 +475,10 @@ html{
     display: block;
     margin-left: -4px;
 }
+.paper-container .footer div.btn-group {
+    height: 100%;
+}
+
 .paper-container .footer div button {
     background-color: #FFF;
     background-image: none;
@@ -583,7 +589,7 @@ html{
     width: 8px;
 }
 .paper-container .footer div ul li {
-    padding: 2px 5px 2px 5px;
+    padding: 0px;
 }
 .paper-container .footer div ul li a {
     display: block;

@@ -1,13 +1,12 @@
 @import 'https://fonts.googleapis.com/css?family=Raleway:500,700';
-
 body {
 	position: relative;
 }
 
 .banner-text, .profile-panel, .sidebar-nav, .sections-sidebar {
 	font-family: 'Raleway', sans-serif;
-	font-weight:500;
-	font-style:normal;
+	font-weight: 500;
+	font-style: normal;
 }
 
 .affix {
@@ -30,14 +29,23 @@ body {
 	min-height: 100vh;
 }
 
-#loginpanel .tab-pane{
+.page-content>.row>div {
+	padding-left: 0px;
+	padding-right: 0px;
+}
+
+#loginpanel .tab-pane {
 	margin-top: 20px;
 }
+
+
 /*
 div.form-group + div.form-group{
 	padding-left: 0;
 }
 */
+
+
 /* Profile panel */
 
 .profile-panel {
@@ -103,21 +111,45 @@ div.form-group + div.form-group{
 	}
 }
 
-*::-webkit-scrollbar {
-     width: 6px!important; 
+a, a:active, a:focus {
+	outline: none;
 }
 
-*::-webkit-scrollbar-track {
-     background: rgba(0,0,0,.05); 
+
+/* Scroll Bar */
+
+*::-webkit-scrollbar {
+	width: 10px;
+	height: 10px
 }
 
 *::-webkit-scrollbar-thumb {
-     background-color: rgba(255,255,255,.4); 
+	background: #ccc;
 }
 
-a, a:active, a:focus {
-outline: none;
+*::-webkit-scrollbar-thumb:hover {
+	background: #777;
 }
+
+#sidebar-wrapper::-webkit-scrollbar {
+	width: 7px;
+}
+
+#sidebar-wrapper::-webkit-scrollbar-track {
+	background: rgba(0, 0, 0, .05);
+}
+
+#sidebar-wrapper::-webkit-scrollbar-thumb {
+	background-color: rgba(255, 255, 255, .4);
+}
+
+#sidebar-wrapper::-webkit-scrollbar-thumb:hover {
+	background: rgba(255, 255, 255, .6);
+}
+
+
+/* End Scroll Bar */
+
 
 /*
 .paper-container section:hover {
