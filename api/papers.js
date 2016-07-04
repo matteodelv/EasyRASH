@@ -57,7 +57,6 @@ router.get('/:id', function(req, res) {
 				var filePath = path.resolve('storage/papers/' + req.params.id + '.html');
 				if (eligible) {
 					if (fs.existsSync(filePath)) {
-						console.log(canSeeAnnotations ? 'User CAN see annotations' : 'User can NOT see annotations');
 						fs.readFile(filePath, "utf-8", function(err, data) {
 							var emptyLineRegex = new RegExp(/^\s*\n/gm);
 							if (!canSeeAnnotations) {

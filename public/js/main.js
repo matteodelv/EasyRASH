@@ -196,7 +196,7 @@ function logIn() {
 			localStorage.accessToken = result.accessToken;
 			$('#login-modal').modal('hide');
 			$.notify({ //http://bootstrap-notify.remabledesigns.com/
-				message: 'Welcome ' + result.id + ". Redirecting to User Panel...",
+				message: 'Welcome ' + result.id,
 				icon: "fa fa-check"
 			}, {
 				type: 'success',
