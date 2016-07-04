@@ -65,7 +65,14 @@ function loadCurrentPaperContent() {
 
 	if (document.location.pathname.startsWith("/papers/")) {
 		var parsed = JSON.parse(sessionStorage.papers);
-		var papers = parsed.submitted.concat(parsed.reviewable);
+		//var papers = parsed.submitted.concat(parsed.reviewable);
+		var papers = [];
+		for (var category in parsed.articles) {
+			if (parsed.articles.hasOwnProperty(category)) {
+				papers = papers.concat(parsed.articles[category]);
+			}
+		}
+		
 		var paper = papers.find(function(paper) {
 			if (document.location.pathname.replace(/\/$/, "").endsWith(paper.url)) {
 				return paper;
@@ -149,10 +156,85 @@ function loadCurrentPaperContent() {
 	}
 }
 
+function getConferences() {
+	$.ajax({
+		url: "/api/events",
+		method: "GET",
+		success: function(res) {
+			var conferencesUl = $("#conferenceSelector .dropdown-menu");
+			//console.log(conferencesUl);
+			
+			for (var i = 0; i < res.length; i++) {
+				//var li = document.createElement("li");
+				//var a = document.createElement("a");
+				var $li = $('<li><a>'+res[i].conference+'</a></li>');
+				//a.href = encodeURI("/api/events/" + res[i].acronym + "/papers");
+				//a.text = res[i].conference;
+				//var acronym = res[i].acronym;
+				//$(a).data('acronym', res[i].acronym);
+				$('a', $li).data('acronym', res[i].acronym);
+				$('a', $li).on("click", function() {
+					var a = $(this);
+					$.ajax({
+						url: encodeURI("/api/events/" + a.data('acronym') + "/papers"),
+						method: "GET",
+						success: function(result) {
+							$("#sidebar-wrapper .profile-panel .userRole").text("Role: " + result.userRole);
+							$("#conferenceSelector button").html(result.selectedConf + "<span class='caret'></span>");
+							
+							console.log("AJAX request for conference " + a.data('acronym'));
+							//console.log(result);
+							fetchAndBuildSidebarMenu(result, function() {
+								loadCurrentPaperContent();
+							});
+						},
+						error: function(err) {
+							console.log(err);
+						}
+					});
+				});
+				//li.appendChild(a);
+				conferencesUl.append($li);
+			}
+		},
+		error: function(err) {
+			console.log(err);
+		}
+	});
+}
+
+function fetchAndBuildSidebarMenu(result, callback) {
+	sessionStorage.papers = JSON.stringify(result); // NON rimuovere altrimenti gli articoli non vengono caricati
+	//var liCat = $('<li class="sidebar-brand submitted"><a href="#">Submitted</a></li><li class="sidebar-brand reviewable"><a href="#">Reviewable</a></li>');
+	$("#sidebar").empty();//.append(liCat);
+	var articles = result.articles;
+	if (articles) {
+		for (var type in articles) {
+			if (articles.hasOwnProperty(type)) {
+				// Il nome delle categorie di articoli è gestito dal server in base al ruolo dell'utente loggato
+				var liCat = $('<li class="sidebar-brand ' + type + '">' + type.replace("_", " ") + '</li>');
+				$("#sidebar").append(liCat);
+				
+				articles[type].forEach(function(paper) {
+					var urlComplete = '/papers/' + paper.url;
+					var li = $('<li><a href="' + urlComplete + '">' + paper.title.split(" -- ")[0] + '</a></li>\n').insertAfter($('#sidebar-wrapper .sidebar-brand.' + type));
+					li.on('click', function() {
+						redirectToPaper(urlComplete, paper);
+						return false;
+					});
+				});
+			}
+		}
+	}
+	
+	if (callback) callback();
+}
+
 function userReady(fullname) {
 	$('.profile-panel').removeClass('hidden').animateCss('bounceIn');
 	$('.profile-panel>h4').text(fullname);
-	getPapers();
+	//getPapers();
+	getConferences();
 }
 
 $(document).ready(function() {

@@ -38,5 +38,6 @@ router.post('/verify', (req, res) => {
 //Routing for RESTful api
 router.use('/papers', require('./papers')); //GET Requests for /api/papers, carried out by papersController
 router.use('/users', require('./users'));
+router.use('/events', require('./events'));
 
 module.exports = router;

@@ -56,7 +56,7 @@ div.form-group + div.form-group{
 	margin: 0.2em;
 }
 
-.profile-panel>.name {
+.profile-panel>.name, .profile-panel>.userRole {
 	margin: auto 0.2em;
 	color: #E5E5E5;
 	display: inline;

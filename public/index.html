@@ -31,11 +31,15 @@
          <div id="sidebar-wrapper" class="col-md-2 sidebar hidden-print">
             <div class="profile-panel hidden">
                <h4 class="name"></h4>
+			   <h6 class="userRole"></h6>
                <button class="btn" onclick="javascript:logOut()">Log out</button>
             </div>
+			<div id="conferenceSelector" class="dropdown">
+				<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Choose Conference... <span class="caret"></span></button>
+				<ul class="dropdown-menu">
+				</ul>
+			</div>
             <ul id="sidebar" class="sidebar-nav nav nav-pills nav-stacked">
-               <li class="sidebar-brand submitted"><a href="#">Submitted</a></li>
-               <li class="sidebar-brand reviewable"><a href="#">Reviewable</a></li>
             </ul>
          </div>
          <div id="page-content-wrapper" class="col-md-10 col-md-offset-2">
