@@ -6,6 +6,9 @@ $.fn.extend({
 			$(this).removeClass('animated ' + animationName);
 		});
 		return $(this);
+	},
+	ignore: function(sel) {
+		return this.clone().find(sel || ">*").remove().end();
 	}
 });
 
@@ -72,7 +75,7 @@ function loadCurrentPaperContent() {
 				papers = papers.concat(parsed.articles[category]);
 			}
 		}
-		
+
 		var paper = papers.find(function(paper) {
 			if (document.location.pathname.replace(/\/$/, "").endsWith(paper.url)) {
 				return paper;
@@ -84,6 +87,7 @@ function loadCurrentPaperContent() {
 			url: '/api' + document.location.pathname,
 			method: 'GET',
 			success: function(result) {
+				$('#placeholder').remove();
 				var xmlParsed = $.parseXML(result);
 				var $xml = $(xmlParsed);
 				//Head
@@ -163,11 +167,11 @@ function getConferences() {
 		success: function(res) {
 			var conferencesUl = $("#conferenceSelector .dropdown-menu");
 			//console.log(conferencesUl);
-			
+
 			for (var i = 0; i < res.length; i++) {
 				//var li = document.createElement("li");
 				//var a = document.createElement("a");
-				var $li = $('<li><a>'+res[i].conference+'</a></li>');
+				var $li = $('<li><a>' + res[i].conference + '</a></li>');
 				//a.href = encodeURI("/api/events/" + res[i].acronym + "/papers");
 				//a.text = res[i].conference;
 				//var acronym = res[i].acronym;
@@ -175,13 +179,15 @@ function getConferences() {
 				$('a', $li).data('acronym', res[i].acronym);
 				$('a', $li).on("click", function() {
 					var a = $(this);
+					$("#conferenceSelector .btn:first-child *:first-child").text($(this).text());
+					$("#conferenceSelector .btn:first-child *:first-child").val($(this).text());
 					$.ajax({
 						url: encodeURI("/api/events/" + a.data('acronym') + "/papers"),
 						method: "GET",
 						success: function(result) {
 							$("#sidebar-wrapper .profile-panel .userRole").text("Role: " + result.userRole);
-							$("#conferenceSelector button").html(result.selectedConf + "<span class='caret'></span>");
-							
+							//$("#conferenceSelector button").text(result.selectedConf);
+
 							console.log("AJAX request for conference " + a.data('acronym'));
 							//console.log(result);
 							fetchAndBuildSidebarMenu(result, function() {
@@ -206,7 +212,7 @@ function getConferences() {
 function fetchAndBuildSidebarMenu(result, callback) {
 	sessionStorage.papers = JSON.stringify(result); // NON rimuovere altrimenti gli articoli non vengono caricati
 	//var liCat = $('<li class="sidebar-brand submitted"><a href="#">Submitted</a></li><li class="sidebar-brand reviewable"><a href="#">Reviewable</a></li>');
-	$("#sidebar").empty();//.append(liCat);
+	$("#sidebar").empty(); //.append(liCat);
 	var articles = result.articles;
 	if (articles) {
 		for (var type in articles) {
@@ -214,7 +220,7 @@ function fetchAndBuildSidebarMenu(result, callback) {
 				// Il nome delle categorie di articoli è gestito dal server in base al ruolo dell'utente loggato
 				var liCat = $('<li class="sidebar-brand ' + type + '">' + type.replace("_", " ") + '</li>');
 				$("#sidebar").append(liCat);
-				
+
 				articles[type].forEach(function(paper) {
 					var urlComplete = '/papers/' + paper.url;
 					var li = $('<li><a href="' + urlComplete + '">' + paper.title.split(" -- ")[0] + '</a></li>\n').insertAfter($('#sidebar-wrapper .sidebar-brand.' + type));
@@ -226,7 +232,7 @@ function fetchAndBuildSidebarMenu(result, callback) {
 			}
 		}
 	}
-	
+
 	if (callback) callback();
 }
 

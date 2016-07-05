@@ -147,6 +147,24 @@ a, a:active, a:focus {
 	background: rgba(255, 255, 255, .6);
 }
 
+.placeholderimg {
+	width: 320px;
+	display: block;
+	margin: 3em auto;
+}
+
+#placeholder p{
+	font-family: 'Raleway', sans-serif;
+	font-weight: 700;
+	font-size: 30pt;
+	color: #CCCCCC;
+	text-align: center;
+}
+
+#conferenceSelector .btn, #conferenceSelector .dropdown-menu li a{
+	white-space: normal;
+	width: 100%;
+}
 
 /* End Scroll Bar */
 
