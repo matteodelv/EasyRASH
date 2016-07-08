@@ -32,6 +32,17 @@ a {
 .help-inline.error {
 	margin: 0em 2em;
 }
+
+.label {
+	font-family: 'Lato', sans-serif;
+}
+
+.webui-popover-inner .close{
+	position: absolute;
+	right: 0;
+	z-index: 1;
+}
+
 /*Main view*/
 
 .paper-container {
@@ -44,24 +55,28 @@ a {
 }
 
 .paper-container>section, .paper-container>header {
+	position: relative;
 	padding-left: 20px;
 	padding-right: 20px;
 }
 
-.comment-anchor {
-	position: absolute;
-	float: left;
-	width: 5px;
-	margin-left: -10px;
-	border-radius: 2.5px;
+.paper-container>section *{
+	position: relative;
 }
 
-.comment-anchor:hover{
-	/* width: 300px; */
+.comment-anchor {
+	position: absolute!important;
+	top: 0;
+	bottom: 0;
+	float: left;
+	width: 10px;
+	margin-left: -20px;
+	border-radius: 5px;
+	overflow: visible;
 }
 
 .paper-container>section>.comment-anchor {
-	margin-left: -20px;
+	margin-left: -40px;
 }
 
 #loginpanel .tab-pane {
@@ -83,10 +98,6 @@ a {
 	margin: auto 0.2em;
 	color: #E5E5E5;
 	display: inline;
-}
-
-.popover {
-	max-width:
 }
 
 
@@ -236,11 +247,15 @@ a, a:active, a:focus {
 	margin-right: 0.5em;
 }
 
-.popover .carousel .comment-header {
+.webui-popover .carousel .comment-header {
 	border-bottom: 2px solid;
 	padding-bottom: 0.5em;
 	font-family: 'Raleway', sans-serif;
 	font-weight: 700;
+}
+
+.webui-popover {
+	max-width: 400px;
 }
 
 

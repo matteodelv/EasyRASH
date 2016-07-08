@@ -112,7 +112,7 @@ Computer Modern Unicode fonts are from http://canopus.iacp.dvo.ru/~panov/cm-unic
     text-align: justify;
 }
 
-.paper-container * {
+.paper-container * :not(.comment-anchor) {
     margin: 0;
     padding: 0;
 }

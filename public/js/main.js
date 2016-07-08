@@ -219,6 +219,9 @@ function loadCurrentPaperContent() {
 					});
 				});
 				Object.keys(annotationsById).forEach(function(id) {
+					annotationsById[id].sort(function(a, b) {
+						return b.text.length - a.text.length
+					});
 					//Highlight color default to first reviewer's color
 					var rgbColor = reviewerColors[annotationsById[id][0].author];
 					var rgbaColor = hexToRgbA(rgbColor, 0.5);
@@ -231,58 +234,75 @@ function loadCurrentPaperContent() {
 							'background-color': rgbaColor
 						});
 
-						var $popover = $elem.popover({
-							placement: 'top',
+						var $popover = $elem.webuiPopover({
+							placement: 'auto-top',
 							trigger: 'hover',
-							html: true,
-							container: $elem,
+							type: 'html',
+							animation: 'pop',
 							content: getInlineAnnotationHtml(id, annotationsById[id]),
 							delay: { "show": 0, "hide": 300 }
 						});
 
-						$popover.on("shown.bs.popover", function(e) {
+						$popover.on("shown.webui.popover", function(e) {
 							carouselNormalization('#carousel-' + id.replace('#', '') + ' .item');
 						});
 
-						/*$popover.on("show.bs.popover", function(e) {
-							$('.popover').popover('hide');
-						});*/
 						$('#carousel-' + id).carousel();
 						//Block annotations appear on the side with a hover effect
-					} else if (['p', 'div', 'section', 'figure'].indexOf($(id).prop('tagName').toLowerCase()) >= 0) {
+					} else if (['p', 'div', 'section', 'figure', 'footer', 'header'].indexOf($(id).prop('tagName').toLowerCase()) >= 0) {
 						var $anchor = $('<div class="comment-anchor hidden-print"></div>');
 						var $elem = $(id);
 						$anchor.css({
-							'background-color': rgbColor,
-							'height': $elem.height()
+							'background-color': rgbaColor
 						});
-						//$elem.children().wrapAll($wrapper);
-						$elem.prepend($anchor);
+						
+						var inner = ['section', 'footer', 'header'].indexOf($(id).prop('tagName').toLowerCase()) < 0;
+						if (inner) {
+							var $wrapper = $('<div></div>');
+							$elem.replaceWith($wrapper);
+							$wrapper.append($anchor);
+							$wrapper.append($elem);
+						} else {
+							$elem.prepend($anchor);
+						}
 
-						var $popover = $anchor.popover({
-							placement: 'bottom',
+						var animateOut = function($element) {
+							$anchor.stop(true, false).animate({ 'min-width': '0' }, {
+								duration: 300,
+								easing: 'easeInCubic'
+							});
+						};
+
+						var $popover = $elem.webuiPopover({
+							placement: 'top-right',
 							trigger: 'manual',
-							html: true,
-							container: $anchor,
+							type: 'html',
+							animation: 'pop',
+							closeable: true,
 							content: getInlineAnnotationHtml(id, annotationsById[id]),
-							delay: { "show": 0, "hide": 300 }
+							delay: { "show": 0, "hide": 0 },
+							onShow: function($element) {
+								var target = $anchor.parent().width() - parseInt($anchor.css('marginLeft')) * 2;
+								$anchor.stop(true, false).animate({ 'min-width': target }, {
+									duration: 400,
+									easing: 'easeOutQuad',
+									done: function() {
+										if (!$popover.is(':visible')) {
+											animateOut($element);
+										}
+									}
+								});
+							},
+							onHide: animateOut
 						});
 
 						$anchor.mouseenter(function() {
-							$popover.popover('show');
-							console.log('enter' + this);
-						});
-						$elem.mouseleave(function(){
-							console.log('left'  + this);
-							$popover.popover('hide');
+							$popover.webuiPopover('show');
 						});
 
-						$popover.on("shown.bs.popover", function(e) {
+						$popover.on("shown.webui.popover", function(e) {
 							carouselNormalization('#carousel-' + id.replace('#', '') + ' .item');
 						});
-						/*$popover.on("show.bs.popover", function(e) {
-							$('.popover').popover('hide');
-						});*/
 						$('#carousel-' + id).carousel();
 					}
 				});
@@ -336,24 +356,31 @@ function getInlineAnnotationHtml(id, annotations) {
 function carouselNormalization(selector) {
 	var items = $(selector), //grab all slides
 		heights = [], //create empty array to store height values
-		tallest; //create variable to make note of the tallest slide
+		tallest, //create variable to make note of the tallest slide
+		widths = [],
+		largest;
 
 	if (items.length) {
 		function normalizeHeights() {
 			items.each(function() { //add heights to array
 				heights.push($(this).height());
+				widths.push($(this).width());
 			});
 			tallest = Math.max.apply(null, heights); //cache largest value
+			largest = Math.max.apply(null, widths);
 			items.each(function() {
 				$(this).css('min-height', tallest + 'px');
+				$(this).css('min-width', largest + 'px');
 			});
 		};
 		normalizeHeights();
 
 		$(window).on('resize orientationchange', function() {
 			tallest = 0, heights.length = 0; //reset vars
+			largest = 0, widths.length = 0;
 			items.each(function() {
 				$(this).css('min-height', '0'); //reset min-height
+				$(this).css('min-width', '0');
 			});
 			normalizeHeights(); //run it again 
 		});
