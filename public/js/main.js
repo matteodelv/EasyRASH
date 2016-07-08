@@ -55,7 +55,7 @@ function hexToRgbA(hex, opacity) {
 		c = '0x' + c.join('');
 		return 'rgba(' + [(c >> 16) & 255, (c >> 8) & 255, c & 255].join(',') + ',' + opacity + ')';
 	}
-	throw new Error('Bad Hex');
+	throw new Error('Bad Hex: ' + hex);
 }
 
 
@@ -210,19 +210,20 @@ function loadCurrentPaperContent() {
 							} else {
 								annotationsById[annotation.ref] = [annotation];
 							}
-						}
-						if (!reviewerColors[annotation.author]) {
-							var colorIndex = Math.floor(Math.random() * distinctColors.length);
-							reviewerColors[annotation.author] = distinctColors[colorIndex];
-							distinctColors.splice(colorIndex);
+							if (!reviewerColors[annotation.author]) {
+								var colorIndex = Math.floor(Math.random() * distinctColors.length);
+								reviewerColors[annotation.author] = distinctColors[colorIndex];
+								distinctColors.splice(colorIndex, 1);
+							}
 						}
 					});
 				});
-				for (id in annotationsById) {
+				Object.keys(annotationsById).forEach(function(id) {
 					//Highlight color default to first reviewer's color
-					var rgbaColor = hexToRgbA(reviewerColors[annotationsById[id][0].author], 0.5);
-					//Inline annotations appear as highlighted text and popover
-					if (['span', 'em', 'code', 'a', 'time', 'cite'].indexOf($(id).prop('tagName').toLowerCase()) >= 0) {
+					var rgbColor = reviewerColors[annotationsById[id][0].author];
+					var rgbaColor = hexToRgbA(rgbColor, 0.5);
+					//Inline annotations appear as highlighted text and popover (plus h1, h2, h3)
+					if (['span', 'em', 'code', 'a', 'time', 'cite', 'h1', 'h2', 'h3'].indexOf($(id).prop('tagName').toLowerCase()) >= 0) {
 						var $elem = $(id);
 
 						$elem.css({
@@ -230,34 +231,61 @@ function loadCurrentPaperContent() {
 							'background-color': rgbaColor
 						});
 
-						var closureGetInlineAnnotationHtml = function(closureId) {
-							return function() {
-								return getInlineAnnotationHtml(closureId, annotationsById[closureId]);
-							}
-						}(id);
-
 						var $popover = $elem.popover({
 							placement: 'top',
 							trigger: 'hover',
 							html: true,
 							container: $elem,
-							content: closureGetInlineAnnotationHtml,
+							content: getInlineAnnotationHtml(id, annotationsById[id]),
 							delay: { "show": 0, "hide": 300 }
 						});
 
-						var closureCarouselNormalization = function(closureId) {
-							return function() {
-								return carouselNormalization('#carousel-' + closureId.replace('#', '') + ' .item');
-							}
-						}(id);
-
 						$popover.on("shown.bs.popover", function(e) {
-							closureCarouselNormalization();
+							carouselNormalization('#carousel-' + id.replace('#', '') + ' .item');
 						});
 
+						/*$popover.on("show.bs.popover", function(e) {
+							$('.popover').popover('hide');
+						});*/
+						$('#carousel-' + id).carousel();
+						//Block annotations appear on the side with a hover effect
+					} else if (['p', 'div', 'section', 'figure'].indexOf($(id).prop('tagName').toLowerCase()) >= 0) {
+						var $anchor = $('<div class="comment-anchor hidden-print"></div>');
+						var $elem = $(id);
+						$anchor.css({
+							'background-color': rgbColor,
+							'height': $elem.height()
+						});
+						//$elem.children().wrapAll($wrapper);
+						$elem.prepend($anchor);
+
+						var $popover = $anchor.popover({
+							placement: 'bottom',
+							trigger: 'manual',
+							html: true,
+							container: $anchor,
+							content: getInlineAnnotationHtml(id, annotationsById[id]),
+							delay: { "show": 0, "hide": 300 }
+						});
+
+						$anchor.mouseenter(function() {
+							$popover.popover('show');
+							console.log('enter' + this);
+						});
+						$elem.mouseleave(function(){
+							console.log('left'  + this);
+							$popover.popover('hide');
+						});
+
+						$popover.on("shown.bs.popover", function(e) {
+							carouselNormalization('#carousel-' + id.replace('#', '') + ' .item');
+						});
+						/*$popover.on("show.bs.popover", function(e) {
+							$('.popover').popover('hide');
+						});*/
 						$('#carousel-' + id).carousel();
 					}
-				}
+				});
 			},
 			error: function(result) {
 				if (result.responseJSON && result.responseJSON.error.name === "TokenExpiredError") {
@@ -338,7 +366,7 @@ function getConferences() {
 		method: "GET",
 		success: function(res) {
 			var conferencesUl = $("#conferenceSelector .dropdown-menu");
-			
+
 			for (var i = 0; i < res.length; i++) {
 				var $li = $('<li><a>' + res[i].conference + '</a></li>');
 				$('a', $li).data('acronym', res[i].acronym);
@@ -354,7 +382,7 @@ function getConferences() {
 							sessionStorage.userRole = result.userRole;
 
 							console.log("AJAX request for conference " + a.data('acronym'));
-							
+
 							fetchAndBuildSidebarMenu(result, true, function() {
 								loadCurrentPaperContent();
 							});
@@ -397,16 +425,16 @@ String.prototype.camelCaseToString = function() {
 
 function applyStatusLabel(paper, loadingConf) {
 	var statusLabel = "";
-	
+
 	if (paper.hasOwnProperty("status") && !loadingConf) {
 		statusLabel = ' <span class="label label-primary">' + paper.conference + '</span> <span class="label $labelClass">$labelText</span>';
-		
+
 		if (paper.status === "accepted") statusLabel = statusLabel.replace("$labelClass", "label-success");
 		else statusLabel = statusLabel.replace("$labelClass", "label-warning");
-		
+
 		statusLabel = statusLabel.replace("$labelText", paper.status.camelCaseToString());
 	}
-	
+
 	if (loadingConf) {
 		if (paper.authors.indexOf(sessionStorage.userID) !== -1) statusLabel += ' <span class="fa fa-user"></span>';
 		if (sessionStorage.userRole !== "Chair") {
@@ -414,47 +442,45 @@ function applyStatusLabel(paper, loadingConf) {
 				if (paper.reviewedBy.indexOf(sessionStorage.userID) !== -1) statusLabel += ' <span class="fa fa-certificate"></span>';
 				else statusLabel += ' <span class="fa fa-exclamation-circle"></span>';
 			}
-		}
-		else {
+		} else {
 			if (paper.reviewers.length === paper.reviewedBy.length) statusLabel += ' <span class="fa fa-certificate"></span>';
 			else statusLabel += ' <span class="fa fa-exclamation-circle"></span>';
 		}
 		if (paper.status === "accepted") statusLabel += ' <span class="fa fa-check"></span>';
 	}
-	
+
 	return statusLabel;
 }
 
 function fetchAndBuildSidebarMenu(result, loadingConf, callback) {
 	sessionStorage.papers = JSON.stringify(result); // NON rimuovere altrimenti gli articoli non vengono caricati
 	var parentObj = "";
-	
+
 	if (loadingConf) {
 		parentObj = "#conferenceSidebar";
 		$(parentObj).empty();
 		$(parentObj).append($('<li class="sidebar-brand">Conference Papers</li>'));
-	}
-	else {
+	} else {
 		parentObj = "#sidebar";
 		$(parentObj + ", #conferenceSidebar").empty();
 	}
-	
+
 	for (var type in result) {
 		if (result.hasOwnProperty(type) && Array.isArray(result[type])) {
 			if (!loadingConf) {
 				var liCat = $('<li class="sidebar-brand ' + type + '">' + type.split("_").join(" ") + '</li>');
 				$(parentObj).append(liCat);
 			}
-			
+
 			result[type].forEach(function(paper) {
 				var urlComplete = "/papers/" + paper.url;
 				var liHtml = '<li><a href="' + urlComplete + '">' + paper.title.split(" -- ")[0] + '$label</a></li>\n';
 				liHtml = liHtml.replace("$label", applyStatusLabel(paper, loadingConf));
-				
+
 				var li = $(liHtml);
 				if (loadingConf) li.insertAfter($(parentObj + ' .sidebar-brand'));
 				else li.insertAfter($(parentObj + ' .sidebar-brand.' + type));
-				
+
 				li.on('click', function() {
 					redirectToPaper(urlComplete, paper);
 					return false;

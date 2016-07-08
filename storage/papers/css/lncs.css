@@ -53,20 +53,47 @@ Computer Modern Unicode fonts are from http://canopus.iacp.dvo.ru/~panov/cm-unic
     margin-top: 4.3cm;
     margin-bottom: 6.0cm;
 }
+
+
 /* Bootstrap overrride */
+
 .paper-container * {
     color: initial;
 }
+
 .paper-container .page-header {
     border: 0px;
 }
 
+
 /* END Bootstrap override */
+
+
+/*LNCS override*/
+
+.paper-container .popover-content {
+    padding: 9px 14px;
+}
+
+.paper-container .popover-content .carousel-indicators {
+    margin-left: -30%;
+    margin-right: auto;
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.paper-container p {
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+}
+
+
+/*END LNCS override*/
 
 .paper-container {
     font-size: 10pt !important;
     margin: 0 auto !important;
-    padding: 0 !important;
+    padding: 0 0 70px 0 !important;
     width: 122mm !important;
     /*height:193mm !important;*/
     color: #000000;
@@ -120,6 +147,7 @@ Computer Modern Unicode fonts are from http://canopus.iacp.dvo.ru/~panov/cm-unic
     word-break: break-all;
 }
 
+
 /* /END Links */
 
 
@@ -170,101 +198,127 @@ Computer Modern Unicode fonts are from http://canopus.iacp.dvo.ru/~panov/cm-unic
 /* Headings */
 
 .paper-container {
-    text-align:left;
-
+    text-align: left;
 }
+
 .paper-container h1, .paper-container h2 {
     overflow: hidden;
     font-family: "CMU Serif Bold", serif !important;
     line-height: 1.231;
 }
+
 .paper-container h1 {
     font-size: 12pt;
     margin-top: 1.5em;
     margin-bottom: 0.9em;
 }
+
 .paper-container h2 {
     font-size: 10pt;
     margin-top: 1.35em;
     margin-bottom: 0.75em;
 }
+
 .paper-container h3, .paper-container h4, .paper-container h5, .paper-container h6 {
     display: inline;
     font-size: 10pt;
 }
+
 .paper-container h3:after {
     font-weight: bold;
     content: ". ";
 }
+
 .paper-container h4, .paper-container h5, .paper-container h6 {
     font-weight: normal;
 }
+
 .paper-container h4:after, .paper-container h5:after, .paper-container h6:after {
     content: ". ";
 }
+
 .paper-container h3 + p, .paper-container h4 + p, .paper-container h5 + p, .paper-container h6 + p {
     display: inline;
 }
 
-.paper-container address{
+.paper-container address {
     font-size: 10pt !important;
 }
 
+
 /* /END Headings */
 
+
 /* Abstract */
+
 .paper-container section[role=doc-abstract] {
     font-size: 9pt;
     margin: 0 2.3em 1em;
     margin-bottom: 2.75em;
 }
+
 .paper-container section[role=doc-abstract] h1, .paper-container section[role=doc-abstract] > p:first-of-type {
     display: inline;
 }
+
 .paper-container section[role=doc-abstract] h1:after {
     content: ". ";
 }
 
+
 /* /END Abstract */
 
+
 /* Front matter */
+
 .paper-container .affiliation {
     font-size: 9pt !important;
 }
+
 .paper-container .affiliation *, .paper-container section[role=doc-abstract] h1, .paper-container section[role=doc-abstract] p {
     font-size: 0.93em;
 }
+
 .paper-container .keywords strong:after {
     content: ": ";
 }
+
 .paper-container .keywords ul {
     display: inline;
     margin-left: 0px;
 }
+
 .paper-container .keywords li:after {
     content: ", ";
 }
+
 .paper-container .keywords li:last-of-type:after {
     content: "";
 }
+
 .paper-container .keywords li code {
     font-family: "CMU Serif", serif !important;
 }
+
 .paper-container .keywords {
     text-indent: 0px;
     margin-top: 0.5cm;
     margin-bottom: 2.75em;
 }
+
 .paper-container .keywords li {
     display: inline;
     list-style-type: none;
 }
+
 .paper-container .title {
     text-align: center;
 }
+
 .paper-container .acm_subject_categories, .paper-container .acm_general_terms {
     display: none;
 }
+
 .paper-container .authors {
     margin: 0.7cm auto 2.5em -3%;
     text-align: center;
@@ -272,40 +326,52 @@ Computer Modern Unicode fonts are from http://canopus.iacp.dvo.ru/~panov/cm-unic
     line-height: 1;
     font-style: normal;
 }
+
 .paper-container .authors strong {
     font-weight: normal;
 }
+
 .paper-container .authors strong:after {
     content: ", ";
 }
+
 .paper-container .authors strong:last-of-type:after {
     content: "";
 }
+
 .paper-container .email {
     font-family: "CMU Serif Monospace", monospace !important;
     font-size: 8pt;
 }
 
+
 /* /END Front matter */
 
+
 /* Images */
+
 .paper-container img, .paper-container svg {
     border: 0;
     page-break-inside: avoid;
     max-width: 100%;
     height: auto;
 }
+
 .paper-container figure img, .paper-container figure svg {
     vertical-align: middle;
 }
 
+
 /* /END Images */
 
+
 /* Tables */
+
 .paper-container figure[role=tablebox] {
     margin-top: 1em;
     margin-bottom: 1em;
 }
+
 .paper-container table {
     border-collapse: collapse;
     width: 100%;
@@ -315,100 +381,131 @@ Computer Modern Unicode fonts are from http://canopus.iacp.dvo.ru/~panov/cm-unic
     font-size: 8pt;
     word-break: break-all;
 }
+
 .paper-container th, .paper-container td {
     padding-top: 0.25em;
     padding-bottom: 0.25em;
     padding-right: 1em;
     text-align: left;
 }
+
 .paper-container tr {
     vertical-align: top;
     border-bottom: 1px solid #000;
 }
+
 .paper-container tr:last-child {
     border-bottom: 0;
 }
+
 .paper-container th:last-child, .paper-container td:last-child {
     padding-right: 0;
 }
+
 .paper-container table p {
     text-indent: 0;
 }
 
+
 /* /END Tables */
 
+
 /* Heading counters */
+
 .paper-container {
     counter-reset: h1;
 }
+
 .paper-container h1 {
     counter-reset: h2;
 }
+
 .paper-container section:not([role=doc-abstract]):not([role=doc-bibliography]):not([role=doc-acknowledgements]):not([role=doc-footnotes]) h1:before {
     counter-increment: h1;
     content: counter(h1);
     margin-right: 1.5em;
 }
+
 .paper-container section:not([role=doc-abstract]):not([role=doc-bibliography]):not([role=doc-acknowledgements]):not([role=doc-footnotes]) h2:before {
     counter-increment: h2;
     content: counter(h1) "." counter(h2);
     margin-right: 1em;
 }
 
+
 /* /END Heading counters */
 
+
 /* Lists */
+
 .paper-container ul, .paper-container ol {
     margin-left: 1em;
     margin-top: 0.5em;
     margin-bottom: 0.5em;
 }
+
 .paper-container ul ul, .paper-container ol ol, .paper-container ul ol, .paper-container ol ul {
     margin-top: 0.2em;
     margin-bottom: 0.2em;
 }
+
 .paper-container li p:first-child {
     display: inline;
 }
 
+
 /* /END Lists */
 
+
 /* Figure (any) */
+
 .paper-container figure {
     margin-top: 1em;
     margin-bottom: 1em;
     position: relative;
 }
+
 .paper-container figure > p {
     text-align: center;
 }
 
+
 /* /END Figure (any) */
 
+
 /* Listing */
+
 .paper-container figure > pre {
     border: 1px solid black;
     padding: 3px;
 }
 
+
 /* /END Listing */
 
+
 /* Captions */
+
 .paper-container figcaption {
     text-align: center;
     font-size: 9pt;
 }
 
+
 /* /END Captions */
 
+
 /* Footnotes */
+
 .paper-container section[role=doc-footnotes] .hidden-print {
     display: none;
 }
+
 .paper-container section[role=doc-footnotes] {
     counter-reset: fn;
     font-size: 9pt;
 }
+
 .paper-container section[role=doc-footnotes] > .paper-container section[role=doc-footnote]:before {
     counter-increment: fn;
     content: counter(fn);
@@ -416,20 +513,24 @@ Computer Modern Unicode fonts are from http://canopus.iacp.dvo.ru/~panov/cm-unic
     padding-right: 10px;
 }
 
+
 /* /END Footnotes */
 
+
 /* Footer */
+
 
 /*
 html{
     position:relative;
     min-height:100%;
 }*/
+
 .paper-container section[role=doc-footnotes] {
     /* Margin bottom by footer height */
-    
     margin-bottom: 90px;
 }
+
 .paper-container .footer {
     background-color: #F5F5F5;
     bottom: 0px;
@@ -447,34 +548,42 @@ html{
     position: fixed;
     width: 122mm;
 }
+
 .paper-container .footer span, .paper-container .footer div {
     margin-left: 7px;
 }
+
 .paper-container .footer div {
     float: right;
 }
+
 .paper-container .footer div button {
     height: 100%;
 }
+
 .paper-container #layoutselection {
     margin-left: 0px;
     margin-right: 5px;
 }
+
 .paper-container .footer div {
     margin-top: 0px;
     position: relative;
     vertical-align: middle;
     display: inline;
 }
+
 .paper-container .footer > p {
     float: left;
     padding: 0;
     text-align: left;
 }
+
 .paper-container .footer p span:first-of-type {
     display: block;
     margin-left: -4px;
 }
+
 .paper-container .footer div.btn-group {
     height: 100%;
 }
@@ -546,6 +655,7 @@ html{
     -moz-border-top-colors: none;
     -moz-user-select: none;
 }
+
 .paper-container .footer div button .caret {
     border-bottom-color: #333;
     border-bottom-style: solid;
@@ -588,15 +698,19 @@ html{
     white-space: nowrap;
     width: 8px;
 }
+
 .paper-container .footer div ul li {
     padding: 0px;
 }
+
 .paper-container .footer div ul li a {
     display: block;
 }
+
 .paper-container .footer div ul li:hover, .paper-container .footer div button:hover {
     background-color: #D8D8D8;
 }
+
 .paper-container .footer div ul {
     background-clip: padding-box;
     background-color: #FFF;
@@ -647,20 +761,21 @@ html{
     -moz-border-right-colors: none;
     -moz-border-top-colors: none;
 }
+
 .paper-container .footer p {
     display: inline;
 }
 
+
 /* /END Footer */
+
 @media print {
     .paper-container .footer {
         display: none;
     }
-    
     .paper-container h1, .paper-container h2 {
         page-break-after: avoid;
     }
-    
     .paper-container h1, .paper-container p, .paper-container ul, .paper-container ol, .paper-container li, .paper-container pre, .paper-container code {
         orphans: 3;
         widows: 3;

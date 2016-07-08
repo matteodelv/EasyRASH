@@ -1,6 +1,8 @@
 @import 'https://fonts.googleapis.com/css?family=Raleway:500,700';
 @import 'https://fonts.googleapis.com/css?family=Lato:400,700';
 
+/* Misc */
+
 body {
 	position: relative;
 }
@@ -23,7 +25,6 @@ a {
 	margin-top: 20px;
 }
 
-
 .error-message {
 	color: #f22626;
 }
@@ -31,6 +32,7 @@ a {
 .help-inline.error {
 	margin: 0em 2em;
 }
+/*Main view*/
 
 .paper-container {
 	min-height: 100vh;
@@ -41,16 +43,30 @@ a {
 	padding-right: 0px;
 }
 
+.paper-container>section, .paper-container>header {
+	padding-left: 20px;
+	padding-right: 20px;
+}
+
+.comment-anchor {
+	position: absolute;
+	float: left;
+	width: 5px;
+	margin-left: -10px;
+	border-radius: 2.5px;
+}
+
+.comment-anchor:hover{
+	/* width: 300px; */
+}
+
+.paper-container>section>.comment-anchor {
+	margin-left: -20px;
+}
+
 #loginpanel .tab-pane {
 	margin-top: 20px;
 }
-
-
-/*
-div.form-group + div.form-group{
-	padding-left: 0;
-}
-*/
 
 
 /* Profile panel */
@@ -67,6 +83,10 @@ div.form-group + div.form-group{
 	margin: auto 0.2em;
 	color: #E5E5E5;
 	display: inline;
+}
+
+.popover {
+	max-width:
 }
 
 
@@ -193,11 +213,11 @@ a, a:active, a:focus {
 	opacity: 0.8;
 }
 
-.carousel-indicators li{
+.carousel-indicators li {
 	border-color: #000;
 }
 
-.carousel-indicators .active{
+.carousel-indicators .active {
 	background-color: #4D394B;
 }
 
@@ -206,22 +226,23 @@ a, a:active, a:focus {
 	font-family: 'Lato', sans-serif;
 }
 
-.carousel-inner p{
+.carousel-inner p {
 	margin: 0px;
 	padding-top: 0.5em;
 	padding-bottom: 0.5em;
 }
 
-.comment-header a{
+.comment-header a {
 	margin-right: 0.5em;
 }
 
-.comment-header {
+.popover .carousel .comment-header {
 	border-bottom: 2px solid;
 	padding-bottom: 0.5em;
 	font-family: 'Raleway', sans-serif;
 	font-weight: 700;
 }
+
 
 /*END Carousel
 
