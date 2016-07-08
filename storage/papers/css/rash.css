@@ -129,6 +129,11 @@ Under the following terms:
     counter-reset: h6;
 }
 
+.paper-container section{
+    text-align: justify;
+    text-justify: inter-word;
+}
+
 .paper-container section:not([role=doc-abstract]):not([role=doc-bibliography]):not([role=doc-acknowledgements]):not([role=doc-footnotes]) h1:before {
     counter-increment: h1;
     content: counter(h1) ". ";

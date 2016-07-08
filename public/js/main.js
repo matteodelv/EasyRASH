@@ -21,6 +21,9 @@ $.ajaxSetup({
 	}
 });
 
+var distinctColors = ['#ff5972', '#a6637c', '#ff1a9f', '#ff99eb', '#c91aff', '#bb99ff', '#3419ff', '#1a62ff', '#1a94ff', '#1ac6ff', '#13babf', '#1affd5', '#1aff40', '#abf291', '#baff1a', '#ffe01a', '#ffdb99', '#ffaf1a', '#ff7d1a', '#ffaf99', '#ff1a1a'];
+var reviewerColors = {};
+
 //Verify if user agent has a valid token, if not show login form
 window.onload = function() {
 	if (localStorage.accessToken) {
@@ -41,6 +44,44 @@ window.onload = function() {
 	}
 };
 
+function hexToRgbA(hex, opacity) {
+	var c;
+	if (/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)) {
+		c = hex.substring(1).split('');
+		if (c.length == 3) {
+			c = [c[0], c[0], c[1], c[1], c[2], c[2]];
+		}
+		c = '0x' + c.join('');
+		return 'rgba(' + [(c >> 16) & 255, (c >> 8) & 255, c & 255].join(',') + ',' + opacity + ')';
+	}
+	throw new Error('Bad Hex');
+}
+
+
+$(document).ready(function() {
+	//moment.locale('it');
+	$('#signupemail').keyup(function() {
+		var username = $(this).val().split("@")[0];
+		if (username.indexOf($('#signupusername').val()) >= 0 || $('#signupusername').val().indexOf(username) >= 0) {
+			$('#signupusername').val(username);
+		}
+	});
+
+	//Fixes affix width changing when on top
+	$('[data-clampedwidth]').each(function() {
+		var elem = $(this);
+		var parentPanel = elem.data('clampedwidth');
+		var resizeFn = function() {
+			var sideBarNavWidth = $(parentPanel).width() - parseInt(elem.css('paddingLeft')) - parseInt(elem.css('paddingRight')) - parseInt(elem.css('marginLeft')) - parseInt(elem.css('marginRight')) - parseInt(elem.css('borderLeftWidth')) - parseInt(elem.css('borderRightWidth'));
+			elem.css('width', sideBarNavWidth);
+		};
+
+		resizeFn();
+		$(window).resize(resizeFn);
+	});
+
+});
+
 
 //When the user agent's url changes load the new paper
 window.onstatechange = function(event) {
@@ -57,7 +98,7 @@ $viewport.bind("scroll mousedown DOMMouseScroll mousewheel keyup", function(e) {
 });
 
 var $addedHeadTags; //Contains head tags belonging to a single paper, to be removed when a paper view is replaced
-var annotations; //Contains RASH annotations
+var reviews; //Contains RASH review
 //Loads the content of the current paper in the appropriate div
 function loadCurrentPaperContent() {
 
@@ -67,21 +108,26 @@ function loadCurrentPaperContent() {
 	}
 
 	if (document.location.pathname.startsWith("/papers/")) {
-		var parsed = JSON.parse(sessionStorage.papers);
-		//var papers = parsed.submitted.concat(parsed.reviewable);
-		var papers = [];
-		for (var category in parsed.articles) {
-			if (parsed.articles.hasOwnProperty(category)) {
-				papers = papers.concat(parsed.articles[category]);
+		/*TODO: do we need this part?*/
+		if (sessionStorage.papers) {
+			var parsed = JSON.parse(sessionStorage.papers);
+			//var papers = parsed.submitted.concat(parsed.reviewable);
+			var papers = [];
+			for (var category in parsed.articles) {
+				if (parsed.articles.hasOwnProperty(category)) {
+					papers = papers.concat(parsed.articles[category]);
+				}
 			}
+
+			var paper = papers.find(function(paper) {
+				//Remove pound part
+				if (document.location.pathname.replace(/\/$/, "").endsWith(paper.url)) {
+					return paper;
+				}
+			});
 		}
 
-		var paper = papers.find(function(paper) {
-			if (document.location.pathname.replace(/\/$/, "").endsWith(paper.url)) {
-				return paper;
-			}
-		})
-		paper && $('title').remove();
+		$('title').remove();
 
 		$.ajax({
 			url: '/api' + document.location.pathname,
@@ -140,10 +186,66 @@ function loadCurrentPaperContent() {
 				//END: Scroll Spy Sections
 
 				//Comments and reviews
-				annotations = [];
+				reviews = [];
+				var annotationsById = {};
 				$addedHeadTags.filter('script[type="application/ld+json"]').each(function() {
-					annotations.push(JSON.parse($(this).html()));
+					var review = JSON.parse($(this).html());
+					reviews.push(review);
+					review.forEach(annotation => {
+						if (annotation.ref) {
+							if (annotationsById[annotation.ref]) {
+								annotationsById[annotation.ref].push(annotation);
+							} else {
+								annotationsById[annotation.ref] = [annotation];
+							}
+						}
+						if (!reviewerColors[annotation.author]) {
+							var colorIndex = Math.floor(Math.random() * distinctColors.length);
+							reviewerColors[annotation.author] = distinctColors[colorIndex];
+							distinctColors.splice(colorIndex);
+						}
+					});
 				});
+				for (id in annotationsById) {
+					//Highlight color default to first reviewer's color
+					var rgbaColor = hexToRgbA(reviewerColors[annotationsById[id][0].author], 0.5);
+					//Inline annotations appear as highlighted text and popover
+					if (['span', 'em', 'code', 'a', 'time', 'cite'].indexOf($(id).prop('tagName').toLowerCase()) >= 0) {
+						var $elem = $(id);
+
+						$elem.css({
+							'border-radius': '0.3em',
+							'background-color': rgbaColor
+						});
+
+						var closureGetInlineAnnotationHtml = function(closureId) {
+							return function() {
+								return getInlineAnnotationHtml(closureId, annotationsById[closureId]);
+							}
+						}(id);
+
+						var $popover = $elem.popover({
+							placement: 'top',
+							trigger: 'hover',
+							html: true,
+							container: $elem,
+							content: closureGetInlineAnnotationHtml,
+							delay: { "show": 0, "hide": 300 }
+						});
+
+						var closureCarouselNormalization = function(closureId) {
+							return function() {
+								return carouselNormalization('#carousel-' + closureId.replace('#', '') + ' .item');
+							}
+						}(id);
+
+						$popover.on("shown.bs.popover", function(e) {
+							closureCarouselNormalization();
+						});
+
+						$('#carousel-' + id).carousel();
+					}
+				}
 			},
 			error: function(result) {
 				if (result.responseJSON && result.responseJSON.error.name === "TokenExpiredError") {
@@ -156,6 +258,64 @@ function loadCurrentPaperContent() {
 					delay: 2000
 				});
 			}
+		});
+	}
+}
+
+function getInlineAnnotationHtml(id, annotations) {
+	var carouselId = 'carousel-' + id.replace('#', '');
+	var $carouselContainer = $('<div id="' + carouselId + '" class="carousel slide" data-ride="carousel" data-interval="false"></div>');
+	var $carouselIndicatorsContainer = $('<ol class="carousel-indicators"></ol>');
+	var $carouselInner = $('<div class="carousel-inner" role="listbox"></div>');
+	var $carouselControls = $('<div class="carousel-controls"><a class="oull-left" href="#' + carouselId + '" role="button" data-slide="prev">\
+							   <span class="glyphicon glyphicon-chevron-left"></span>\
+							   <span class="sr-only">Previous</span>\
+							   </a>\
+							   <a class="pull-right" href="#' + carouselId + '" role="button" data-slide="next">\
+							   <span class="glyphicon glyphicon-chevron-right"></span>\
+							   <span class="sr-only">Next</span>\
+							   </a></div>');
+
+	annotations.forEach((annotation, index) => {
+		$carouselIndicatorsContainer.append($('<li data-target="#' + carouselId + '" data-slide-to="' + index + '" ' + (index === 0 ? 'class="active"' : '') + '></li>'));
+		$carouselInner.append($('<div class="item ' + (index === 0 ? 'active' : '') + '">\
+								<div class="comment-header" style="border-color:' + reviewerColors[annotations[index].author] + '"><a href="' + annotation.author + '">' + annotation.author + '</a><time datetime="' + annotation.date + '" >' + moment(annotation.date).fromNow() + '</time></div>\
+								<p>' + annotation.text + '</p>\
+								</div>'));
+	});
+
+	if (annotations.length <= 1) {
+		$carouselControls.addClass('hidden');
+	}
+	$carouselControls.append($carouselIndicatorsContainer);
+	$carouselContainer.append($carouselInner).append($carouselControls);
+	return $carouselContainer[0].outerHTML;
+}
+
+//Causes all carousel slides to be the height of the tallest one
+function carouselNormalization(selector) {
+	var items = $(selector), //grab all slides
+		heights = [], //create empty array to store height values
+		tallest; //create variable to make note of the tallest slide
+
+	if (items.length) {
+		function normalizeHeights() {
+			items.each(function() { //add heights to array
+				heights.push($(this).height());
+			});
+			tallest = Math.max.apply(null, heights); //cache largest value
+			items.each(function() {
+				$(this).css('min-height', tallest + 'px');
+			});
+		};
+		normalizeHeights();
+
+		$(window).on('resize orientationchange', function() {
+			tallest = 0, heights.length = 0; //reset vars
+			items.each(function() {
+				$(this).css('min-height', '0'); //reset min-height
+			});
+			normalizeHeights(); //run it again 
 		});
 	}
 }
@@ -240,6 +400,7 @@ function userReady(fullname) {
 	$('.profile-panel').removeClass('hidden').animateCss('bounceIn');
 	$('.profile-panel>h4').text(fullname);
 	//getPapers();
+	loadCurrentPaperContent();
 	getConferences();
 }
 
@@ -269,7 +430,7 @@ var responsiveFooter = function() {
 		$(".footer a").addClass("pull-right");
 		$(".footer .container").removeClass("text-center");
 	}
-}
+};
 
 function logIn() {
 	var data = {};
@@ -362,7 +523,7 @@ function getPapers() {
 							redirectToPaper(urlComplete, paper);
 							return false;
 						});
-					})
+					});
 				}
 			}
 

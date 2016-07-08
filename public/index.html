@@ -2,15 +2,17 @@
 <html>
 
 <head>
+   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
    <meta charset="utf-8" />
    <meta name="viewport" content="width=device-width, initial-scale=1" />
    <script type="text/javascript" src="/js/browser-polyfill.js"></script>
    <script src="//code.jquery.com/jquery-2.2.3.min.js" integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo=" crossorigin="anonymous"></script>
-   <script src="/js/bootstrap.min.js"></script>
+   <script src="/js/bootstrap.js"></script>
    <script type="text/javascript" src="/js/bootstrap-notify.min.js"></script>
    <script type="text/javascript" src="/js/main.js"></script>
    <script type="text/javascript" src="/js/history.js/scripts/bundled/html4+html5/jquery.history.js"></script>
    <script type="text/javascript" src="/papers/js/rash.js"></script>
+   <script type="text/javascript" src="/js/moment-with-locales.min.js"></script>
    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" />
    <link rel="stylesheet" type="text/css" href="/css/style.css" />
    <link rel="stylesheet" type="text/css" href="/css/animate.css" />
@@ -32,10 +34,13 @@
             <div class="profile-panel hidden">
                <h4 class="name"></h4>
                <h6 class="userRole"></h6>
-               <button class="btn" onclick="javascript:logOut()">Log out</button>
+               <button type="button" class="btn" onclick="javascript:logOut()">Log out</button>
             </div>
             <div id="conferenceSelector" class="dropdown">
-               <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"><div>Select a Conference</div><div class="caret"></div></button>
+               <button type="button" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                  <div>Select a Conference</div>
+                  <div class="caret"></div>
+               </button>
                <ul class="dropdown-menu">
                </ul>
             </div>
@@ -45,17 +50,17 @@
          <div id="page-content-wrapper" class="col-md-10 col-md-offset-2">
             <div id="top" class="page-content">
                <div class="row">
-                  <div id="placeholder">
+                  <div id="placeholder" class="col-md-12">
                      <img class="placeholderimg" src="/img/smileydoc.svg" />
                      <p>Your paper will appear here.</p>
                   </div>
                   <div class="col-md-10">
                      <!-- content of page -->
-                     <div id="paper-container" class="paper-container" role="main">
-                     </div>
+                     <article id="paper-container" class="paper-container" role="main">
+                     </article>
                   </div>
                   <nav class="col-md-2 sections-sidebar hidden-print hidden-xs hidden-sm" id="nav-scroll-spy" role="complementary">
-                     <ul class="nav nav-stacked" data-spy="affix" data-offset-top="150">
+                     <ul class="nav nav-stacked" data-spy="affix" data-offset-top="150" data-clampedwidth=".sections-sidebar">
                      </ul>
                   </nav>
                </div>
@@ -70,66 +75,64 @@
                <div class="modal-header">
                   <h4 class="modal-title" id="myModalLabel">Please log in or sign up</h4>
                </div>
-               <div id="loginpanel">
-                  <!-- Modal Body -->
-                  <div class="modal-body tab-content">
-                     <ul class="nav nav-tabs">
-                        <li class="active"><a data-toggle="tab" href="#login">Log in</a></li>
-                        <li><a data-toggle="tab" href="#signup">Sign up</a></li>
-                     </ul>
-                     <form id="login" class="form ws-validate tab-pane fade in active" action="javascript:logIn()">
-                        <div class="form-group">
-                           <label for="loginemail">Email address</label>
-                           <input type="email" id="loginemail" class="form-control" name="email" value="" placeholder="Email" required="required" />
+               <!-- Modal Body -->
+               <div id="loginpanel" class="modal-body tab-content">
+                  <ul class="nav nav-tabs">
+                     <li class="active"><a data-toggle="tab" href="#login">Log in</a></li>
+                     <li><a data-toggle="tab" href="#signup">Sign up</a></li>
+                  </ul>
+                  <form id="login" class="form ws-validate tab-pane fade in active" action="javascript:logIn()">
+                     <div class="form-group">
+                        <label for="loginemail">Email address</label>
+                        <input type="email" id="loginemail" class="form-control" name="email" value="" placeholder="Email" required="required" />
+                     </div>
+                     <div class="form-group">
+                        <label for="loginpassword">Password</label>
+                        <input type="password" id="loginpassword" class="form-control" name="password" value="" placeholder="Password" required="required" />
+                     </div>
+                     <div class="modal-footer">
+                        <span class="help-inline error-message"></span>
+                        <button type="submit" id="loginbutton" class="btn btn-primary" name="login">Login</button>
+                     </div>
+                  </form>
+                  <form id="signup" class="form ws-validate tab-pane fade" action="javascript:signUp()">
+                     <div class="row">
+                        <div class="form-group col-md-6">
+                           <label for="signupname">Name</label>
+                           <input type="text" id="signupname" class="form-control" name="name" value="" placeholder="Name" required="required" />
                         </div>
-                        <div class="form-group">
-                           <label for="loginpassword">Password</label>
-                           <input type="password" id="loginpassword" class="form-control" name="password" value="" placeholder="Password" required="required" />
+                        <div class="form-group col-md-6">
+                           <label for="signupsurname">Surname</label>
+                           <input type="text" id="signupsurname" class="form-control" name="surname" value="" placeholder="Surname" required="required" />
                         </div>
-                        <div class="modal-footer">
-                           <span class="help-inline error-message"></span>
-                           <button type="submit" id="loginbutton" class="btn btn-primary" name="login">Login</button>
+                     </div>
+                     <div class="row">
+                        <div class="form-group col-md-9">
+                           <label for="signupusername">Username</label>
+                           <input type="text" id="signupusername" class="form-control" name="username" value="" placeholder="Username" required="required" />
                         </div>
-                     </form>
-                     <form id="signup" class="form ws-validate tab-pane fade" action="javascript:signUp()">
-                        <div class="row">
-                           <div class="form-group col-md-6">
-                              <label for="signupname">Name</label>
-                              <input type="text" id="signupname" class="form-control" name="name" value="" placeholder="Name" required="required" />
-                           </div>
-                           <div class="form-group col-md-6">
-                              <label for="signupsurname">Surname</label>
-                              <input type="text" id="signupsurname" class="form-control" name="surname" value="" placeholder="Surname" required="required" />
-                           </div>
+                        <div class="form-group col-md-3">
+                           <label for="signupsex">Sex</label>
+                           <select class="form-control" id="signupsex" name="sex">
+                              <option value="unspecified">Not specified</option>
+                              <option value="male">Male</option>
+                              <option value="female">Female</option>
+                           </select>
                         </div>
-                        <div class="row">
-                           <div class="form-group col-md-9">
-                              <label for="singupusername">Username</label>
-                              <input type="text" id="singupusername" class="form-control" name="username" value="" placeholder="Username" required="required" />
-                           </div>
-                           <div class="form-group col-md-3">
-                              <label for="signupsex">Sex</label>
-                              <select class="form-control" id="signupsex" name="sex">
-                                 <option value="unspecified">Not specified</option>
-                                 <option value="male">Male</option>
-                                 <option value="female">Female</option>
-                              </select>
-                           </div>
-                        </div>
-                        <div class="form-group">
-                           <label for="signupemail">Email address</label>
-                           <input type="email" id="signupemail" class="form-control" name="email" value="" placeholder="Email" required="required" />
-                        </div>
-                        <div class="form-group">
-                           <label for="signuppassword">Password</label>
-                           <input type="password" id="signuppassword" class="form-control" name="password" value="" placeholder="Password" required="required" />
-                        </div>
-                        <div class="modal-footer">
-                           <span class="help-inline error-message"></span>
-                           <button type="submit" id="signupbutton" class="btn btn-primary" name="signup">Sign up</button>
-                        </div>
-                     </form>
-                  </div>
+                     </div>
+                     <div class="form-group">
+                        <label for="signupemail">Email address</label>
+                        <input type="email" id="signupemail" class="form-control" name="email" value="" placeholder="Email" required="required" />
+                     </div>
+                     <div class="form-group">
+                        <label for="signuppassword">Password</label>
+                        <input type="password" id="signuppassword" class="form-control" name="password" value="" placeholder="Password" required="required" />
+                     </div>
+                     <div class="modal-footer">
+                        <span class="help-inline error-message"></span>
+                        <button type="submit" id="signupbutton" class="btn btn-primary" name="signup">Sign up</button>
+                     </div>
+                  </form>
                </div>
             </div>
          </div>

@@ -1,4 +1,6 @@
 @import 'https://fonts.googleapis.com/css?family=Raleway:500,700';
+@import 'https://fonts.googleapis.com/css?family=Lato:400,700';
+
 body {
 	position: relative;
 }
@@ -9,6 +11,10 @@ body {
 	font-style: normal;
 }
 
+a {
+	cursor: pointer;
+}
+
 .affix {
 	top: 20px;
 }
@@ -16,6 +22,7 @@ body {
 .affix-top {
 	margin-top: 20px;
 }
+
 
 .error-message {
 	color: #f22626;
@@ -153,7 +160,7 @@ a, a:active, a:focus {
 	margin: 3em auto;
 }
 
-#placeholder p{
+#placeholder p {
 	font-family: 'Raleway', sans-serif;
 	font-weight: 700;
 	font-size: 30pt;
@@ -161,12 +168,62 @@ a, a:active, a:focus {
 	text-align: center;
 }
 
-#conferenceSelector .btn, #conferenceSelector .dropdown-menu li a{
+#conferenceSelector .btn, #conferenceSelector .dropdown-menu li a {
 	white-space: normal;
 	width: 100%;
 }
 
+
 /* End Scroll Bar */
+
+
+/* Carousel */
+
+.carousel-controls a {
+	color: #4D394B;
+}
+
+.carousel-controls {
+	position: relative;
+	margin: 0 auto;
+}
+
+.carousel-indicators {
+	top: 0px;
+	opacity: 0.8;
+}
+
+.carousel-indicators li{
+	border-color: #000;
+}
+
+.carousel-indicators .active{
+	background-color: #4D394B;
+}
+
+.comment-header time {
+	display: inline-block;
+	font-family: 'Lato', sans-serif;
+}
+
+.carousel-inner p{
+	margin: 0px;
+	padding-top: 0.5em;
+	padding-bottom: 0.5em;
+}
+
+.comment-header a{
+	margin-right: 0.5em;
+}
+
+.comment-header {
+	border-bottom: 2px solid;
+	padding-bottom: 0.5em;
+	font-family: 'Raleway', sans-serif;
+	font-weight: 700;
+}
+
+/*END Carousel
 
 
 /*
