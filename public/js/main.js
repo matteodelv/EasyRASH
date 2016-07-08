@@ -43,6 +43,11 @@ window.onload = function() {
 			$('#login-modal').modal('show');
 		});
 	}
+	$(document).keyup(function(e) {
+		if (e.keyCode == 27) { // escape key maps to keycode `27`
+			WebuiPopovers.hideAll();
+		}
+	});
 };
 
 function hexToRgbA(hex, opacity) {
@@ -255,7 +260,7 @@ function loadCurrentPaperContent() {
 						$anchor.css({
 							'background-color': rgbaColor
 						});
-						
+
 						var inner = ['section', 'footer', 'header'].indexOf($(id).prop('tagName').toLowerCase()) < 0;
 						if (inner) {
 							var $wrapper = $('<div></div>');
@@ -272,7 +277,6 @@ function loadCurrentPaperContent() {
 								easing: 'easeInCubic'
 							});
 						};
-
 						var $popover = $elem.webuiPopover({
 							placement: 'top-right',
 							trigger: 'manual',
