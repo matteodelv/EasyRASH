@@ -27,7 +27,11 @@
             "reviewers": [
                "silvio.peroni",
                "angelo.diiorio"
-            ]
+            ],
+			"reviewedBy": [
+				"angelo.diiorio",
+				"silvio.peroni"
+			]
          },
          {
             "title": "Semantic Publishing Challenge: Bootstrapping a Value Chain for Scientific Data ",
@@ -42,7 +46,9 @@
             "reviewers": [
                "alice.liddell",
                "arthur.dent"
-            ]
+            ],
+			"reviewedBy": [
+			]
          },
          {
             "title": "It ROCS! -- The RASH Online Conversion Service",
@@ -59,7 +65,10 @@
             "reviewers": [
                "arabella.strange",
                "john.constantine"
-            ]
+            ],
+			"reviewedBy": [
+				"john.constantine"
+			]
          },
          {
             "title": "RASH: Research Articles in Simplified HTML -- Documentation - Version 0.5, February 15, 2016",
@@ -71,7 +80,9 @@
             "reviewers": [
                "lyra.belacqua",
                "arthur.dent"
-            ]
+            ],
+			"reviewedBy": [
+			]
          },
          {
             "title": "Science Bots: A Model for the Future of Scientific Computation?",
@@ -80,9 +91,12 @@
             ],
             "url": "tuhn-savesd2015",
             "reviewers": [
-               "silvio:peroni",
+               "silvio.peroni",
                "arabella.strange"
-            ]
+            ],
+			"reviewedBy": [
+				"silvio.peroni"
+			]
          }
       ]
    },
@@ -113,7 +127,11 @@
             "reviewers": [
                "vanessa.ives",
                "lyra.belacqua"
-            ]
+            ],
+			"reviewedBy": [
+				"vanessa.ives",
+				"lyra.belacqua"
+			]
          },
          {
             "title": "Exploring bibliographies for research-related tasks",
@@ -129,7 +147,11 @@
                "arthur.dent",
                "arabella.strange",
                "john.constantine"
-            ]
+            ],
+			"reviewedBy": [
+				"arthur.dent",
+				"arabella.strange"
+			]
          },
          {
             "title": "Example paper for comments",
@@ -146,7 +168,9 @@
                "arthur.dent",
                "arabella.strange",
                "john.constantine"
-            ]
+            ],
+			"reviewedBy": [
+			]
          },
          {
             "title": "The RASH Framework: enabling HTML+RDF submissions in scholarly venues",
@@ -165,7 +189,10 @@
             "reviewers": [
                "jessica.jones",
                "vanessa.ives"
-            ]
+            ],
+			"reviewedBy": [
+				"vanessa.ives"
+			]
          },
          {
             "title": "Evaluating citation functions in CiTO: cognitive issues -- Preprint of http://dx.doi.org/10.1007/978-3-319-07443-6_39",
@@ -181,7 +208,10 @@
             "reviewers": [
                "jessica.jones",
                "john.constantine"
-            ]
+            ],
+			"reviewedBy": [
+				"jessica.jones"
+			]
          },
          {
             "title": "Enhanced Publication Management Systems -- A systemic approach towards modern scientific communication",
@@ -194,7 +224,10 @@
             "reviewers": [
                "vanessa.ives",
                "arabella.strange"
-            ]
+            ],
+			"reviewedBy": [
+				"vanessa.ives"
+			]
          }
       ]
    }

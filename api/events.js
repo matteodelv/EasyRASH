@@ -26,36 +26,41 @@ router.get('/:id/papers', function(req, res) {
 		fs.readFile(eventsPath, (err, data) => {
 			var confs = JSON.parse(data);
 			var selectedConf = confs.find(elem => elem.acronym === unescape(req.params.id));
-			var submitted = [];
-			var reviewed = [];
 			var result = {
 				selectedConf: selectedConf.conference,
-				articles: {}	// oggetto contenente gli array degli articoli, in base al ruolo dell'utente
+				papers: []	// array contenente gli articoli, in base al ruolo dell'utente
 			};
 			if (selectedConf.chairs.indexOf(req.jwtPayload.id) > -1) { // L'utente è chair
 				result.userRole = "Chair";
-				result.articles.user_submitted = [];
 				selectedConf.submissions.forEach(submission => {
-					result.articles.user_submitted.push(submission);
+					result.papers.push(submission);
 				});
 			}
-			// TODO: Gestire gli articoli ritornati per gli altri ruoli
 			else {
+				var asAuthor = [];
+				var asReviewer = [];
+				var asReader = [];
+				
 				selectedConf.submissions.forEach(submission => {
-					if (submission.authors.some(author => author === req.jwtPayload.id)) {
-						submitted.push(submission);
-					}
-					if (submission.reviewers.some(reviewer => reviewer === req.jwtPayload.id)) {
-						reviewed.push(submission);
-					}
+					if (submission.reviewers.indexOf(req.jwtPayload.id) !== -1) asReviewer.push(submission);
+					else if (submission.authors.indexOf(req.jwtPayload.id) !== -1) asAuthor.push(submission);
+					else if (submission.status === "accepted") asReader.push(submission);
 				});
+				
+				if (asReviewer.length > 0) {
+					result.userRole = "Reviewer";
+					result.papers = asReviewer.concat(asAuthor);
+				}
+				else if (asAuthor.length > 0) {
+					result.userRole = "Author";
+					result.papers = asAuthor;
+				}
+				else {
+					result.userRole = "Reader";
+					result.papers = asReader;
+				}
 			}
 			res.json(result);
-			/*res.json({
-				selectedConf: selectedConf.conference,
-				submitted: submitted,
-				reviewable: reviewed
-			});*/
 		});
 	} else res.status(404).send("404 Conference Non Found");
 });

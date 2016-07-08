@@ -31,6 +31,7 @@ window.onload = function() {
 			url: '/api/verify',
 			type: 'POST',
 			success: function(result) {
+				sessionStorage.userID = result.id;
 				userReady(result.fullname);
 			},
 			error: function(result) {
@@ -80,6 +81,17 @@ $(document).ready(function() {
 		$(window).resize(resizeFn);
 	});
 
+	responsiveFooter();
+	$(window).resize(responsiveFooter);
+
+	$(".scrollToTop").click(function() {
+		$("html, body").animate({ scrollTop: 0 }, 200);
+		return false;
+	});
+
+	$("#signUpModal").on("hidden.bs.modal", function(e) {
+		$("#signUpForm")[0].reset();
+	});
 });
 
 
@@ -326,16 +338,9 @@ function getConferences() {
 		method: "GET",
 		success: function(res) {
 			var conferencesUl = $("#conferenceSelector .dropdown-menu");
-			//console.log(conferencesUl);
-
+			
 			for (var i = 0; i < res.length; i++) {
-				//var li = document.createElement("li");
-				//var a = document.createElement("a");
 				var $li = $('<li><a>' + res[i].conference + '</a></li>');
-				//a.href = encodeURI("/api/events/" + res[i].acronym + "/papers");
-				//a.text = res[i].conference;
-				//var acronym = res[i].acronym;
-				//$(a).data('acronym', res[i].acronym);
 				$('a', $li).data('acronym', res[i].acronym);
 				$('a', $li).on("click", function() {
 					var a = $(this);
@@ -346,11 +351,11 @@ function getConferences() {
 						method: "GET",
 						success: function(result) {
 							$("#sidebar-wrapper .profile-panel .userRole").text("Role: " + result.userRole);
-							//$("#conferenceSelector button").text(result.selectedConf);
+							sessionStorage.userRole = result.userRole;
 
 							console.log("AJAX request for conference " + a.data('acronym'));
-							//console.log(result);
-							fetchAndBuildSidebarMenu(result, function() {
+							
+							fetchAndBuildSidebarMenu(result, true, function() {
 								loadCurrentPaperContent();
 							});
 						},
@@ -359,7 +364,6 @@ function getConferences() {
 						}
 					});
 				});
-				//li.appendChild(a);
 				conferencesUl.append($li);
 			}
 		},
@@ -369,29 +373,96 @@ function getConferences() {
 	});
 }
 
-function fetchAndBuildSidebarMenu(result, callback) {
-	sessionStorage.papers = JSON.stringify(result); // NON rimuovere altrimenti gli articoli non vengono caricati
-	//var liCat = $('<li class="sidebar-brand submitted"><a href="#">Submitted</a></li><li class="sidebar-brand reviewable"><a href="#">Reviewable</a></li>');
-	$("#sidebar").empty(); //.append(liCat);
-	var articles = result.articles;
-	if (articles) {
-		for (var type in articles) {
-			if (articles.hasOwnProperty(type)) {
-				// Il nome delle categorie di articoli è gestito dal server in base al ruolo dell'utente loggato
-				var liCat = $('<li class="sidebar-brand ' + type + '">' + type.replace("_", " ") + '</li>');
-				$("#sidebar").append(liCat);
+function getUserPapers() {
+	$.ajax({
+		url: "/api/papers/user",
+		method: "GET",
+		success: function(res) {
+			fetchAndBuildSidebarMenu(res, false, function() {
+				loadCurrentPaperContent();
+			});
+		},
+		error: function(err) {
+			console.log("Unable to get user papers");
+			console.log(err);
+		}
+	});
+}
 
-				articles[type].forEach(function(paper) {
-					var urlComplete = '/papers/' + paper.url;
-					var li = $('<li><a href="' + urlComplete + '">' + paper.title.split(" -- ")[0] + '</a></li>\n').insertAfter($('#sidebar-wrapper .sidebar-brand.' + type));
-					li.on('click', function() {
-						redirectToPaper(urlComplete, paper);
-						return false;
-					});
-				});
+// Helper functions to keep code clean
+String.prototype.camelCaseToString = function() {
+	var splitted = this.replace(/([A-Z]([a-z]+))/g, ' $1').trim();
+	return splitted.charAt(0).toUpperCase() + splitted.slice(1);
+}
+
+function applyStatusLabel(paper, loadingConf) {
+	var statusLabel = "";
+	
+	if (paper.hasOwnProperty("status") && !loadingConf) {
+		statusLabel = ' <span class="label label-primary">' + paper.conference + '</span> <span class="label $labelClass">$labelText</span>';
+		
+		if (paper.status === "accepted") statusLabel = statusLabel.replace("$labelClass", "label-success");
+		else statusLabel = statusLabel.replace("$labelClass", "label-warning");
+		
+		statusLabel = statusLabel.replace("$labelText", paper.status.camelCaseToString());
+	}
+	
+	if (loadingConf) {
+		if (paper.authors.indexOf(sessionStorage.userID) !== -1) statusLabel += ' <span class="fa fa-user"></span>';
+		if (sessionStorage.userRole !== "Chair") {
+			if (paper.reviewers.indexOf(sessionStorage.userID) !== -1) {
+				if (paper.reviewedBy.indexOf(sessionStorage.userID) !== -1) statusLabel += ' <span class="fa fa-certificate"></span>';
+				else statusLabel += ' <span class="fa fa-exclamation-circle"></span>';
 			}
 		}
+		else {
+			if (paper.reviewers.length === paper.reviewedBy.length) statusLabel += ' <span class="fa fa-certificate"></span>';
+			else statusLabel += ' <span class="fa fa-exclamation-circle"></span>';
+		}
+		if (paper.status === "accepted") statusLabel += ' <span class="fa fa-check"></span>';
 	}
+	
+	return statusLabel;
+}
+
+function fetchAndBuildSidebarMenu(result, loadingConf, callback) {
+	sessionStorage.papers = JSON.stringify(result); // NON rimuovere altrimenti gli articoli non vengono caricati
+	var parentObj = "";
+	
+	if (loadingConf) {
+		parentObj = "#conferenceSidebar";
+		$(parentObj).empty();
+		$(parentObj).append($('<li class="sidebar-brand">Conference Papers</li>'));
+	}
+	else {
+		parentObj = "#sidebar";
+		$(parentObj + ", #conferenceSidebar").empty();
+	}
+	
+	for (var type in result) {
+		if (result.hasOwnProperty(type) && Array.isArray(result[type])) {
+			if (!loadingConf) {
+				var liCat = $('<li class="sidebar-brand ' + type + '">' + type.split("_").join(" ") + '</li>');
+				$(parentObj).append(liCat);
+			}
+			
+			result[type].forEach(function(paper) {
+				var urlComplete = "/papers/" + paper.url;
+				var liHtml = '<li><a href="' + urlComplete + '">' + paper.title.split(" -- ")[0] + '$label</a></li>\n';
+				liHtml = liHtml.replace("$label", applyStatusLabel(paper, loadingConf));
+				
+				var li = $(liHtml);
+				if (loadingConf) li.insertAfter($(parentObj + ' .sidebar-brand'));
+				else li.insertAfter($(parentObj + ' .sidebar-brand.' + type));
+				
+				li.on('click', function() {
+					redirectToPaper(urlComplete, paper);
+					return false;
+				});
+			});
+		}
+	}
+	if (loadingConf) $("#conferenceSidebar").css("border-bottom", "1px solid #E5E5E5");
 
 	if (callback) callback();
 }
@@ -399,24 +470,10 @@ function fetchAndBuildSidebarMenu(result, callback) {
 function userReady(fullname) {
 	$('.profile-panel').removeClass('hidden').animateCss('bounceIn');
 	$('.profile-panel>h4').text(fullname);
-	//getPapers();
-	loadCurrentPaperContent();
 	getConferences();
+	getUserPapers();
 }
 
-$(document).ready(function() {
-	responsiveFooter();
-	$(window).resize(responsiveFooter);
-
-	$(".scrollToTop").click(function() {
-		$("html, body").animate({ scrollTop: 0 }, 200);
-		return false;
-	});
-
-	$("#signUpModal").on("hidden.bs.modal", function(e) {
-		$("#signUpForm")[0].reset();
-	});
-});
 //TODO: Move to a different file
 var responsiveFooter = function() {
 	if ($(window).width() < 768) {
@@ -452,6 +509,7 @@ function logIn() {
 				delay: 3000,
 				mouse_over: "pause"
 			});
+			sessionStorage.userID = result.id;
 			userReady(result.fullname);
 		},
 		error: function(result) {
@@ -504,40 +562,6 @@ function logOut() {
 	localStorage.accessToken = null;
 	window.location.replace("/");
 	return false;
-}
-
-//Gets the papers of the logged in user
-function getPapers() {
-	$.ajax({
-		url: '/api/papers/',
-		method: 'GET',
-		success: function(result) {
-			sessionStorage.papers = JSON.stringify(result);
-			//Populating sidebar
-			for (var key in result) {
-				if (result.hasOwnProperty(key)) {
-					result[key].forEach(function(paper) {
-						var urlComplete = '/papers/' + paper.url;
-						var li = $('<li><a href="' + urlComplete + '">' + paper.title.split(" -- ")[0] + '</a></li>\n').insertAfter($('#sidebar-wrapper .sidebar-brand.' + key));
-						li.on('click', function() {
-							redirectToPaper(urlComplete, paper);
-							return false;
-						});
-					});
-				}
-			}
-
-			loadCurrentPaperContent();
-		},
-		error: function(result) {
-			$.notify({
-				message: result.responseJSON ? 'Error: ' + result.responseJSON.message + '-' + result.responseJSON.error.message : 'Error: ' + result.responseText
-			}, {
-				type: 'danger',
-				delay: 2000
-			});
-		}
-	});
 }
 
 function redirectToPaper(url, paper) {

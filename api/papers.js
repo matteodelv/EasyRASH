@@ -29,6 +29,33 @@ router.get('/', function(req, res) {
 	} else res.status(404).send('404 sorry not found');
 });
 
+router.get("/user", function(req, res) {
+	var eventsPath = path.resolve("storage/events.json");
+	if (fs.existsSync(eventsPath)) {
+		fs.readFile(eventsPath, (err, data) => {
+			var events = JSON.parse(data);
+			var result = {
+				authored_by_me: [],	// contiene tutti gli articoli dell'utente loggato
+				pending_reviews: []	// contiene tutti gli articoli che l'utente loggato deve ancora recensire
+			};
+			events.forEach(event => {
+				event.submissions.forEach(paper => {
+					paper.conference = event.acronym;
+					
+					if (paper.authors.some(author => author === req.jwtPayload.id)) {
+						result.authored_by_me.push(paper);
+					}
+					
+					if (paper.reviewers.some(reviewer => reviewer === req.jwtPayload.id && paper.reviewedBy.indexOf(reviewer) === -1 && paper.status !== "accepted")) {
+						result.pending_reviews.push(paper);
+					}
+				});
+			});
+			res.json(result);
+		});
+	} else res.status(404).send("404 Data Not Found");
+});
+
 //Responds with a paper given the id
 router.get('/:id', function(req, res) {
 	//Filter out comments by permissions: /(<script type="application\/ld\+json">)((.|\n)*?)<\/script>/igm
