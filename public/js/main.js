@@ -124,6 +124,8 @@ function loadCurrentPaperContent() {
 		$('.paper-container').empty();
 	}
 
+	WebuiPopovers.hideAll();
+
 	if (document.location.pathname.startsWith("/papers/")) {
 		/*TODO: do we need this part?*/
 		if (sessionStorage.papers) {
