@@ -52,7 +52,7 @@
     font-size: 1.2em;
     font-weight: 700;
     text-transform: uppercase;
-	color:#E5E5E5;
+    color: #E5E5E5;
 }
 
 .sidebar-nav > .sidebar-brand a {
@@ -65,17 +65,21 @@
 }
 
 #conferenceSidebar .fa-check {
-	color:#009874;
+    color: #009874;
 }
+
 #conferenceSidebar .fa-user {
-	color:#337ab7;
+    color: #337ab7;
 }
+
 #conferenceSidebar .fa-certificate {
-	color:#f1af08;
+    color: #f1af08;
 }
+
 #conferenceSidebar .fa-exclamation-circle {
-	color:#f1885c;
+    color: #f1885c;
 }
+
 
 /* Scroll Spy sidebar */
 
@@ -102,7 +106,10 @@
     background-color: transparent;
     border-left: 1px solid #4D394B;
 }
+
+
 /* Scroll Spy sidebar Sub sections */
+
 .sections-sidebar>.nav>li>ul {
     display: none;
 }
@@ -133,4 +140,33 @@
     color: #4D394B;
     padding-left: 39px;
     border-left: 1px solid #4D394B;
+}
+
+/*END Scroll Spy*/
+
+/* Conferences Sidebar Section */
+
+.conferences-panel .panel-heading{
+    padding: 0px;
+    border: 0;
+    background: transparent;
+}
+
+.conferences-panel .panel-heading .btn{
+    border-radius: 4px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.conferences-panel.panel{
+    border: 0;
+    background-color: transparent;
+}
+
+.conferences-panel .panel-body{
+    border-color: #337ab7;
+    border-width: 0px 1px 1px 1px;
+    border-style: solid;
+    border-radius: 0px 0px 4px 4px;
+    background-color: transparent;
 }

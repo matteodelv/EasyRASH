@@ -246,6 +246,7 @@ function loadCurrentPaperContent() {
 							trigger: 'hover',
 							type: 'html',
 							animation: 'pop',
+							closeable: true,
 							content: getInlineAnnotationHtml(id, annotationsById[id]),
 							delay: { "show": 0, "hide": 300 }
 						});
@@ -285,6 +286,8 @@ function loadCurrentPaperContent() {
 							type: 'html',
 							animation: 'pop',
 							closeable: true,
+							arrow: false,
+							offsetTop: -10,
 							content: getInlineAnnotationHtml(id, annotationsById[id]),
 							delay: { "show": 0, "hide": 0 },
 							onShow: function($element) {
@@ -328,6 +331,7 @@ function loadCurrentPaperContent() {
 	}
 }
 
+//Returns the content of a popup annotation
 function getInlineAnnotationHtml(id, annotations) {
 	var carouselId = 'carousel-' + id.replace('#', '');
 	var $carouselContainer = $('<div id="' + carouselId + '" class="carousel slide" data-ride="carousel" data-interval="false"></div>');
@@ -492,7 +496,9 @@ function fetchAndBuildSidebarMenu(result, loadingConf, callback) {
 	if (loadingConf) {
 		parentObj = "#conferenceSidebar";
 		$(parentObj).empty();
-		$(parentObj).append($('<li class="sidebar-brand">Conference Papers</li>'));
+		$(parentObj).append($('<li class="sidebar-brand hidden">Conference Papers</li>'));
+		$('.conferences-panel .panel-body').removeClass('hidden');
+		$('.conferences-panel .panel-heading .btn').css('border-radius', '4px 4px 0px 0px');
 	} else {
 		parentObj = "#sidebar";
 		$(parentObj + ", #conferenceSidebar").empty();
@@ -521,7 +527,7 @@ function fetchAndBuildSidebarMenu(result, loadingConf, callback) {
 			});
 		}
 	}
-	if (loadingConf) $("#conferenceSidebar").css("border-bottom", "1px solid #E5E5E5");
+	//if (loadingConf) $("#conferenceSidebar").css("border-bottom", "1px solid #E5E5E5");
 
 	if (callback) callback();
 }
