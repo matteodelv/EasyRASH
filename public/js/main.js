@@ -210,7 +210,7 @@ function loadCurrentPaperContent() {
 				$addedHeadTags.filter('script[type="application/ld+json"]').each(function() {
 					var review = JSON.parse($(this).html());
 					reviews.push(review);
-					review.forEach(annotation => {
+					review.forEach(function(annotation) {
 						if (annotation.ref) {
 							if (annotationsById[annotation.ref]) {
 								annotationsById[annotation.ref].push(annotation);
@@ -346,7 +346,7 @@ function getInlineAnnotationHtml(id, annotations) {
 							   <span class="sr-only">Next</span>\
 							   </a></div>');
 
-	annotations.forEach((annotation, index) => {
+	annotations.forEach(function(annotation, index) {
 		$carouselIndicatorsContainer.append($('<li data-target="#' + carouselId + '" data-slide-to="' + index + '" ' + (index === 0 ? 'class="active"' : '') + '></li>'));
 		$carouselInner.append($('<div class="item ' + (index === 0 ? 'active' : '') + '">\
 								<div class="comment-header" style="border-color:' + reviewerColors[annotations[index].author] + '"><a href="' + annotation.author + '">' + annotation.author + '</a><time datetime="' + annotation.date + '" >' + moment(annotation.date).fromNow() + '</time></div>\
@@ -471,8 +471,9 @@ function applyStatusLabel(paper, loadingConf) {
 
 		statusLabel = statusLabel.replace("$labelText", paper.status.camelCaseToString());
 	}
-
+	console.log("applyStatusLabel");
 	if (loadingConf) {
+		console.log("loadingConf");
 		if (paper.authors.indexOf(sessionStorage.userID) !== -1) statusLabel += ' <span class="fa fa-user"></span>';
 		if (sessionStorage.userRole !== "Chair") {
 			if (paper.reviewers.indexOf(sessionStorage.userID) !== -1) {
