@@ -39,9 +39,7 @@ window.onload = function() {
 			}
 		});
 	} else {
-		$(window).load(function() {
-			$('#login-modal').modal('show');
-		});
+		$('#login-modal').modal('show');
 	}
 	$(document).keyup(function(e) {
 		if (e.keyCode == 27) { // escape key maps to keycode `27`
