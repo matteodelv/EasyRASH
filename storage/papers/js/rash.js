@@ -377,13 +377,13 @@ function rasherize() {
 
     /* Footnotes (part one) */
     $('section[role=doc-footnotes] section[role=doc-footnote]').sort(function(a, b) {
-        var all_footnote_pointers = $("a[href]").each(function() {
+        var all_footnote_pointers = $(".paper-container a[href]").each(function() {
             if ($.trim($(this).text()) == '' && $($(this).attr("href")).parents("section[role=doc-footnotes]")) {
                 return $(this);
             }
         });
-        var a_index = all_footnote_pointers.index(all_footnote_pointers.filter("a[href='#" + $(a).attr("id") + "']"));
-        var b_index = all_footnote_pointers.index(all_footnote_pointers.filter("a[href='#" + $(b).attr("id") + "']"));
+        var a_index = all_footnote_pointers.index(all_footnote_pointers.filter(".paper-container a[href='#" + $(a).attr("id") + "']"));
+        var b_index = all_footnote_pointers.index(all_footnote_pointers.filter(".paper-container a[href='#" + $(b).attr("id") + "']"));
         if (a_index < b_index) {
             return -1;
         } else if (a_index > b_index) {

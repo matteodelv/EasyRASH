@@ -14,14 +14,24 @@
    <script type="text/javascript" src="/papers/js/rash.js"></script>
    <script type="text/javascript" src="/js/moment-with-locales.min.js"></script>
    <script type="text/javascript" src="/js/jquery.webui-popover.js"></script>
+   <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery.webui-popover/1.2.12/jquery.webui-popover.min.js"></script> -->
    <script type="text/javascript" src="/js/jquery.easing.1.3.js"></script>
+   <script type="text/javascript" src="/js/jquery.injectCSS.js"></script>
    <script type="text/javascript" src="https://use.fontawesome.com/5042c30d9c.js"></script>
+   <script type="text/javascript" src="/js/rangy-1.3.0/rangy-core.js"></script>
+   <script type="text/javascript" src="/js/rangy-1.3.0/rangy-serializer.js"></script>
+   <script type="text/javascript" src="/js/rangy-1.3.0/rangy-classapplier.js"></script>
+   <script type="text/javascript" src="/js/rangy-1.3.0/rangy-selectionsaverestore.js"></script>
+   <script type="text/javascript" src="/js/rangy-1.3.0/rangy-textrange.js"></script>
+   <script type="text/javascript" src="/js/rangy-1.3.0/rangy-highlighter.js"></script>
+   <script type="text/javascript" src="/js/annotations.js"></script>
    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" />
    <link rel="stylesheet" type="text/css" href="/css/style.css" />
    <link rel="stylesheet" type="text/css" href="/css/animate.css" />
    <link rel="stylesheet" type="text/css" href="/css/sidebar.css" />
    <link rel="stylesheet" type="text/css" href="/css/fonts.css" />
    <link rel="stylesheet" type="text/css" href="/papers/css/rash.css" />
+   <link rel="stylesheet" type="text/css" href="/css/flip-button.css" />
    <link rel="stylesheet" type="text/css" href="/css/jquery.webui-popover.min.css" />
    <title>Homepage</title>
 </head>
@@ -30,8 +40,22 @@
    <div class="container-fluid banner hidden-print">
       <div class="col-md-offset-2">
          <div class="banner-text">Easy RASH</div>
+         <a class="pull-right" href="https://github.com/essepuntato/rash"><i class="fa fa-github" aria-hidden="true"></i></a>
       </div>
    </div>
+   <nav class="col-md-offset-2 topnav navbar navbar-inverse hidden-xs" data-spy="affix" data-offset-top="100">
+      <ul class="nav navbar-nav">
+         <li>
+            <input id="mode-checkbox" type="checkbox" class="tgl tgl-flip" />
+            <label data-tg-off="Reader mode" data-tg-on="Reviewer mode" for="mode-checkbox" class="tgl-btn"></label>
+         </li>
+         <li>
+            <a class="btn-md send-review-btn" data-toggle="tooltip" data-placement="bottom" title="Send review">
+               <i aria-hidden="true" class="fa fa-share-square-o"></i>
+            </a>
+         </li>
+      </ul>
+   </nav>
    <div class="container-fluid">
       <div id="wrapper" class="row">
          <!-- Left Sidebar -->
@@ -39,7 +63,9 @@
             <div class="profile-panel hidden">
                <h4 class="name"></h4>
                <h6 class="userRole"></h6>
-               <button type="button" class="btn" onclick="javascript:logOut()">Log out</button>
+               <a class="btn btn-md reverse" onclick="javascript:logOut()" data-toggle="tooltip" data-placement="bottom" title="Log out">
+                  <i class="fa fa-sign-out" aria-hidden="true"></i>
+               </a>
             </div>
             <div class="panel panel-primary conferences-panel">
                <div class="panel-heading">
@@ -73,7 +99,7 @@
                      </article>
                   </div>
                   <nav class="col-md-2 sections-sidebar hidden-print hidden-xs hidden-sm" id="nav-scroll-spy" role="complementary">
-                     <ul class="nav nav-stacked" data-spy="affix" data-offset-top="150" data-clampedwidth=".sections-sidebar">
+                     <ul class="nav nav-stacked" data-spy="affix" data-offset-top="100" data-clampedwidth=".sections-sidebar">
                      </ul>
                   </nav>
                </div>

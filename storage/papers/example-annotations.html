@@ -53,7 +53,7 @@
          "@type": "comment",
          "@id": "#review1-c1",
          "text": "The text of the comment referring to a fragment (i.e., a 'span')",
-         "ref": "#fragment1",
+         "ref": ["#fragment2", "#fragment3"],
          "author": "mailto:silvio.peroni@unibo.it",
          "date": "2016-01-16T11:54:26"
       },
@@ -63,6 +63,24 @@
          "@id": "#review1-c2",
          "text": "The text of the comment referring to an existing element (i.e., a 'p')",
          "ref": "#p2",
+         "author": "mailto:silvio.peroni@unibo.it",
+         "date": "2016-01-16T11:59:58"
+      },
+      {
+         "@context": "http://vitali.web.cs.unibo.it/twiki/pub/TechWeb16/context.json",
+         "@type": "comment",
+         "@id": "#review1-c3",
+         "text": "BLABLABLA",
+         "ref": "#fragment4",
+         "author": "mailto:silvio.peroni@unibo.it",
+         "date": "2016-01-16T11:59:58"
+      },
+      {
+         "@context": "http://vitali.web.cs.unibo.it/twiki/pub/TechWeb16/context.json",
+         "@type": "comment",
+         "@id": "#review1-c4",
+         "text": "large",
+         "ref": "#fragment5",
          "author": "mailto:silvio.peroni@unibo.it",
          "date": "2016-01-16T11:59:58"
       },
@@ -105,7 +123,7 @@
          "@type": "comment",
          "@id": "#review2-c2",
          "text": "Comment from a different user but this guy really wants to make very long comments for some reason, maybe he wants to find out how the application reacts to, as I already mentioned, very long comments. But who knows, maybe he just likes to talk a lot.",
-         "ref": "#fragment1",
+         "ref": ["#fragment1", "#fragment2"],
          "author": "mailto:angelo.diiorio@unibo.it",
          "date": "2016-01-17T12:34:56"
       },
@@ -115,6 +133,15 @@
          "@id": "#review2-c1",
          "text": "Wow, that's another comment on the same element!",
          "ref": "#p2",
+         "author": "mailto:angelo.diiorio@unibo.it",
+         "date": "2016-01-17T11:59:58"
+      },
+      {
+         "@context": "http://vitali.web.cs.unibo.it/twiki/pub/TechWeb16/context.json",
+         "@type": "comment",
+         "@id": "#review2-c4",
+         "text": "small!",
+         "ref": "#fragment6",
          "author": "mailto:angelo.diiorio@unibo.it",
          "date": "2016-01-17T11:59:58"
       },
@@ -179,7 +206,7 @@
       <!-- Abstract -->
       <section role="doc-abstract">
          <h1>Abstract</h1>
-         <p>The creation and use of <span id="fragment1">knowledge graphs for information discovery</span>, question answering, and task completion has exploded in recent years, but their application has often been limited to the most common user scenarios. The benefits of such models of human knowledge have not yet been fully realized within the domain of scholarship and research outputs, and Microsoft Research is determined to change the way that research information is discovered, analyzed, and exploited. The Microsoft Academic Graph is a new entity graph of research publications, authors, venues, organizations, and topics which is now driving new features in Bing, Cortana, and Microsoft Academic. In addition, Microsoft Research has opened up this dataset to the community new APIs to support further research, experimentation, and development. This talk will highlight how Microsoft is surfacing this information in novel ways, and how the research community can take advantage of these data and APIs to enable new research opportunities.</p>
+         <p>The creation and use of <span id="fragment1">knowledge graphs for </span><span id="fragment2">information discovery</span><span id="fragment3">, question answering</span>, and task completion has exploded in recent years, but their application has often been limited to the most common user scenarios. The benefits of such models of human knowledge have not yet been fully realized within the domain of scholarship and research outputs, and Microsoft Research is determined to change <span id="fragment4">the way</span> that research information is discovered, analyzed, and exploited. The Microsoft Academic Graph is a new entity graph of research publications, authors, venues, organizations, and topics which is now driving new features in <span id="fragment5">Google, <span id="fragment6">Bing</span>, Cortana, and Microsoft Academic</span>. In addition, Microsoft Research has opened up this dataset to the community new APIs to support further research, experimentation, and development. This talk will highlight how Microsoft is surfacing this information in novel ways, and how the research community can take advantage of these data and APIs to enable new research opportunities.</p>
       </section>
 
       <!-- BIO -->

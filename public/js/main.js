@@ -48,22 +48,9 @@ window.onload = function() {
 	});
 };
 
-function hexToRgbA(hex, opacity) {
-	var c;
-	if (/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)) {
-		c = hex.substring(1).split('');
-		if (c.length == 3) {
-			c = [c[0], c[0], c[1], c[1], c[2], c[2]];
-		}
-		c = '0x' + c.join('');
-		return 'rgba(' + [(c >> 16) & 255, (c >> 8) & 255, c & 255].join(',') + ',' + opacity + ')';
-	}
-	throw new Error('Bad Hex: ' + hex);
-}
-
-
 $(document).ready(function() {
 	//moment.locale('it');
+	$('[data-toggle="tooltip"]').tooltip(); 
 	$('#signupemail').keyup(function() {
 		var username = $(this).val().split("@")[0];
 		if (username.indexOf($('#signupusername').val()) >= 0 || $('#signupusername').val().indexOf(username) >= 0) {
@@ -150,8 +137,18 @@ function loadCurrentPaperContent() {
 			url: '/api' + document.location.pathname,
 			method: 'GET',
 			success: function(result) {
+				try {
+					var xmlParsed = $.parseXML(result);
+				} catch (err) {
+					$.notify({
+						message: 'Error while parsing XML.'
+					}, {
+						type: 'danger',
+						delay: 2000
+					});
+					return;
+				}
 				$('#placeholder').remove();
-				var xmlParsed = $.parseXML(result);
 				var $xml = $(xmlParsed);
 				//Head
 				$addedHeadTags && $addedHeadTags.remove();
@@ -201,118 +198,8 @@ function loadCurrentPaperContent() {
 					var $spy = $(this).scrollspy('refresh');
 				});
 				//END: Scroll Spy Sections
-
-				//Comments and reviews
-				reviews = [];
-				var annotationsById = {};
-				$addedHeadTags.filter('script[type="application/ld+json"]').each(function() {
-					var review = JSON.parse($(this).html());
-					reviews.push(review);
-					review.forEach(function(annotation) {
-						if (annotation.ref) {
-							if (annotationsById[annotation.ref]) {
-								annotationsById[annotation.ref].push(annotation);
-							} else {
-								annotationsById[annotation.ref] = [annotation];
-							}
-							if (!reviewerColors[annotation.author]) {
-								var colorIndex = Math.floor(Math.random() * distinctColors.length);
-								reviewerColors[annotation.author] = distinctColors[colorIndex];
-								distinctColors.splice(colorIndex, 1);
-							}
-						}
-					});
-				});
-				Object.keys(annotationsById).forEach(function(id) {
-					annotationsById[id].sort(function(a, b) {
-						return b.text.length - a.text.length
-					});
-					//Highlight color default to first reviewer's color
-					var rgbColor = reviewerColors[annotationsById[id][0].author];
-					var rgbaColor = hexToRgbA(rgbColor, 0.5);
-					//Inline annotations appear as highlighted text and popover (plus h1, h2, h3)
-					if (['span', 'em', 'code', 'a', 'time', 'cite', 'h1', 'h2', 'h3'].indexOf($(id).prop('tagName').toLowerCase()) >= 0) {
-						var $elem = $(id);
-
-						$elem.css({
-							'border-radius': '0.3em',
-							'background-color': rgbaColor
-						});
-
-						var $popover = $elem.webuiPopover({
-							placement: 'auto-top',
-							trigger: 'hover',
-							type: 'html',
-							animation: 'pop',
-							closeable: true,
-							content: getInlineAnnotationHtml(id, annotationsById[id]),
-							delay: { "show": 0, "hide": 300 }
-						});
-
-						$popover.on("shown.webui.popover", function(e) {
-							carouselNormalization('#carousel-' + id.replace('#', '') + ' .item');
-						});
-
-						$('#carousel-' + id).carousel();
-						//Block annotations appear on the side with a hover effect
-					} else if (['p', 'div', 'section', 'figure', 'footer', 'header'].indexOf($(id).prop('tagName').toLowerCase()) >= 0) {
-						var $anchor = $('<div class="comment-anchor hidden-print"></div>');
-						var $elem = $(id);
-						$anchor.css({
-							'background-color': rgbaColor
-						});
-
-						var inner = ['section', 'footer', 'header'].indexOf($(id).prop('tagName').toLowerCase()) < 0;
-						if (inner) {
-							var $wrapper = $('<div></div>');
-							$elem.replaceWith($wrapper);
-							$wrapper.append($anchor);
-							$wrapper.append($elem);
-						} else {
-							$elem.prepend($anchor);
-						}
-
-						var animateOut = function($element) {
-							$anchor.stop(true, false).animate({ 'min-width': '0' }, {
-								duration: 300,
-								easing: 'easeInCubic'
-							});
-						};
-						var $popover = $elem.webuiPopover({
-							placement: 'top-right',
-							trigger: 'manual',
-							type: 'html',
-							animation: 'pop',
-							closeable: true,
-							arrow: false,
-							offsetTop: -10,
-							content: getInlineAnnotationHtml(id, annotationsById[id]),
-							delay: { "show": 0, "hide": 0 },
-							onShow: function($element) {
-								var target = $anchor.parent().width() - parseInt($anchor.css('marginLeft')) * 2;
-								$anchor.stop(true, false).animate({ 'min-width': target }, {
-									duration: 400,
-									easing: 'easeOutQuad',
-									done: function() {
-										if (!$popover.is(':visible')) {
-											animateOut($element);
-										}
-									}
-								});
-							},
-							onHide: animateOut
-						});
-
-						$anchor.mouseenter(function() {
-							$popover.webuiPopover('show');
-						});
-
-						$popover.on("shown.webui.popover", function(e) {
-							carouselNormalization('#carousel-' + id.replace('#', '') + ' .item');
-						});
-						$('#carousel-' + id).carousel();
-					}
-				});
+				loadAnnotations();
+				loadDraftAnnotations();
 			},
 			error: function(result) {
 				if (result.responseJSON && result.responseJSON.error.name === "TokenExpiredError") {
@@ -325,72 +212,6 @@ function loadCurrentPaperContent() {
 					delay: 2000
 				});
 			}
-		});
-	}
-}
-
-//Returns the content of a popup annotation
-function getInlineAnnotationHtml(id, annotations) {
-	var carouselId = 'carousel-' + id.replace('#', '');
-	var $carouselContainer = $('<div id="' + carouselId + '" class="carousel slide" data-ride="carousel" data-interval="false"></div>');
-	var $carouselIndicatorsContainer = $('<ol class="carousel-indicators"></ol>');
-	var $carouselInner = $('<div class="carousel-inner" role="listbox"></div>');
-	var $carouselControls = $('<div class="carousel-controls"><a class="oull-left" href="#' + carouselId + '" role="button" data-slide="prev">\
-							   <span class="glyphicon glyphicon-chevron-left"></span>\
-							   <span class="sr-only">Previous</span>\
-							   </a>\
-							   <a class="pull-right" href="#' + carouselId + '" role="button" data-slide="next">\
-							   <span class="glyphicon glyphicon-chevron-right"></span>\
-							   <span class="sr-only">Next</span>\
-							   </a></div>');
-
-	annotations.forEach(function(annotation, index) {
-		$carouselIndicatorsContainer.append($('<li data-target="#' + carouselId + '" data-slide-to="' + index + '" ' + (index === 0 ? 'class="active"' : '') + '></li>'));
-		$carouselInner.append($('<div class="item ' + (index === 0 ? 'active' : '') + '">\
-								<div class="comment-header" style="border-color:' + reviewerColors[annotations[index].author] + '"><a href="' + annotation.author + '">' + annotation.author + '</a><time datetime="' + annotation.date + '" >' + moment(annotation.date).fromNow() + '</time></div>\
-								<p>' + annotation.text + '</p>\
-								</div>'));
-	});
-
-	if (annotations.length <= 1) {
-		$carouselControls.addClass('hidden');
-	}
-	$carouselControls.append($carouselIndicatorsContainer);
-	$carouselContainer.append($carouselInner).append($carouselControls);
-	return $carouselContainer[0].outerHTML;
-}
-
-//Causes all carousel slides to be the height of the tallest one
-function carouselNormalization(selector) {
-	var items = $(selector), //grab all slides
-		heights = [], //create empty array to store height values
-		tallest, //create variable to make note of the tallest slide
-		widths = [],
-		largest;
-
-	if (items.length) {
-		function normalizeHeights() {
-			items.each(function() { //add heights to array
-				heights.push($(this).height());
-				widths.push($(this).width());
-			});
-			tallest = Math.max.apply(null, heights); //cache largest value
-			largest = Math.max.apply(null, widths);
-			items.each(function() {
-				$(this).css('min-height', tallest + 'px');
-				$(this).css('min-width', largest + 'px');
-			});
-		};
-		normalizeHeights();
-
-		$(window).on('resize orientationchange', function() {
-			tallest = 0, heights.length = 0; //reset vars
-			largest = 0, widths.length = 0;
-			items.each(function() {
-				$(this).css('min-height', '0'); //reset min-height
-				$(this).css('min-width', '0');
-			});
-			normalizeHeights(); //run it again 
 		});
 	}
 }
@@ -469,9 +290,7 @@ function applyStatusLabel(paper, loadingConf) {
 
 		statusLabel = statusLabel.replace("$labelText", paper.status.camelCaseToString());
 	}
-	console.log("applyStatusLabel");
 	if (loadingConf) {
-		console.log("loadingConf");
 		if (paper.authors.indexOf(sessionStorage.userID) !== -1) statusLabel += ' <span class="fa fa-user"></span>';
 		if (sessionStorage.userRole !== "Chair") {
 			if (paper.reviewers.indexOf(sessionStorage.userID) !== -1) {

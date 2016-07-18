@@ -931,7 +931,8 @@
                     case 'top':
                         position = {
                             top: pos.top - targetHeight,
-                            left: pos.left < getNodePosition(this.$element[0]).left ? getNodePosition(this.$element[0]).left - targetWidth / 2 : pos.left + pos.width / 2 - targetWidth / 2
+                            //left: pos.left < getNodePosition(this.$element[0]).left ? getNodePosition(this.$element[0]).left - targetWidth / 2 : pos.left + pos.width / 2 - targetWidth / 2
+                            left:  pos.left + pos.width / 2 - targetWidth / 2
                         };
                         break;
                     case 'left':
