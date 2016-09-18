@@ -412,6 +412,10 @@ section>.add-block-annotation-btn{
 	left: -20px;
 }
 
+section>section>.add-block-annotation-btn{
+	left: -40px;
+}
+
 .add-block-annotation-btn:hover, .add-annotation-btn:hover {
 	border-color: #bada55;
 }
