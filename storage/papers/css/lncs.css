@@ -547,6 +547,7 @@ html{
     padding-top: 5px;
     position: fixed;
     width: 122mm;
+    z-index: 102;
 }
 
 .paper-container .footer span, .paper-container .footer div {

@@ -199,6 +199,7 @@ html {
     padding: 10px;
     margin-left: auto;
     margin-right: auto;
+    z-index: 102;
 }
 
 .paper-container .footer span, .footer div {

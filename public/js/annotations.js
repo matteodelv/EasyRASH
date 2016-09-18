@@ -145,7 +145,7 @@ $(window).load(function() {
 });
 
 function loadDraftAnnotations() {
-	var paperId = document.location.pathname.split('/papers/')[1];
+	var paperId = document.location.pathname.split('/papers/')[1].replace(/\/?$/, '/');
 	if (localStorage.getItem(paperId + 'draftAnnotations')) {
 		var draftAnnotations = JSON.parse(localStorage.getItem(paperId + 'draftAnnotations'));
 		Object.keys(draftAnnotations).forEach(function(annotationKey) {
@@ -246,7 +246,7 @@ function loadDraftAnnotation(annotation) {
 		}
 		//Saving annotation locally
 		annotation.content = $('#' + $wrapper.attr('id') + '-editor textarea').val();
-		var paperId = document.location.pathname.split('/papers/')[1];
+		var paperId = document.location.pathname.split('/papers/')[1].replace(/\/?$/, '/'); //Add trailing slash
 		if (!localStorage.getItem(paperId + 'draftAnnotations')) {
 			localStorage.setItem(paperId + 'draftAnnotations', JSON.stringify({}));
 		}
@@ -396,7 +396,8 @@ function loadAnnotations() {
 
 			var inner = ['section', 'footer', 'header'].indexOf($(id).prop('tagName').toLowerCase()) < 0;
 			if (inner) {
-				var $wrapper = $('<div class="cgen"></div>');
+				//Do not set cgen to prevent from hiding
+				var $wrapper = $('<div class=""></div>');
 				$elem.replaceWith($wrapper);
 				$wrapper.append($anchor);
 				$wrapper.append($elem);
