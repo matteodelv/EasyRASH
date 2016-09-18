@@ -102,7 +102,7 @@ a.btn-md:active i {
 }
 
 .topnav.navbar {
-	z-index: 10;
+	z-index: 102;
 	background-color: #1870af;
 	border-radius: 0;
 }
@@ -169,6 +169,9 @@ a.btn-md:active i {
 
 .paper-container {
 	min-height: 100vh;
+}
+
+.page-content{
 }
 
 .page-content>.row>div {

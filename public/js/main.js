@@ -180,8 +180,9 @@ function loadCurrentPaperContent() {
 					$(this).on('click', function(event) {
 						var href = $(this).attr('href');
 						event.preventDefault();
+						//remove topnav distance
 						$root.animate({
-							scrollTop: $(href).offset().top
+							scrollTop: $(href).offset().top - 50
 						}, 400, function() {
 							history.pushState({}, '', href);
 						});
@@ -191,7 +192,7 @@ function loadCurrentPaperContent() {
 				var scrollTarget = window.location.hash && $(window.location.hash).offset() ? $(window.location.hash).offset().top : $('#top').offset().top;
 				if (scrollTarget !== $(window).scrollTop()) {
 					$root.animate({
-						scrollTop: scrollTarget
+						scrollTop: scrollTarget - 50
 					}, 400);
 				}
 				$('[data-spy="scroll"]').each(function() {
