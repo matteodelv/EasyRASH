@@ -90,6 +90,11 @@ a.btn-md:active i {
 	user-select: none;
 }
 
+.banner-text a {
+	color:#FFF;
+	text-decoration:none;
+}
+
 
 /* Affixes */
 

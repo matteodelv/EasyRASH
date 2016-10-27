@@ -1,6 +1,7 @@
 var router = require('express').Router();
 var path = require('path');
 var fs = require('fs');
+var utils = require('../utils.js');
 
 router.get('/', function(req, res) {
 	var filePath = path.resolve('storage/events.json');
@@ -18,6 +19,56 @@ router.get('/', function(req, res) {
 			res.json(conferences);
 		});
 	} else res.status(404).send('404 sorry not found');
+});
+
+// add a PUT/POST endpoint to create a new conference and make the user that created it as chair
+router.post('/create', function(req, res) {
+	// checking user email existance
+	/*
+	if (req.body.cochairs || req.body.reviewers) {
+		var usersPath = path.resolve('storage/users.json');
+		if (fs.existsSync(usersPath)) {
+			fs.readFile(usersPath, (error, data) => {
+				var users = JSON.parse(data);
+				var coChairCheck = req.body.cochairs.every(function (aCoChair) {
+					if (!users.find(x => x.email === aCoChair)) return true;
+					else return false;
+				});
+				var revCheck = req.body.reviewers.every(function (aRev) {
+					if (!users.find(x => x.email === aRev)) return true;
+					else return false;
+				});
+				if (!coChairCheck || !revCheck) res.status(400).send('Please check emails... Some of them appear don\'t exist.');
+			});
+		} else res.status(404).send('404 Users Not Found');
+	}*/
+
+	utils.checkAcronymUsage(req.body.acronym, result => {
+		if (result) {
+			var eventsPath = path.resolve('storage/events.json');
+			var events;
+			if (fs.existsSync(eventsPath)) {
+				fs.readFile(eventsPath, (error, data) => {
+					var newConf = {
+						conference: req.body.title,
+						acronym: req.body.acronym,
+						chairs: [ req.jwtPayload.id ],
+						pc_members: [],
+						submissions: []
+					};
+					events = JSON.parse(data);
+					events.push(newConf);
+
+					if (events) {
+						fs.writeFile(eventsPath, JSON.stringify(events, null, '\t'), error => {
+							if (error) throw error;
+							res.json({ success: true, message: 'Conference correctly created! Redirecting to admin panel...' });
+						});
+					} else res.status(400).json({ success: false, message: 'Problems fetching conferences... Try again.' });
+				});
+			} else res.status(404).json({ success: false, message: 'Error 404 - Events not found' });
+		} else res.status(400).json({ success: false, message: 'Chosen acronym already in use! Please, try again.' });
+	});
 });
 
 router.get('/:id/papers', function(req, res) {
@@ -64,5 +115,7 @@ router.get('/:id/papers', function(req, res) {
 		});
 	} else res.status(404).send("404 Conference Non Found");
 });
+
+
 
 module.exports = router;

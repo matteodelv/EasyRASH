@@ -223,6 +223,7 @@ function getConferences() {
 		method: "GET",
 		success: function(res) {
 			var conferencesUl = $("#conferenceSelector .dropdown-menu");
+			conferencesUl.empty(); 		// To avoid duplicate entries
 
 			for (var i = 0; i < res.length; i++) {
 				var $li = $('<li><a>' + res[i].conference + '</a></li>');
@@ -238,8 +239,6 @@ function getConferences() {
 							$("#sidebar-wrapper .profile-panel .userRole").text("Role: " + result.userRole);
 							sessionStorage.userRole = result.userRole;
 
-							console.log("AJAX request for conference " + a.data('acronym'));
-
 							fetchAndBuildSidebarMenu(result, true, function() {
 								loadCurrentPaperContent();
 							});
@@ -251,9 +250,16 @@ function getConferences() {
 				});
 				conferencesUl.append($li);
 			}
+			var $divider = $("<li class='divider'></li>");
+			conferencesUl.append($divider);
+			var $newConfButton = $('<li><a>New Conference...</a></li>');
+			$('a', $newConfButton).on("click", function() {
+				$('#newConfModal').modal('show');
+			});
+			conferencesUl.append($newConfButton);
 		},
 		error: function(err) {
-			console.log(err);
+			console.log(err);		// TODO: Manage error situation
 		}
 	});
 }
@@ -346,7 +352,6 @@ function fetchAndBuildSidebarMenu(result, loadingConf, callback) {
 			});
 		}
 	}
-	//if (loadingConf) $("#conferenceSidebar").css("border-bottom", "1px solid #E5E5E5");
 
 	if (callback) callback();
 }
@@ -446,6 +451,38 @@ function logOut() {
 	localStorage.accessToken = null;
 	window.location.replace("/");
 	return false;
+}
+
+function createNewConference() {
+	var data = {};
+	$('#newConfForm input[name]').each(function(index) {
+		data[$(this).attr('name')] = $(this).val();
+	});
+	/*
+	['cochairs', 'reviewers'].forEach(function(item, index) {
+		if (data[item]) data[item] = data[item].split(',');
+		else delete data[item];
+	});*/
+	console.log(data);
+	$.ajax({
+		url: '/api/events/create',
+		method: 'POST',
+		data: data,
+		success: function(result) {
+			$('#newConfForm .modal-body').prepend($('<div class="alert alert-success fade in" role="alert"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>' + result.message + '</div>'));
+			
+			getConferences();
+
+			window.setTimeout(function() {
+				$('#newConfModal').modal('hide');
+			}, 1000);
+
+			// TODO: Remove "your paper will apper here" and show conference admin panel
+		},
+		error: function(error) {
+			$('#newConfForm .modal-body').prepend($('<div class="alert alert-danger fade in" role="alert"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>' + JSON.parse(error.responseText).message + '</div>'));
+		}
+	});
 }
 
 function redirectToPaper(url, paper) {

@@ -1,234 +1,231 @@
 [
-   {
-      "conference": "International Web Comics Conference 2016",
-      "acronym": "IWCC 2016",
-      "chairs": [
-         "jessica.jones",
-         "vanessa.ives",
-         "fabio.vitali"
-      ],
-      "pc_members": [
-         "silvio.peroni",
-         "angelo.diiorio",
-         "lyra.belacqua",
-         "alice.liddell",
-         "arthur.dent",
-         "arabella.strange",
-         "john.constantine"
-      ],
-      "submissions": [
-         {
-            "title": "The Microsoft Academic Graph: New Applications and Research Opportunities -- SAVE-SD 2016 Keynote Talk",
-            "status": "accepted",
-            "authors": [
-               "alex.wade"
-            ],
-            "url": "wade-savesd2016",
-            "reviewers": [
-               "silvio.peroni",
-               "angelo.diiorio"
-            ],
-			"reviewedBy": [
-				"angelo.diiorio",
-				"silvio.peroni"
-			]
-         },
-         {
-            "title": "Semantic Publishing Challenge: Bootstrapping a Value Chain for Scientific Data ",
-            "status": "pending",
-            "authors": [
-               "vahdati",
-               "anastasia.dimou",
-               "math.semantic.web",
-               "angelo.diiorio"
-            ],
-            "url": "vahdati-savesd2016",
-            "reviewers": [
-               "alice.liddell",
-               "arthur.dent"
-            ],
-			"reviewedBy": [
-			]
-         },
-         {
-            "title": "It ROCS! -- The RASH Online Conversion Service",
-            "status": "pending",
-            "authors": [
-               "angelo.diiorio",
-               "alejandra.gonzalezbeltran",
-               "francesco.osborne",
-               "silvio.peroni",
-               "francesco.poggi5",
-               "fabio.vitali"
-            ],
-            "url": "diiorio-www2016",
-            "reviewers": [
-               "arabella.strange",
-               "john.constantine"
-            ],
-			"reviewedBy": [
-				"john.constantine"
-			]
-         },
-         {
-            "title": "RASH: Research Articles in Simplified HTML -- Documentation - Version 0.5, February 15, 2016",
-            "status": "rejected",
-            "authors": [
-               "silvio.peroni"
-            ],
-            "url": "peroni-rashdoc2016",
-            "reviewers": [
-               "lyra.belacqua",
-               "arthur.dent"
-            ],
-			"reviewedBy": [
-			]
-         },
-         {
-            "title": "Science Bots: A Model for the Future of Scientific Computation?",
-            "authors": [
-               "tokuhn"
-            ],
-            "url": "tuhn-savesd2015",
-            "reviewers": [
-               "silvio.peroni",
-               "arabella.strange"
-            ],
-			"reviewedBy": [
-				"silvio.peroni"
-			]
-         }
-      ]
-   },
-   {
-      "conference": "International Great Books Conference 2016",
-      "acronym": "IGBC 2016",
-      "chairs": [
-         "arabella.strange",
-         "john.constantine"
-      ],
-      "pc_members": [
-         "jessica.jones",
-         "vanessa.ives",
-         "lyra.belacqua",
-         "alice.liddell",
-         "arthur.dent",
-         "arabella.strange",
-         "john.constantine"
-      ],
-      "submissions": [
-         {
-            "title": "Increasing the Productivity of Scholarship: The Case for Knowledge Graphs -- SAVE-SD 2015 Keynote Talk",
-            "status": "rejected",
-            "authors": [
-               "p.groth"
-            ],
-            "url": "groth-savesd2015",
-            "reviewers": [
-               "vanessa.ives",
-               "lyra.belacqua"
-            ],
-			"reviewedBy": [
-				"vanessa.ives",
-				"lyra.belacqua"
-			]
-         },
-         {
-            "title": "Exploring bibliographies for research-related tasks",
-            "status": "toBeAmended",
-            "authors": [
-               "angelo.diiorio",
-               "raffaele.giannella",
-               "francesco.poggi5",
-               "fabio.vitali"
-            ],
-            "url": "diiorio-savesd2015",
-            "reviewers": [
-               "arthur.dent",
-               "arabella.strange",
-               "john.constantine"
-            ],
-			"reviewedBy": [
-				"arthur.dent",
-				"arabella.strange"
-			]
-         },
-         {
-            "title": "Example paper for comments",
-            "status": "accepted",
-            "authors": [
-               "angelo.diiorio",
-               "raffaele.giannella",
-               "francesco.poggi5",
-               "fabio.vitali",
-               "silvio.peroni"
-            ],
-            "url": "example-annotations",
-            "reviewers": [
-               "arthur.dent",
-               "arabella.strange",
-               "john.constantine"
-            ],
-			"reviewedBy": [
-			]
-         },
-         {
-            "title": "The RASH Framework: enabling HTML+RDF submissions in scholarly venues",
-            "status": "toBeAmended",
-            "authors": [
-               "angelo.diiorio",
-               "andrea.nuzzolese",
-               "francesco.osborne",
-               "silvio.peroni",
-               "francesco.poggi5",
-               "mike",
-               "fabio.vitali",
-               "j.zhao5"
-            ],
-            "url": "diiorio-iswc2015",
-            "reviewers": [
-               "jessica.jones",
-               "vanessa.ives"
-            ],
-			"reviewedBy": [
-				"vanessa.ives"
-			]
-         },
-         {
-            "title": "Evaluating citation functions in CiTO: cognitive issues -- Preprint of http://dx.doi.org/10.1007/978-3-319-07443-6_39",
-            "status": "accepted",
-            "authors": [
-               "paolo.ciancarini",
-               "angelo.diiorio",
-               "andrea.nuzzolese",
-               "silvio.peroni",
-               "fabio.vitali"
-            ],
-            "url": "ciancarini-eswc2014",
-            "reviewers": [
-               "jessica.jones",
-               "john.constantine"
-            ],
-			"reviewedBy": [
-				"jessica.jones"
-			]
-         },
-         {
-            "title": "Enhanced Publication Management Systems -- A systemic approach towards modern scientific communication",
-            "status": "accepted",
-            "authors": [
-               "alessia.bardi",
-               "paolo.manghi"
-            ],
-            "url": "bardi-savesd2015",
-            "reviewers": [
-               "vanessa.ives",
-               "arabella.strange"
-            ],
-			"reviewedBy": [
-				"vanessa.ives"
-			]
-         }
-      ]
-   }
+	{
+		"conference": "International Web Comics Conference 2016",
+		"acronym": "IWCC 2016",
+		"chairs": [
+			"jessica.jones",
+			"vanessa.ives",
+			"fabio.vitali"
+		],
+		"pc_members": [
+			"silvio.peroni",
+			"angelo.diiorio",
+			"lyra.belacqua",
+			"alice.liddell",
+			"arthur.dent",
+			"arabella.strange",
+			"john.constantine"
+		],
+		"submissions": [
+			{
+				"title": "The Microsoft Academic Graph: New Applications and Research Opportunities -- SAVE-SD 2016 Keynote Talk",
+				"status": "accepted",
+				"authors": [
+					"alex.wade"
+				],
+				"url": "wade-savesd2016",
+				"reviewers": [
+					"silvio.peroni",
+					"angelo.diiorio"
+				],
+				"reviewedBy": [
+					"angelo.diiorio",
+					"silvio.peroni"
+				]
+			},
+			{
+				"title": "Semantic Publishing Challenge: Bootstrapping a Value Chain for Scientific Data ",
+				"status": "pending",
+				"authors": [
+					"vahdati",
+					"anastasia.dimou",
+					"math.semantic.web",
+					"angelo.diiorio"
+				],
+				"url": "vahdati-savesd2016",
+				"reviewers": [
+					"alice.liddell",
+					"arthur.dent"
+				],
+				"reviewedBy": []
+			},
+			{
+				"title": "It ROCS! -- The RASH Online Conversion Service",
+				"status": "pending",
+				"authors": [
+					"angelo.diiorio",
+					"alejandra.gonzalezbeltran",
+					"francesco.osborne",
+					"silvio.peroni",
+					"francesco.poggi5",
+					"fabio.vitali"
+				],
+				"url": "diiorio-www2016",
+				"reviewers": [
+					"arabella.strange",
+					"john.constantine"
+				],
+				"reviewedBy": [
+					"john.constantine"
+				]
+			},
+			{
+				"title": "RASH: Research Articles in Simplified HTML -- Documentation - Version 0.5, February 15, 2016",
+				"status": "rejected",
+				"authors": [
+					"silvio.peroni"
+				],
+				"url": "peroni-rashdoc2016",
+				"reviewers": [
+					"lyra.belacqua",
+					"arthur.dent"
+				],
+				"reviewedBy": []
+			},
+			{
+				"title": "Science Bots: A Model for the Future of Scientific Computation?",
+				"authors": [
+					"tokuhn"
+				],
+				"url": "tuhn-savesd2015",
+				"reviewers": [
+					"silvio.peroni",
+					"arabella.strange"
+				],
+				"reviewedBy": [
+					"silvio.peroni"
+				]
+			}
+		]
+	},
+	{
+		"conference": "International Great Books Conference 2016",
+		"acronym": "IGBC 2016",
+		"chairs": [
+			"arabella.strange",
+			"john.constantine"
+		],
+		"pc_members": [
+			"jessica.jones",
+			"vanessa.ives",
+			"lyra.belacqua",
+			"alice.liddell",
+			"arthur.dent",
+			"arabella.strange",
+			"john.constantine"
+		],
+		"submissions": [
+			{
+				"title": "Increasing the Productivity of Scholarship: The Case for Knowledge Graphs -- SAVE-SD 2015 Keynote Talk",
+				"status": "rejected",
+				"authors": [
+					"p.groth"
+				],
+				"url": "groth-savesd2015",
+				"reviewers": [
+					"vanessa.ives",
+					"lyra.belacqua"
+				],
+				"reviewedBy": [
+					"vanessa.ives",
+					"lyra.belacqua"
+				]
+			},
+			{
+				"title": "Exploring bibliographies for research-related tasks",
+				"status": "toBeAmended",
+				"authors": [
+					"angelo.diiorio",
+					"raffaele.giannella",
+					"francesco.poggi5",
+					"fabio.vitali"
+				],
+				"url": "diiorio-savesd2015",
+				"reviewers": [
+					"arthur.dent",
+					"arabella.strange",
+					"john.constantine"
+				],
+				"reviewedBy": [
+					"arthur.dent",
+					"arabella.strange"
+				]
+			},
+			{
+				"title": "Example paper for comments",
+				"status": "accepted",
+				"authors": [
+					"angelo.diiorio",
+					"raffaele.giannella",
+					"francesco.poggi5",
+					"fabio.vitali",
+					"silvio.peroni"
+				],
+				"url": "example-annotations",
+				"reviewers": [
+					"arthur.dent",
+					"arabella.strange",
+					"john.constantine"
+				],
+				"reviewedBy": []
+			},
+			{
+				"title": "The RASH Framework: enabling HTML+RDF submissions in scholarly venues",
+				"status": "toBeAmended",
+				"authors": [
+					"angelo.diiorio",
+					"andrea.nuzzolese",
+					"francesco.osborne",
+					"silvio.peroni",
+					"francesco.poggi5",
+					"mike",
+					"fabio.vitali",
+					"j.zhao5"
+				],
+				"url": "diiorio-iswc2015",
+				"reviewers": [
+					"jessica.jones",
+					"vanessa.ives"
+				],
+				"reviewedBy": [
+					"vanessa.ives"
+				]
+			},
+			{
+				"title": "Evaluating citation functions in CiTO: cognitive issues -- Preprint of http://dx.doi.org/10.1007/978-3-319-07443-6_39",
+				"status": "accepted",
+				"authors": [
+					"paolo.ciancarini",
+					"angelo.diiorio",
+					"andrea.nuzzolese",
+					"silvio.peroni",
+					"fabio.vitali"
+				],
+				"url": "ciancarini-eswc2014",
+				"reviewers": [
+					"jessica.jones",
+					"john.constantine"
+				],
+				"reviewedBy": [
+					"jessica.jones"
+				]
+			},
+			{
+				"title": "Enhanced Publication Management Systems -- A systemic approach towards modern scientific communication",
+				"status": "accepted",
+				"authors": [
+					"alessia.bardi",
+					"paolo.manghi"
+				],
+				"url": "bardi-savesd2015",
+				"reviewers": [
+					"vanessa.ives",
+					"arabella.strange"
+				],
+				"reviewedBy": [
+					"vanessa.ives"
+				]
+			}
+		]
+	}
 ]
