@@ -71,12 +71,51 @@ router.post('/create', function(req, res) {
 	});
 });
 
+// Update Conference :id with data as argument
+router.put('/update/:id', function(request, result) {
+	console.log('Update Conference method called');
+	console.log('Data received from client:');
+	console.log(request.body);
+	console.log('Request Body Title:');
+	console.log(request.body.title);
+	console.log('Request Body Acronym:');
+	console.log(request.body.acronym);
+	console.log('Request Body Cochairs:');
+	console.log(JSON.stringify(request.body.cochairs));
+	console.log('\n');
+
+	// 1- Find specific event to update
+	// 2- Check co-chairs and reviewers conflicts
+	// 3- Update event info
+	// 4- Write edit to file
+
+	var eventsPath = path.resolve('storage/events.json');
+	if (fs.existsSync(eventsPath)) {
+		fs.readFile(eventsPath, (error, data) => {
+			var confs = JSON.parse(data);
+			console.log('CONFS = ');
+			console.log(confs);
+			var selectedConf = confs.find(elem => elem.acronym === decodeURI(request.params.id));
+			selectedConf.title = request.body.title;
+			selectedConf.acronym = request.body.acronym;
+			//selectedConf.chairs = request.body.cochairs.slice(0);
+			console.log('RECEIVED COCHAIRS = ');
+			console.log(request.body.cochairs);
+			console.log('UPDATED CONFS = ');
+			console.log(confs);
+			//selectedConf.reviewers = request.body.reviewers.slice(0); // NO: i reviewers sono relativi ad ogni papers e non all'intera conferenza... fanno parte dei pc_members?! Anyway... Ripensare la logica per i reviewers
+		});
+	}
+
+	// Work in progress...
+});
+
 router.get('/:id/papers', function(req, res) {
 	var eventsPath = path.resolve("storage/events.json");
 	if (fs.existsSync(eventsPath)) {
 		fs.readFile(eventsPath, (err, data) => {
 			var confs = JSON.parse(data);
-			var selectedConf = confs.find(elem => elem.acronym === unescape(req.params.id));
+			var selectedConf = confs.find(elem => elem.acronym === decodeURI(req.params.id));
 			var result = {
 				selectedConf: selectedConf.conference,
 				papers: []	// array contenente gli articoli, in base al ruolo dell'utente

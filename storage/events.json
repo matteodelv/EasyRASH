@@ -227,5 +227,14 @@
 				]
 			}
 		]
+	},
+	{
+		"conference": "Conference Title",
+		"acronym": "CA16",
+		"chairs": [
+			"fabio.vitali"
+		],
+		"pc_members": [],
+		"submissions": []
 	}
 ]
