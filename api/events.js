@@ -21,6 +21,19 @@ router.get('/', function(req, res) {
 	} else res.status(404).send('404 sorry not found');
 });
 
+router.get('/:id', function(req, res) {
+	var eventsPath = path.resolve('storage/events.json');
+	if (fs.existsSync(eventsPath)) {
+		var data = fs.readFileSync(eventsPath);
+		if (!data) return res.status(400).json({ success: false, message: 'Unable to load conference info...' });
+
+		var confs = JSON.parse(data);
+		var selectedConf = confs.find(elem => elem.acronym === req.params.id);
+		if (selectedConf) res.json({ success: true, conference: selectedConf });
+		else res.status(404).json({ success: false, message: 'Conference not found...' });
+	} else res.status(400).json({ success: false, message: 'Unable to list conferences... Try again' });
+});
+
 // add a PUT/POST endpoint to create a new conference and make the user that created it as chair
 router.post('/create', function(req, res) {
 	// checking user email existance
@@ -72,18 +85,7 @@ router.post('/create', function(req, res) {
 });
 
 // Update Conference :id with data as argument
-router.put('/update/:id', function(request, result) {
-	console.log('Update Conference method called');
-	console.log('Data received from client:');
-	console.log(request.body);
-	console.log('Request Body Title:');
-	console.log(request.body.title);
-	console.log('Request Body Acronym:');
-	console.log(request.body.acronym);
-	console.log('Request Body Cochairs:');
-	console.log(JSON.stringify(request.body.cochairs));
-	console.log('\n');
-
+router.put('/update/:id', function(req, res) {
 	// 1- Find specific event to update
 	// 2- Check co-chairs and reviewers conflicts
 	// 3- Update event info
@@ -93,21 +95,20 @@ router.put('/update/:id', function(request, result) {
 	if (fs.existsSync(eventsPath)) {
 		fs.readFile(eventsPath, (error, data) => {
 			var confs = JSON.parse(data);
-			console.log('CONFS = ');
-			console.log(confs);
-			var selectedConf = confs.find(elem => elem.acronym === decodeURI(request.params.id));
-			selectedConf.title = request.body.title;
-			selectedConf.acronym = request.body.acronym;
-			//selectedConf.chairs = request.body.cochairs.slice(0);
-			console.log('RECEIVED COCHAIRS = ');
-			console.log(request.body.cochairs);
-			console.log('UPDATED CONFS = ');
-			console.log(confs);
-			//selectedConf.reviewers = request.body.reviewers.slice(0); // NO: i reviewers sono relativi ad ogni papers e non all'intera conferenza... fanno parte dei pc_members?! Anyway... Ripensare la logica per i reviewers
-		});
-	}
+			var selectedConf = confs.find(elem => elem.acronym === decodeURI(req.params.id));
+			if (selectedConf.conference !== req.body.title) selectedConf.conference = req.body.title;
+			if (selectedConf.acronym = req.body.acronym) selectedConf.acronym = req.body.acronym;
+			selectedConf.chairs = req.body['cochairs[]'].slice(0);
+			selectedConf.pc_members = req.body['reviewers[]'].slice(0);
 
-	// Work in progress...
+			if (confs) {
+				fs.writeFile(eventsPath, JSON.stringify(confs, null, '\t'), error => {
+					if (error) throw error;
+					res.json({ success: true, message: 'Conference correctly updated!' });
+				});
+			} else res.status(400).json({ success: false, message: 'Problems updating conferences... Try again.' });
+		});
+	} else res.status(400).json({ success: false, message: 'Problems loading conference info... Try again.' });
 });
 
 router.get('/:id/papers', function(req, res) {
