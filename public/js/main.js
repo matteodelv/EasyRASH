@@ -84,7 +84,7 @@ $(document).ready(function() {
 	});
 
 	// Chiamata aggiunta solo per testare il pannello di amministrazione delle conferenze; da togliere in deploy
-	showConferenceAdminPanel({ title: "Conference Title", acronym: "CA16" });
+	//showConferenceAdminPanel({ title: "Conference Title", acronym: "CA16" });
 });
 
 

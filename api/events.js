@@ -81,7 +81,9 @@ router.put('/update/:id', function(request, result) {
 	console.log('Request Body Acronym:');
 	console.log(request.body.acronym);
 	console.log('Request Body Cochairs:');
-	console.log(JSON.stringify(request.body.cochairs));
+	console.log(request.body['cochairs[]']);
+	console.log('Request Body Reviewers:');
+	console.log(request.body['reviewers[]']);
 	console.log('\n');
 
 	// 1- Find specific event to update

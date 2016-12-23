@@ -44,6 +44,75 @@ function refreshMode() {
 	}
 }
 
+function getXPath(node) {
+    var comp, comps = [];
+    var parent = null;
+    var xpath = '';
+    var getPos = function(node) {
+        var position = 1, curNode;
+        if (node.nodeType == Node.ATTRIBUTE_NODE) {
+            return null;
+        }
+        for (curNode = node.previousSibling; curNode; curNode = curNode.previousSibling) {
+            if (curNode.nodeName == node.nodeName) {
+                ++position;
+            }
+        }
+        return position;
+     }
+
+    if (node instanceof Document) {
+        return '/';
+    }
+
+    var foundId = false;
+
+    for (; node && !(node instanceof Document) && !foundId; node = node.nodeType == Node.ATTRIBUTE_NODE ? node.ownerElement : node.parentNode) {
+        comp = comps[comps.length] = {};
+        switch (node.nodeType) {
+            case Node.TEXT_NODE:
+                comp.name = 'text()';
+                break;
+            case Node.ATTRIBUTE_NODE:
+                comp.name = '@' + node.nodeName;
+                break;
+            case Node.PROCESSING_INSTRUCTION_NODE:
+                comp.name = 'processing-instruction()';
+                break;
+            case Node.COMMENT_NODE:
+                comp.name = 'comment()';
+                break;
+            case Node.ELEMENT_NODE:
+            	if (node.id && node.nodeName.toUpperCase() === "SECTION"){
+            		foundId = true;
+            		comp.id = node.id;
+            	}
+                comp.name = node.nodeName;
+                break;
+        }
+        if (!foundId){
+        	comp.position = getPos(node);
+    	}
+    }
+
+    for (var i = comps.length - 1; i >= 0; i--) {
+        comp = comps[i];
+        if (comp.id){
+        	xpath += '//' + comp.name.toLowerCase();
+        	xpath += '[@id="' + comp.id + '"]';
+        } else {
+        	xpath += '/' + comp.name.toLowerCase();   	
+
+	        if (comp.position != null) {
+	            xpath += '[' + comp.position + ']';
+	        }
+        }
+    }
+
+    return xpath;
+
+}
+
 $(window).load(function() {
 	refreshMode();
 	$(document).mouseup(function() {
@@ -52,6 +121,9 @@ $(window).load(function() {
 			$addAnnotationPopup.removeClass('hidden').animateCss('tada');
 		}
 
+		$('.send-review-btn').off('click').click(function(e){
+			sendReview();
+		});
 		$addAnnotationPopup.off('click').click(function(e) {
 			if (activeMode !== 'reviewer') {
 				return;
@@ -59,7 +131,7 @@ $(window).load(function() {
 			var currentNode;
 			var annotation = {};
 
-			// Build path strings
+			/* Build path strings 
 			currentNode = currentSelection.anchorNode;
 			while (!currentNode.tagName || currentNode.tagName.toLowerCase() !== 'section' && $('.paper-container').has($(currentNode))) {
 				currentNode = currentNode.parentNode;
@@ -86,12 +158,18 @@ $(window).load(function() {
 				currentNode = currentNode.parentNode;
 			}
 			annotation.end = '#' + currentNode.id + annotation.end;
-
+			
+			/* END Build path strings */
 			annotation.text = currentSelection.text();
 
 			annotation.isBackwards = currentSelection.isBackwards();
 
 			annotation.content = '';
+			
+			annotation.startXPath = getXPath(currentSelection.anchorNode);
+			annotation.startOffset = currentSelection.anchorOffset;
+			annotation.endXPath = getXPath(currentSelection.focusNode);
+			annotation.endOffset = currentSelection.focusOffset;
 
 			loadDraftAnnotation(annotation);
 		});
@@ -165,12 +243,18 @@ function loadDraftAnnotations() {
 	});
 }
 
+function getElementByXpath(path) {
+  return document.evaluate(path, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+}
+
 function loadDraftAnnotation(annotation) {
 
 	//Restoring selection
 	var section = annotation.sectionId ? $('#' + annotation.sectionId)[0] : $('.paper-container')[0].childNodes[annotation.sectionIndex];
 	var range = rangy.createRange();
-	range.selectCharacters(section, annotation.characterRanges[0].characterRange.start, annotation.characterRanges[0].characterRange.end);
+	//range.selectCharacters(section, annotation.characterRanges[0].characterRange.start, annotation.characterRanges[0].characterRange.end);
+	range.setStart(getElementByXpath(annotation.startXPath), annotation.startOffset);
+	range.setEnd(getElementByXpath(annotation.endXPath), annotation.endOffset);
 	var limitRange = rangy.createRange();
 	limitRange.selectNode(range.endContainer);
 	range = limitRange.intersection(range);
@@ -260,6 +344,42 @@ function loadDraftAnnotation(annotation) {
 
 	$wrapper.on("click", function(e) {
 		$('textarea').focus();
+	});
+}
+
+function sendReview(){
+	var paperId = document.location.pathname.split('/papers/')[1].replace(/\/?$/, '/');
+	
+	var review = {
+		annotations: JSON.parse(localStorage.getItem(paperId + 'draftAnnotations'))
+	}
+	console.log(review);
+	$.ajax({
+		url: '/api/papers/' + paperId + 'review',
+		method: 'POST',
+		data: review,
+		success: function(result) {
+			$.notify({ 
+				message: 'Review sent successfully.',
+				icon: "fa fa-check"
+			}, {
+				type: 'success',
+				delay: 3000,
+				mouse_over: "pause"
+			});
+			localStorage.removeItem(paperId + 'draftAnnotations');
+		},
+		error: function(result) {
+			$('.send-review-btn').animateCss('shake');
+			$.notify({
+				message: JSON.parse(result.responseText).message,
+				icon: "fa fa-exclamation-triangle"
+			}, {
+				type: "danger",
+				delay: 3000,
+				mouse_over: "pause"
+			});
+		}
 	});
 }
 

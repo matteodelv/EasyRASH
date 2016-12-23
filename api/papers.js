@@ -1,6 +1,14 @@
 var router = require('express').Router();
 var path = require('path');
 var fs = require('fs');
+var xpath = require('xpath');
+var parse5 = require('parse5');
+var xmlser = require('xmlserializer');
+var xmldom = require('xmldom');
+var dom = xmldom.DOMParser;
+var serializer =  new xmldom.XMLSerializer();
+
+const CONTEXT = "http://vitali.web.cs.unibo.it/twiki/pub/TechWeb16/context.json";
 
 //Responds with all the paper associated with a particular user
 router.get('/', function(req, res) {
@@ -103,6 +111,101 @@ router.get('/:id', function(req, res) {
 		} else res.status(404).send('404 sorry not found');
 
 	} else res.status(406).send('406 - Not acceptable: ' + req.get('Accept') + ' not acceptable');
+});
+
+router.post('/:id/review', function(req, res) {
+	//TODO: Check if user can actually review that paper
+	console.log("Recensione " + req.params.id);
+	console.log(req);
+	var filePath = path.resolve('storage/papers/' + req.params.id + '.html');
+	if (fs.existsSync(filePath)){
+		fs.readFile(filePath, function (err, html) {
+		    if (err) throw err; 
+		    var doc = new dom().parseFromString(html.toString());
+		    var select = xpath.useNamespaces({"x": "http://www.w3.org/1999/xhtml"});
+		    Object.keys(req.body.annotations).forEach(a => {
+		    	console.log(a);
+
+		    	//Case where the annotation is linked to a pre-existing block id
+		    	if (doc.getElementById(req.body.annotations[a].id)) {
+		    		return;
+		    	}
+		    	//Creates xpath query with correct namespace
+		    	var query = function(xpath){
+		    		return xpath.split('/').map(tag => tag === "" ? "" : (tag.indexOf("text()") !== -1 ? tag : "x:" + tag)).join('/');
+		    	}
+
+		    	var annotationElement = doc.createElement('span');
+		    	annotationElement.setAttribute('id', req.body.annotations[a].id);
+
+		    	//Split closing tag
+		    	console.log('END XPATH: "%s"', query(req.body.annotations[a].endXPath));
+				var endNode = select(query(req.body.annotations[a].endXPath), doc)[0];
+		    	console.log("END NODE: %s", endNode.data);
+		    	endNode.splitText(+req.body.annotations[a].endOffset);
+				endNode = endNode.nextSibling;
+		    	console.log("END NODE AFTER SPLIT: %s", endNode.data);
+
+		    	//Split starting tag
+		    	console.log('END XPATH: "%s"', query(req.body.annotations[a].startXPath));
+				var startNode = select(query(req.body.annotations[a].startXPath), doc)[0];
+		    	console.log("START NODE: %s",startNode.data);
+		    	startNode.splitText(+req.body.annotations[a].startOffset);
+		    	console.log("START NODE AFTER SPLIT: %s",startNode.data);
+
+		    	var insertAfter = function(referenceNode, newNode){
+		    		referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
+		    	}
+
+		    	//Insert new span node
+		    	console.log("Adding span node...");
+		    	insertAfter(startNode, annotationElement);
+
+		    	//Move all nodes between start and end to the new span node
+		    	var current = annotationElement.nextSibling;
+		    	while (current != endNode){
+		    		var next = current.nextSibling;
+		    		console.log("Moving node: %s", current.data);
+		    		current.parentNode.removeChild(current);
+		    		annotationElement.appendChild(current);
+		    		current = next;
+		    	}
+		    });
+
+		    var jsonLDBlock = doc.createElement('script');
+		    jsonLDBlock.setAttribute('type', 'application/ld+json');
+		    var reviewBlock = [];
+		    var review = {}; //TODO: Blocco review (vedi example-annotations.html)
+		    reviewBlock.push(review);
+		    Object.keys(req.body.annotations).forEach(a => {
+		    	// Insert JSON+LD annotations (done at the end to match offsets)
+		    	var annotation = {};
+		    	annotation["@context"] = CONTEXT;
+		    	annotation["@type"] = "comment";
+		    	annotation["@id"] = ""; //TODO: Find increasing id
+		    	annotation["text"] = req.body.annotations[a].content;
+		    	annotation["ref"] = req.body.annotations[a].id;
+		    	annotation["author"] = req.jwtPayload.id;
+		    	annotation["date"] = new Date().toString();
+		    	reviewBlock.push(annotation);
+		    });
+		    var person = {}; //TODO: Blocco person (vedi example-annotations.html)
+		    reviewBlock.push(person);
+
+		    var jsonText = doc.createTextNode(JSON.stringify(reviewBlock, null, "\t"));
+
+		    jsonLDBlock.appendChild(jsonText);
+
+		    var head = select("//x:head", doc)[0];
+
+		    head.appendChild(jsonLDBlock);
+
+		    //Write back to file
+		    fs.writeFileSync(filePath, serializer.serializeToString(doc));
+
+		    res.send('Paper reviewed successfully.')
+		});
+	} else res.status(404).send('404 sorry not found');
 });
 
 module.exports = router;

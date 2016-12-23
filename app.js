@@ -9,7 +9,7 @@ var bearerToken = require('express-bearer-token');
 app.disable('x-powered-by');
 app.set('secret', config.secret);
 
-app.use(bodyParser.urlencoded({ extended: false })); //Used to automatically parse requests body
+app.use(bodyParser.urlencoded({ extended: true })); //Used to automatically parse requests body
 app.use(bodyParser.json());
 app.use(morgan('dev')); //Used to log HTTP requests
 
