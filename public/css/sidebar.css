@@ -27,6 +27,7 @@
     margin: 0 0 .5em .5em;
     line-height: 1.2em;
     font-weight: 400;
+    color:#999;
 }
 
 .sidebar-nav li a, .sidebar-nav li a:focus {

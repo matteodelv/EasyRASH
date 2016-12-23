@@ -84,7 +84,11 @@ $(document).ready(function() {
 	});
 
 	// Chiamata aggiunta solo per testare il pannello di amministrazione delle conferenze; da togliere in deploy
+<<<<<<< HEAD
 	//showConferenceAdminPanel({ title: "Conference Title", acronym: "CA16" });
+=======
+	//showConferenceAdminPanel({ acronym: "CA161234" });
+>>>>>>> c58023d528e829a2f03fb4fe4822d3c4d3782e15
 });
 
 
@@ -332,27 +336,37 @@ function fetchAndBuildSidebarMenu(result, loadingConf, callback) {
 		$(parentObj + ", #conferenceSidebar").empty();
 	}
 
+	console.log(result);
+
 	for (var type in result) {
+		console.log('Insiede for loop');
+		console.log('Type = ' + type);
 		if (result.hasOwnProperty(type) && Array.isArray(result[type])) {
 			if (!loadingConf) {
 				var liCat = $('<li class="sidebar-brand ' + type + '">' + type.split("_").join(" ") + '</li>');
 				$(parentObj).append(liCat);
 			}
 
-			result[type].forEach(function(paper) {
-				var urlComplete = "/papers/" + paper.url;
-				var liHtml = '<li><a href="' + urlComplete + '">' + paper.title.split(" -- ")[0] + '$label</a></li>\n';
-				liHtml = liHtml.replace("$label", applyStatusLabel(paper, loadingConf));
+			if (result[type].length > 0) {
+				result[type].forEach(function(paper) {
+					var urlComplete = "/papers/" + paper.url;
+					var liHtml = '<li><a href="' + urlComplete + '">' + paper.title.split(" -- ")[0] + '$label</a></li>\n';
+					liHtml = liHtml.replace("$label", applyStatusLabel(paper, loadingConf));
 
-				var li = $(liHtml);
-				if (loadingConf) li.insertAfter($(parentObj + ' .sidebar-brand'));
-				else li.insertAfter($(parentObj + ' .sidebar-brand.' + type));
+					var li = $(liHtml);
+					if (loadingConf) li.insertAfter($(parentObj + ' .sidebar-brand'));
+					else li.insertAfter($(parentObj + ' .sidebar-brand.' + type));
 
-				li.on('click', function() {
-					redirectToPaper(urlComplete, paper);
-					return false;
+					li.on('click', function() {
+						redirectToPaper(urlComplete, paper);
+						return false;
+					});
 				});
-			});
+			}
+			else {
+				var li = $('<li>No Submitted Papers Yet</li>');
+				if (loadingConf) li.insertAfter($(parentObj + ' .sidebar-brand'));
+			}
 		}
 	}
 
@@ -461,12 +475,7 @@ function createNewConference() {
 	$('#newConfForm input[name]').each(function(index) {
 		data[$(this).attr('name')] = $(this).val();
 	});
-	/*
-	['cochairs', 'reviewers'].forEach(function(item, index) {
-		if (data[item]) data[item] = data[item].split(',');
-		else delete data[item];
-	});*/
-	console.log(data);
+
 	$.ajax({
 		url: '/api/events/create',
 		method: 'POST',
@@ -482,7 +491,7 @@ function createNewConference() {
 			}, 1500);
 
 			// TODO: Remove "your paper will apper here" and show conference admin panel
-			showConferenceAdminPanel(data);
+			showConferenceAdminPanel(data.acronym);
 		},
 		error: function(error) {
 			$('#newConfForm .modal-body .alert').empty();
@@ -497,17 +506,42 @@ function createNewConference() {
 	});
 }
 
-function showConferenceAdminPanel(confData) {
-	var defaultPageContent = $('#page-content-wrapper #top').html();
-	$('#page-content-wrapper #top').remove();
+var $pageContentWrapper;
+
+function showConferenceAdminPanel(acronym) {
 	// window.setTimeout(function() {
 	 	//$('#page-content-wrapper #top').show();
 	//}, 10000);
+	
+	$.ajax({
+		method: 'GET',
+		url: encodeURI('/api/events/' + acronym),
+		success: function(res) {
+			$pageContentWrapper = $('#page-content-wrapper #top').html();
+			
+			$("#page-content-wrapper #top").fadeTo(500, 0).slideUp(500, function() {
+				$(this).remove();
+				buildConfAdminPanel(res.conference);
+			});
+		},
+		error: function(err) {
+			$.notify({
+				message: JSON.parse(result.responseText).message,
+				icon: "fa fa-exclamation-triangle"
+			}, {
+				type: "danger",
+				delay: 3000,
+				mouse_over: "pause"
+			});
+		}
+	});
+}
 
+function buildConfAdminPanel(confData) {
 	var panel = $('<div id="conf-admin-panel"><div class="row"><div class="panel-content col-md-8 col-md-offset-2"></div></div></div>');
 	$('#page-content-wrapper').append(panel);
 
-	var headTitle = $('<h4>Chair Admin Panel - </h4>').append(confData.title);
+	var headTitle = $('<h4>Chair Admin Panel - </h4>').append(confData.conference);
 	var headText = $('<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam feugiat turpis vel leo aliquam, id ultrices ligula sodales. Nam venenatis bibendum ipsum nec aliquam. Praesent ut rutrum lorem. Nulla nec odio dolor. Aenean varius magna ut pretium ornare. Phasellus sit amet gravida lacus. Curabitur lacinia lorem vestibulum velit lacinia venenatis. In finibus erat vitae dui tincidunt, sed vulputate justo commodo. Aliquam gravida vestibulum orci, volutpat maximus justo semper eget. Fusce a purus felis.</p>');
 
 	var ids = ["confTitle", "confAcronym", "confCochairs", "confReviewers"];
@@ -533,9 +567,12 @@ function showConferenceAdminPanel(confData) {
 			res.forEach(user => {
 				var option = $('<option></option>');
 				option.attr('value', user.id);
+				if (confData.chairs.indexOf(user.id) > -1) option.attr('selected', 'selected');
 				$(option).append(user.family_name + ' ' + user.given_name + ' &lt;' + user.email + '&gt;');
 				$(ccSelect).append(option);
 				option = option.clone();
+				option.removeAttr('selected');
+				if (confData.pc_members.indexOf(user.id) > -1) option.attr('selected', 'selected'); // PERCHE' su chrome non funziona?
 				$(rSelect).append(option);
 			});
 		},
@@ -566,7 +603,7 @@ function showConferenceAdminPanel(confData) {
 			var input = $('<input class="form-control">');
 			$(input).attr('type', types[$i]);
 			$(input).attr('id', ids[$i]);
-			$(input).attr('value', $i == 0 ? confData.title : confData.acronym);
+			$(input).attr('value', $i == 0 ? confData.conference : confData.acronym);
 			$(input).attr('name', names[$i]);
 
 			$(div).append(input);
@@ -609,8 +646,8 @@ function showConferenceAdminPanel(confData) {
 		e.preventDefault();
 		console.log('Update Conference button pressed');
 
-		var data = {
-			oldAcronym: confData.acronym,
+		var data = {		// confData.acronym serve ancora?
+			oldAcronym: confData.acronym
 		};
 		$('#conf-admin-panel input[name], #conf-admin-panel select[name]').each(function(index) {
 			data[$(this).attr('name')] = $(this).val();
@@ -623,18 +660,30 @@ function showConferenceAdminPanel(confData) {
 		if (!data['cochairs']) delete data['cochairs'];
 		if (!data['reviewers']) delete data['reviewers'];
 
-		console.log(data);
-		console.log('Gonna send AJAX request to ' + encodeURI('/api/events/update/' + confData.acronym));
-
 		$.ajax({
 			method:'PUT',
 			data: data,
 			url: encodeURI('/api/events/update/' + confData.acronym),
 			success: function(res) {
 				console.log('Success received!');
+				$(form).prepend('<div class="alert alert-success fade in" role="alert"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>' + res.message + '</div>');
+
+				getConferences();
+
+				window.setTimeout(function() {
+					$("#conf-admin-panel .alert").fadeTo(500, 0).slideUp(500, function() {
+						$(this).remove(); 
+					});
+				}, 2000);
 			},
 			error: function(err) {
-				console.log('Error received: ' + JSON.parse(err.responseText).message);
+				$(form).prepend('<div class="alert alert-warning fade in" role="alert"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>' + JSON.parse(err.responseText).message + '</div>');
+
+				window.setTimeout(function() {
+					$("#conf-admin-panel .alert").fadeTo(500, 0).slideUp(500, function() {
+						$(this).remove(); 
+					});
+				}, 2000);
 			}
 		});
 	});
@@ -642,6 +691,12 @@ function showConferenceAdminPanel(confData) {
 	$('#conf-admin-panel .btn-default').on('click', function(e) {
 		e.preventDefault();
 		console.log('Close Conference Admin Panel button pressed');
+
+		// Remove admin panel and restore "your paper will appear here"
+		$("#conf-admin-panel").fadeTo(500, 0).slideUp(500, function() {
+			$(this).remove();
+			$('#page-content-wrapper').html($pageContentWrapper);
+		});
 	});
 }
 

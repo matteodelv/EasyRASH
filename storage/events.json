@@ -229,12 +229,28 @@
 		]
 	},
 	{
-		"conference": "Conference Title",
-		"acronym": "CA16",
+		"conference": "Conference Title 1234",
+		"acronym": "CA161234",
 		"chairs": [
+			"p.groth",
+			"paolo.manghi",
+			"arabella.strange"
+		],
+		"pc_members": [
+			"alessia.bardi",
+			"lyra.belacqua"
+		],
+		"submissions": []
+	},
+	{
+		"conference": "International Conference on Software Engineering",
+		"acronym": "ICSE16",
+		"chairs": "angelo.diiorio",
+		"pc_members": [
+			"paolo.ciancarini",
+			"andrea.nuzzolese",
 			"fabio.vitali"
 		],
-		"pc_members": [],
 		"submissions": []
 	}
 ]
