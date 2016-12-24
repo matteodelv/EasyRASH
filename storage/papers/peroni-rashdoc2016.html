@@ -79,7 +79,7 @@ Under the following terms:
 
     <body>
         <!-- Abstract -->
-        <section role="doc-abstract">
+        <section id="sec-abstract" role="doc-abstract">
             <h1>Abstract</h1>
             <p>The current version of this document is licensed under a <a href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>. It documents the <em>Research Articles in Simplified HTML</em> (<em><code>RASH</code></em>)
                 <a href="#RASH2015"></a> (<a href="../grammar/rash.rng">version 0.5</a>), i.e., a markup language defined as a subset of <a href="http://www.w3.org/TR/rdfa-in-html/">HTML+RDFa</a> for writing scientific articles. A full example of a real research article
@@ -87,7 +87,7 @@ Under the following terms:
             <p>For any feedback please <a href="mailto:essepuntato@gmail.com">send me an email</a> or use the tools in the official GitHub repository (<a href="http://github.com/essepuntato/rash">github.com/essepuntato/rash</a>).</p>
         </section>
         <!-- Sections -->
-        <section>
+        <section id="introduction">
             <h1>Introduction</h1>
             <p>This paper introduces the <em>Research Articles in Simplified HTML</em> (<em><code>RASH</code></em>) format
                 <a href="#RASH2015"></a>, i.e., a markup language that restricts the use of <a href="http://www.w3.org/TR/html5/">HTML</a> elements to only <strong>31 elements</strong> for writing academic research articles. It is possible to includes also <strong><a href="http://www.w3.org/TR/rdfa-syntax/">RDFa</a> annotations</strong> within any element of the language, and also allows one to specify other RDF annotations in <a href="http://www.w3.org/TR/turtle/">Turtle</a>, <a href="http://www.w3.org/TR/rdf-syntax-grammar/">RDF/XML</a> and <a href="http://www.w3.org/TR/json-ld/">JSON-LD</a>. In addition, RASH strictly follows the <a href="https://rawgit.com/w3c/aria/master/aria/dpub.html">Digital Publishing WAI-ARIA Module 1.0</a> (which is currently an editor draft) for expressing structural semantics on various markup elements used.</p>
@@ -216,7 +216,7 @@ Under the following terms:
     content="Department of Computer Science and Engineering, 
              University of Bologna, Bologna, Italy" /&gt;</code></pre>
             </section>
-            <section>
+            <section id="acm">
                 <h1>ACM subject categories and keywords</h1>
                 <p>In addition to the aforementioned data, it is possible to use <code>meta</code> elements to specify other article-related data, such as the <a href="http://www.acm.org/about/class/class/2012">ACM subject categories</a> and free text keyword. In particular:</p>
                 <ul>
@@ -383,7 +383,7 @@ Under the following terms:
         <section id="floatings">
             <h1>Boxes for figures, tables, formulas and listings</h1>
             <p>In a scientific article, figures, tables and formulas as usually contained within appropriate boxes (some accompanied by a caption) that allow one to refer to such items easily within the text. In RASH, all these boxes are defined by the element <code>figure</code>.</p>
-            <section>
+            <section id="figureboxes">
                 <h1>Figure boxes</h1>
                 <p>We can define a figure box containing an image with a caption by using the element <code>figure</code> with an element <code>p</code> that can contain one of the following inline elements (see
                     <a href="#inlines"></a> for more details):</p>
@@ -544,7 +544,7 @@ Under the following terms:
     &lt;figcaption&gt;Caption of the table.&lt;/figcaption&gt;
 &lt;/figure&gt;</code></pre>
             </section>
-            <section>
+            <section id="formulaboxes">
                 <h1>Formula boxes</h1>
                 <p>We can define a formula box containing a formula by using the element <code>figure</code> with an element <code>p</code> that can contain either an element <code>img</code>, an element <code>math</code>, or an element <code>span</code>, and the attribute <code>id</code> set to some value in order to refer to this item.</p>
                 <figure id="formula_1">
@@ -653,7 +653,7 @@ Under the following terms:
     &lt;/p&gt;
 &lt;/figure&gt;</code></pre>
             </section>
-            <section>
+            <section id="listingboxes">
                 <h1>Listing boxes</h1>
                 <p>We can define a listing box containing a code excerpt with a caption by using the element <code>figure</code> containing the element <code>pre</code>, and with the attribute <code>id</code> set to some value in order to refer to this item.</p>
                 <figure id="listing_1">

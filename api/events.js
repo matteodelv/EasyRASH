@@ -85,20 +85,6 @@ router.post('/create', function(req, res) {
 });
 
 // Update Conference :id with data as argument
-router.put('/update/:id', function(request, result) {
-	console.log('Update Conference method called');
-	console.log('Data received from client:');
-	console.log(request.body);
-	console.log('Request Body Title:');
-	console.log(request.body.title);
-	console.log('Request Body Acronym:');
-	console.log(request.body.acronym);
-	console.log('Request Body Cochairs:');
-	console.log(request.body['cochairs[]']);
-	console.log('Request Body Reviewers:');
-	console.log(request.body['reviewers[]']);
-	console.log('\n');
-
 router.put('/update/:id', function(req, res) {
 	// 1- Find specific event to update
 	// 2- Check co-chairs and reviewers conflicts

@@ -21,7 +21,7 @@ $.ajaxSetup({
 	}
 });
 
-var distinctColors = ['#ff5972', '#a6637c', '#ff1a9f', '#ff99eb', '#c91aff', '#bb99ff', '#3419ff', '#1a62ff', '#1a94ff', '#1ac6ff', '#13babf', '#1affd5', '#1aff40', '#abf291', '#baff1a', '#ffe01a', '#ffdb99', '#ffaf1a', '#ff7d1a', '#ffaf99', '#ff1a1a'];
+distinctColors = ['#ff5972', '#a6637c', '#ff1a9f', '#ff99eb', '#c91aff', '#bb99ff', '#3419ff', '#1a62ff', '#1a94ff', '#1ac6ff', '#13babf', '#1affd5', '#1aff40', '#abf291', '#baff1a', '#ffe01a', '#ffdb99', '#ffaf1a', '#ff7d1a', '#ffaf99', '#ff1a1a'];
 var reviewerColors = {};
 
 //Verify if user agent has a valid token, if not show login form
@@ -84,11 +84,8 @@ $(document).ready(function() {
 	});
 
 	// Chiamata aggiunta solo per testare il pannello di amministrazione delle conferenze; da togliere in deploy
-<<<<<<< HEAD
 	//showConferenceAdminPanel({ title: "Conference Title", acronym: "CA16" });
-=======
 	//showConferenceAdminPanel({ acronym: "CA161234" });
->>>>>>> c58023d528e829a2f03fb4fe4822d3c4d3782e15
 });
 
 
