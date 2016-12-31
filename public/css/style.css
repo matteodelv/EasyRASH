@@ -445,6 +445,18 @@ section>section>.add-block-annotation-btn{
 	cursor: pointer;
 }
 
+
+#closeConfDiv {
+	border-top:1px dashed #CCC;
+	margin-top:25px;
+	padding:25px 15px 15px;
+}
+
+#closeConfDiv button {
+	margin-right:15px;
+	margin-bottom:10px;
+}
+
 /*.inline-annotation::before {
   content: "";
   position: absolute;

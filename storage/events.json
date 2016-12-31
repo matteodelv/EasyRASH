@@ -2,6 +2,7 @@
 	{
 		"conference": "International Web Comics Conference 2016",
 		"acronym": "IWCC 2016",
+		"status": "open",
 		"chairs": [
 			"jessica.jones",
 			"vanessa.ives",
@@ -101,6 +102,7 @@
 	{
 		"conference": "International Great Books Conference 2016",
 		"acronym": "IGBC 2016",
+		"status": "open",
 		"chairs": [
 			"arabella.strange",
 			"john.constantine"
@@ -231,6 +233,7 @@
 	{
 		"conference": "Conference Title 1234",
 		"acronym": "CA161234",
+		"status": "open",
 		"chairs": [
 			"p.groth",
 			"paolo.manghi",
@@ -245,7 +248,23 @@
 	{
 		"conference": "International Conference on Software Engineering",
 		"acronym": "ICSE16",
+		"status": "open",
 		"chairs": "angelo.diiorio",
+		"pc_members": [
+			"paolo.ciancarini",
+			"andrea.nuzzolese",
+			"fabio.vitali"
+		],
+		"submissions": []
+	},
+	{
+		"conference": "International Conference on Bla Bla Bla",
+		"acronym": "ICBB16",
+		"status": "closed",
+		"chairs": [
+			"fabio.vitali",
+			"angelo.diiorio"
+		],
 		"pc_members": [
 			"paolo.ciancarini",
 			"andrea.nuzzolese",

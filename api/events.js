@@ -12,7 +12,8 @@ router.get('/', function(req, res) {
 			events.forEach(event => {
 				var c = {
 					conference: event.conference,
-					acronym: event.acronym
+					acronym: event.acronym,
+					status: event.status
 				};
 				conferences.push(c);
 			});
@@ -34,28 +35,7 @@ router.get('/:id', function(req, res) {
 	} else res.status(400).json({ success: false, message: 'Unable to list conferences... Try again' });
 });
 
-// add a PUT/POST endpoint to create a new conference and make the user that created it as chair
 router.post('/create', function(req, res) {
-	// checking user email existance
-	/*
-	if (req.body.cochairs || req.body.reviewers) {
-		var usersPath = path.resolve('storage/users.json');
-		if (fs.existsSync(usersPath)) {
-			fs.readFile(usersPath, (error, data) => {
-				var users = JSON.parse(data);
-				var coChairCheck = req.body.cochairs.every(function (aCoChair) {
-					if (!users.find(x => x.email === aCoChair)) return true;
-					else return false;
-				});
-				var revCheck = req.body.reviewers.every(function (aRev) {
-					if (!users.find(x => x.email === aRev)) return true;
-					else return false;
-				});
-				if (!coChairCheck || !revCheck) res.status(400).send('Please check emails... Some of them appear don\'t exist.');
-			});
-		} else res.status(404).send('404 Users Not Found');
-	}*/
-
 	utils.checkAcronymUsage(req.body.acronym, result => {
 		if (result) {
 			var eventsPath = path.resolve('storage/events.json');
@@ -84,20 +64,38 @@ router.post('/create', function(req, res) {
 	});
 });
 
+// Close Conference identified by :id
+router.put('/close/:id', function(req, res) {
+	var eventsPath = path.resolve('storage/events.json');
+	if (fs.existsSync(eventsPath)) {
+		fs.readFile(eventsPath, (error, data) => {
+			var confs = JSON.parse(data);
+			var selectedConf = confs.find(elem => elem.acronym === decodeURI(req.params.id));
+			var paperCheck = selectedConf.submissions.every(paper => { return paper.status === "accepted"; });
+			if (selectedConf.status === "open" && paperCheck) {
+				selectedConf.status = "closed";
+
+				if (confs) {
+					fs.writeFile(eventsPath, JSON.stringify(confs, null, '\t'), error => {
+						if (error) throw error;
+						res.json({ success: true, message: 'Conference successfully closed!' });
+					});
+				} else res.status(400).json({ success: false, message: 'Unable to close the conference. Please, try again later!' });
+			}
+			else res.status(400).json({ success: false, message: 'Conditions to close the conference are not met. This is an error condition. Try again!'})
+		});
+	} else res.status(400).json({ success: false, message: 'There are problems loading conferences. Please, try again later!' });
+});
+
 // Update Conference :id with data as argument
 router.put('/update/:id', function(req, res) {
-	// 1- Find specific event to update
-	// 2- Check co-chairs and reviewers conflicts
-	// 3- Update event info
-	// 4- Write edit to file
-
 	var eventsPath = path.resolve('storage/events.json');
 	if (fs.existsSync(eventsPath)) {
 		fs.readFile(eventsPath, (error, data) => {
 			var confs = JSON.parse(data);
 			var selectedConf = confs.find(elem => elem.acronym === decodeURI(req.params.id));
 			if (selectedConf.conference !== req.body.title) selectedConf.conference = req.body.title;
-			if (selectedConf.acronym = req.body.acronym) selectedConf.acronym = req.body.acronym;
+			if (selectedConf.acronym !== req.body.acronym) selectedConf.acronym = req.body.acronym;
 			selectedConf.chairs = req.body['cochairs[]'].slice(0);
 			selectedConf.pc_members = req.body['reviewers[]'].slice(0);
 
@@ -119,6 +117,7 @@ router.get('/:id/papers', function(req, res) {
 			var selectedConf = confs.find(elem => elem.acronym === decodeURI(req.params.id));
 			var result = {
 				selectedConf: selectedConf.conference,
+				acronym: selectedConf.acronym,
 				papers: []	// array contenente gli articoli, in base al ruolo dell'utente
 			};
 			if (selectedConf.chairs.indexOf(req.jwtPayload.id) > -1) { // L'utente è chair
