@@ -274,7 +274,7 @@ function loadDraftAnnotation(annotation) {
 	}
 	annotation.id = $wrapper[0].id;
 	if (!$wrapper[0].id) {
-		annotation.id = getUninqueInlineAnnotationId();
+		annotation.id = getUniqueInlineAnnotationId();
 		$wrapper.attr('id', annotation.id);
 	}
 	$wrapper.addClass('inline-annotation');
@@ -383,7 +383,7 @@ function sendReview(){
 	});
 }
 
-function getUninqueInlineAnnotationId() {
+function getUniqueInlineAnnotationId() {
 	var max = 0;
 	$('.inline-annotation').each(function() {
 		if (!$(this).attr('id')) {
@@ -457,8 +457,8 @@ function loadAnnotations() {
 		var rgbColor = reviewerColors[annotationsById[id][0].author];
 		var rgbaColor = hexToRgbA(rgbColor, 0.4);
 		//Inline annotations appear as highlighted text and popover (plus h1, h2, h3)
-		if (inlineAnnotationElements.indexOf($(id).prop('tagName').toLowerCase()) >= 0) {
-			var $elem = $(id);
+		if (inlineAnnotationElements.indexOf($('#'+id).prop('tagName').toLowerCase()) >= 0) {
+			var $elem = $('#'+id);
 
 			//TODO: Should be replaced with author(s) with formatted string
 			var statement = ".inline-annotation." + id.replace('#', '');

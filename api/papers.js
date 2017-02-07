@@ -7,6 +7,7 @@ var xmlser = require('xmlserializer');
 var xmldom = require('xmldom');
 var dom = xmldom.DOMParser;
 var serializer =  new xmldom.XMLSerializer();
+var util = require('util');
 
 const CONTEXT = "http://vitali.web.cs.unibo.it/twiki/pub/TechWeb16/context.json";
 
@@ -139,7 +140,7 @@ router.post('/:id/review', function(req, res) {
 		    	annotationElement.setAttribute('id', req.body.annotations[a].id);
 
 		    	//Split closing tag
-		    	console.log('END XPATH: "%s"', query(req.body.annotations[a].endXPath));
+		    	console.log('END XPATH: "%s" - OFFSET: %s', query(req.body.annotations[a].endXPath), req.body.annotations[a].endOffset);
 				var endNode = select(query(req.body.annotations[a].endXPath), doc)[0];
 		    	console.log("END NODE: %s", endNode.data);
 		    	endNode.splitText(+req.body.annotations[a].endOffset);
@@ -147,7 +148,7 @@ router.post('/:id/review', function(req, res) {
 		    	console.log("END NODE AFTER SPLIT: %s", endNode.data);
 
 		    	//Split starting tag
-		    	console.log('END XPATH: "%s"', query(req.body.annotations[a].startXPath));
+		    	console.log('START XPATH: "%s" - OFFSET: %s', query(req.body.annotations[a].startXPath), req.body.annotations[a].startOffset);
 				var startNode = select(query(req.body.annotations[a].startXPath), doc)[0];
 		    	console.log("START NODE: %s",startNode.data);
 		    	startNode.splitText(+req.body.annotations[a].startOffset);
@@ -174,22 +175,56 @@ router.post('/:id/review', function(req, res) {
 
 		    var jsonLDBlock = doc.createElement('script');
 		    jsonLDBlock.setAttribute('type', 'application/ld+json');
+	    	// Insert JSON+LD annotations (done at the end to match offsets)
+		    //vedi example-annotations.html
 		    var reviewBlock = [];
-		    var review = {}; //TODO: Blocco review (vedi example-annotations.html)
+		    var review = {}; 
+		    review["@context"] = CONTEXT;
+		    review["@type"] = "review";
+		    var annotationsRegex = /(?:<script)(?:.*)(?:type="application\/ld\+json")(?:>)((\s|\S)*?)(?:<\/script>)/igm;
+		    var match = annotationsRegex.exec(html.toString());
+		    var reviewId = "#review" + (match != null ? match.length + 1 : 1);
+		    review["@id"] = reviewId;
+		    var article = {};
+		    review["article"] = article;
+		    article["@id"] = "";
+		    var eval = {};
+		    eval["@id"] = reviewId + "-eval";
+		    eval["@type"] = "score";
+		    eval["status"] = "pso:under-review" 
+		    eval["author"] = req.jwtPayload.id;
+		    eval["date"] = new Date().toISOString();
+		    article["eval"] = eval;
 		    reviewBlock.push(review);
+		    var annotationIds = [];
+		    var i=0;
 		    Object.keys(req.body.annotations).forEach(a => {
-		    	// Insert JSON+LD annotations (done at the end to match offsets)
 		    	var annotation = {};
 		    	annotation["@context"] = CONTEXT;
 		    	annotation["@type"] = "comment";
-		    	annotation["@id"] = ""; //TODO: Find increasing id
+		    	var id = reviewId + '-c' + ++i; 
+		    	annotation["@id"] = id; 
+		    	annotationIds.push(id);
 		    	annotation["text"] = req.body.annotations[a].content;
-		    	annotation["ref"] = req.body.annotations[a].id;
+		    	annotation["ref"] = req.body.annotations[a].id; //TODO: This should be done server side
 		    	annotation["author"] = req.jwtPayload.id;
-		    	annotation["date"] = new Date().toString();
+		    	annotation["date"] = new Date().toISOString();
 		    	reviewBlock.push(annotation);
 		    });
-		    var person = {}; //TODO: Blocco person (vedi example-annotations.html)
+
+		    review["comments"] = annotationIds;
+
+		    var person = {}; 
+		    person["@content"] = CONTEXT;
+		    person["@type"] = "person";
+		    person["@id"] = req.jwtPayload.id;
+		    person["name"] = req.jwtPayload.given_name + " " + req.jwtPayload.family_name;
+		    var as = {}
+	    	as["@id"] = "#role1"
+	    	as["@type"] = "role";
+	    	as["role_type"] = "pro:reviewer";
+	    	as["in"] = "";
+		    person["as"] = as;
 		    reviewBlock.push(person);
 
 		    var jsonText = doc.createTextNode(JSON.stringify(reviewBlock, null, "\t"));
