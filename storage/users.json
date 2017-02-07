@@ -206,13 +206,5 @@
 		"email": "vahdati@example.com",
 		"pass": "vahdati",
 		"sex": "female"
-	},
-	{
-		"id": "veega",
-		"given_name": "Filippo",
-		"family_name": "Vigani",
-		"email": "pippoviga1995@gmail.com",
-		"pass": "fenicottero",
-		"sex": "male"
 	}
 ]

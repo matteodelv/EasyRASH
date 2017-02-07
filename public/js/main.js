@@ -409,6 +409,13 @@ function signUp() {
 		}, // TODO: Error graphic management to be tested
 		error: function(result) {
 			$('#submitButtonSignUp').animateCss('shake').prev('.help-inline').animateCss('bounceIn').text(JSON.parse(result.responseText).message);
+			$.notify({
+				message: JSON.parse(result.responseText).message
+			}, {
+				type: 'error',
+				mouse_over: 'pause',
+				delay: 5000
+			});
 		}
 	});
 }

@@ -6,7 +6,16 @@ var crypto = require('crypto');
 var nodemailer = require('nodemailer');
 'use strict';
 
-var transporter = nodemailer.createTransport('smtps://easyrashservice%40gmail.com:lickahorse@smtp.gmail.com');
+//var transporter = nodemailer.createTransport('smtps://easyrashservice%40matteodv.me:#lickahorse19@smtp.mail.matteodv.me');
+var transporter = nodemailer.createTransport({
+	host: 'mail.matteodv.me',
+	port: 465,
+	secure: true,
+	auth: {
+		user: "easyrashservice@matteo.dv.me",
+		pass: "#lickahorse19"
+	}
+});
 
 router.post('/signin', function(req, res) {
 	fs.readFile('./storage/users.json', 'utf8', (err, data) => {
@@ -36,6 +45,13 @@ router.post('/signin', function(req, res) {
 });
 
 router.post('/signup', function(req, res) {
+	transporter.verify(function(error, success){
+		if (error){
+			console.log(error);
+		} else {
+			console.log("Servizio email funziona correttamente");
+		}
+	});
 	fs.readFile('./storage/users.json', 'utf8', (err, data) => {
 		if (err) throw err;
 		var users = JSON.parse(data);
