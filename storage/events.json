@@ -20,7 +20,7 @@
 		"submissions": [
 			{
 				"title": "The Microsoft Academic Graph: New Applications and Research Opportunities -- SAVE-SD 2016 Keynote Talk",
-				"status": "accepted",
+				"status": "pending",
 				"authors": [
 					"alex.wade"
 				],
@@ -30,8 +30,8 @@
 					"angelo.diiorio"
 				],
 				"reviewedBy": [
-					"angelo.diiorio",
-					"silvio.peroni"
+					"silvio.peroni",
+					"angelo.diiorio"
 				]
 			},
 			{
@@ -67,7 +67,8 @@
 					"john.constantine"
 				],
 				"reviewedBy": [
-					"john.constantine"
+					"john.constantine",
+					"arabella.strange"
 				]
 			},
 			{

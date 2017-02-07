@@ -362,7 +362,8 @@ function logIn() {
 			}, {
 				type: 'success',
 				delay: 3000,
-				mouse_over: "pause"
+				mouse_over: "pause",
+				z_index: 1051
 			});
 			sessionStorage.userID = result.id;
 			userReady(result.fullname);
@@ -376,7 +377,8 @@ function logIn() {
 			}, {
 				type: "danger",
 				delay: 3000,
-				mouse_over: "pause"
+				mouse_over: "pause",
+				z_index: 1051
 			});
 			$("#emailFieldLogin").val("");
 			$("#passFieldLogin").val("");
@@ -404,18 +406,21 @@ function signUp() {
 			}, {
 				type: 'warning',
 				mouse_over: 'pause',
-				delay: 5000
+				delay: 5000,
+				z_index: 1051
 			});
-		}, // TODO: Error graphic management to be tested
+		},
 		error: function(result) {
-			$('#submitButtonSignUp').animateCss('shake').prev('.help-inline').animateCss('bounceIn').text(JSON.parse(result.responseText).message);
-			$.notify({
+			$('#signupbutton').animateCss('shake').prev('.help-inline').animateCss('bounceIn').text(JSON.parse(result.responseText).message);
+			/*$.notify({
 				message: JSON.parse(result.responseText).message
 			}, {
-				type: 'error',
+				type: 'danger',
 				mouse_over: 'pause',
-				delay: 5000
-			});
+				delay: 5000,
+				z_index: 1051
+
+			});*/
 		}
 	});
 }

@@ -12,8 +12,11 @@ var transporter = nodemailer.createTransport({
 	port: 465,
 	secure: true,
 	auth: {
-		user: "easyrashservice@matteo.dv.me",
+		user: "easyrashservice@matteodv.me",
 		pass: "#lickahorse19"
+	},
+	tls: {
+		rejectUnauthorized:false
 	}
 });
 
@@ -94,7 +97,7 @@ router.post('/signup', function(req, res) {
 						var verifyLink = req.get('host') ? req.protocol + '://' + req.get('host') + '/api/authentication/verify/' + token : req.protocol + '://' + server.address().address + ':' + server.address().port + '/api/authentication/verify/' + token;
 						// setup e-mail data with unicode symbols
 						var mailOptions = {
-								from: '"EasyRASH" <easyrash@gmail.com>',
+								from: '"EasyRASH" <easyrashservice@matteodv.me>',
 								to: req.body.email,
 								subject: 'Easy RASH account verification ✔',
 								html: '<p><b>It looks like you created a new account at Easy Rash.</b></p><p>In order to verify your account and be able to log in, please click on the following link: <a href="' + verifyLink + '">' + verifyLink + '</a></p>'

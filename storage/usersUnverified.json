@@ -1,42 +1,10 @@
 [
 	{
-		"id": "pippo",
-		"given_name": "Filippo",
-		"family_name": "Vigani",
-		"email": "filippo.vigani@studio.unibo.it",
-		"pass": "fenicottero",
-		"verificationToken": "99eceddfe66968334567562e15c05ae3a3bf3b3ec52dc8fe18b12243d62e6305da27e7d5f71cfdd2f6de36c70e8997f2"
-	},
-	{
-		"id": "filippo.vigani",
-		"given_name": "F",
-		"family_name": "V",
-		"email": "filippo.vigani@outlook.com",
-		"pass": "fenicottero",
-		"verificationToken": "1bf2bfd48479e99121f499cd169a06f2feadc3cd2e73bd54bb37a95c9d5c91486321f16ecf19c00c7662e40d14087d98"
-	},
-	{
-		"id": "pippoviga1995",
-		"given_name": "Filippo",
-		"family_name": "Vigani",
-		"email": "pippoviga1995@gmail.com",
-		"pass": "fenicottero",
-		"verificationToken": "926ea18a9187e22436cee163f085f2bf8971a8833afec50caaaa57a0ded074784e862ebf5b3d8f328b4a3a69edc4468b"
-	},
-	{
-		"id": "pippoviga1995",
-		"given_name": "Filippo",
-		"family_name": "Vigani",
-		"email": "pippoviga1995@gmail.com",
-		"pass": "fenicottero",
-		"verificationToken": "880faa6aac2405b86416f24d11a956df8ada2fb061c3d5efa68b625de589c075113e434d34da3833d795d12371c152d8"
-	},
-	{
-		"id": "pippoviga1995",
-		"given_name": "Filippo",
-		"family_name": "Vigani",
-		"email": "pippoviga1995@gmail.com",
-		"pass": "fenicottero",
-		"verificationToken": "75e55612d7b4043c1d93381978d5a589d28b5e1923bb3916d7c597752176a6645b7680d79f1b50cf4233c6de3b3658d2"
+		"id": "asdkfm",
+		"given_name": "Mat",
+		"family_name": "DV",
+		"email": "ksdamkdamsf@gmail.com",
+		"pass": "dskkkdfsjkj",
+		"verificationToken": "94ee55caf744ae9f586e66854245db34b2c1d02aa2b0a31da1f764534240f65e208d75c3c4b6d0a8908705dfd9e4e1c6"
 	}
 ]

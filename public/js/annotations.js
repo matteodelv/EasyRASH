@@ -372,7 +372,7 @@ function sendReview(){
 		error: function(result) {
 			$('.send-review-btn').animateCss('shake');
 			$.notify({
-				message: JSON.parse(result.responseText).message,
+				message: result.responseText,
 				icon: "fa fa-exclamation-triangle"
 			}, {
 				type: "danger",
@@ -418,8 +418,10 @@ function loadAnnotations() {
 	reviews = [];
 	//Global variable
 	annotationsById = {};
+	console.log("Loading annotations.");
 	$addedHeadTags.filter('script[type="application/ld+json"]').each(function() {
 		var review = JSON.parse($(this).html());
+		console.log($(this).html);
 		reviews.push(review);
 		review.forEach(function(annotation) {
 			if (annotation.ref) {
