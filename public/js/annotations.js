@@ -459,8 +459,8 @@ function loadAnnotations() {
 		var rgbColor = reviewerColors[annotationsById[id][0].author];
 		var rgbaColor = hexToRgbA(rgbColor, 0.4);
 		//Inline annotations appear as highlighted text and popover (plus h1, h2, h3)
-		if (inlineAnnotationElements.indexOf($('#'+id).prop('tagName').toLowerCase()) >= 0) {
-			var $elem = $('#'+id);
+		if (inlineAnnotationElements.indexOf($('#'+id.replace('#', '')).prop('tagName').toLowerCase()) >= 0) {
+			var $elem = $('#'+id.replace('#', ''));
 
 			//TODO: Should be replaced with author(s) with formatted string
 			var statement = ".inline-annotation." + id.replace('#', '');

@@ -85,10 +85,27 @@ router.get('/:id', function(req, res) {
 				//TODO: FIX THIS
 				var canSeeAnnotations = events.some(event =>
 					event.submissions.some(submission => {
-						return submission.url === req.params.id && (
-							submission.status === 'accepted' ||
-							(event.chairs.some(chair => chair === req.jwtPayload.id)) ||
-							submission.status !== 'pending' && (submission.authors.some(author => author === req.jwtPayload.id) || (event.pc_members.some(pcmember => pcmember === req.jwtPayload.id))))
+						if (submission.url === req.params.id){ //Found submission
+							var paperIsAccepted = submission.status === 'accepted';
+							var userIsChairOfThisEvent = (event.chairs.some(chair => chair === req.jwtPayload.id));
+							var isAlreadyReviewedByUser = submission.reviewedBy.some(reviewer => reviewer == req.jwtPayload.id);
+
+							var userIsAuthorOfPaper = submission.authors.some(author => author === req.jwtPayload.id);
+							var paperIsNotPending = submission.status !== 'pending';
+							var userIsPcMemberofThisEvent = event.pc_members.some(pcmember => pcmember === req.jwtPayload.id);
+
+							var csa = paperIsAccepted || userIsChairOfThisEvent || isAlreadyReviewedByUser || (paperIsNotPending && (userIsAuthorOfPaper || userIsPcMemberofThisEvent));
+
+							console.log(`Requested paper ${submission.url} ${paperIsAccepted ? "is" : "is not"} in accepted status and ${paperIsNotPending ? "is not" : "is"} pending.\n`
+								+`User ${req.jwtPayload.id} ${userIsChairOfThisEvent ? "is" : "is not"} chair of event ${event.acronym}, `
+							 	+`${userIsAuthorOfPaper ? "is" : "is not"} author of this paper, `
+							 	+`${userIsPcMemberofThisEvent ? "is" : "is not"} pc member of this event, `
+							 	+`${isAlreadyReviewedByUser ? "has" : "has not"} reviewed this paper.\n`
+							 	+`Therefore ${req.jwtPayload.sex === "female" ? "she" : (req.jwtPayload.sex === "male" ? "he" : "they")} ${csa ? "can" : "cannot"} view the underlying annotations.`);
+
+							return csa;
+						}
+						return false;
 					})
 				);
 				var filePath = path.resolve('storage/papers/' + req.params.id + '.html');
