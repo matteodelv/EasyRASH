@@ -12,15 +12,53 @@ $(document).ready(function() {
 	reviewerColor = hexToRgbA(distinctColors[colorIndex], 0.4);
 	distinctColors.splice(colorIndex, 1);
 
-	$('#mode-checkbox').change(function() {
-		if ($(this).is(":checked")) {
-			//Reviewer mode
-			activeMode = 'reviewer';
-		} else {
-			//Annotator mode
-			activeMode = 'reader';
+	$('#mode-checkbox').on('click', function(event) {
+		console.log("onClick on mode checkbox");
+		if ($('#paper-container').children().length === 0) {
+			event.preventDefault();
+			$.notify({
+				message: "You are not allowed to change mode if no paper is selected",
+				icon: "fa fa-exclamation-triangle"
+			}, {
+				type: "danger",
+				delay: 3000,
+				mouse_over: "pause"
+			});
 		}
-		refreshMode();
+		else {
+			if (sessionStorage.paperRole) {
+				if (sessionStorage.paperRole !== "Reviewer") {
+					event.preventDefault();
+					$.notify({
+						message: "You are not allowed to review this paper because you are " + sessionStorage.paperRole + "!",
+						icon: "fa fa-exclamation-triangle"
+					}, {
+						type: "danger",
+						delay: 3000,
+						mouse_over: "pause"
+					});
+				}
+				else if (sessionStorage.alreadyReviewed) {
+					event.preventDefault();
+					$.notify({
+						message: "You have already reviewed this paper!",
+						icon: "fa fa-exclamation-triangle"
+					}, {
+						type: "danger",
+						delay: 3000,
+						mouse_over: "pause"
+					});
+				}
+				else {
+					if ($(this).is(':checked')) {
+						activeMode = 'reviewer';
+					} else {
+						activeMode = 'reader';
+					}
+					refreshMode();
+				}
+			}
+		}
 	});
 });
 

@@ -83,20 +83,6 @@
 					"arthur.dent"
 				],
 				"reviewedBy": []
-			},
-			{
-				"title": "Science Bots: A Model for the Future of Scientific Computation?",
-				"authors": [
-					"tokuhn"
-				],
-				"url": "tuhn-savesd2015",
-				"reviewers": [
-					"silvio.peroni",
-					"arabella.strange"
-				],
-				"reviewedBy": [
-					"silvio.peroni"
-				]
 			}
 		]
 	},
@@ -215,7 +201,7 @@
 			},
 			{
 				"title": "Enhanced Publication Management Systems -- A systemic approach towards modern scientific communication",
-				"status": "accepted",
+				"status": "pending",
 				"authors": [
 					"alessia.bardi",
 					"paolo.manghi"

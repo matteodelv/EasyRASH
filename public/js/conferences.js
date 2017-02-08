@@ -11,7 +11,7 @@ function getConferences() {
 		method: "GET",
 		success: function(res) {
 			var conferencesUl = $("#conferenceSelector .dropdown-menu");
-			conferencesUl.empty(); 		// To avoid duplicate entries
+			conferencesUl.empty();
 
 			for (var i = 0; i < res.length; i++) {
 				var completeTitle = res[i].conference;
@@ -22,6 +22,7 @@ function getConferences() {
 					var a = $(this);
 					$("#conferenceSelector .btn:first-child *:first-child").text($(this).text());
 					$("#conferenceSelector .btn:first-child *:first-child").val($(this).text());
+
 					$.ajax({
 						url: encodeURI("/api/events/" + a.data('acronym') + "/papers"),
 						method: "GET",
@@ -31,6 +32,7 @@ function getConferences() {
 							sessionStorage.currentAcronym = result.acronym;
 
 							checkCurrentRole();
+							//History.pushState("", "EasyRash", "/");
 
 							fetchAndBuildSidebarMenu(result, true, function() {
 								loadCurrentPaperContent();
@@ -107,28 +109,30 @@ function createNewConference() {
 }
 
 function showConferenceAdminPanel(acronym) {
-	$.ajax({
-		method: 'GET',
-		url: encodeURI('/api/events/' + acronym),
-		success: function(res) {
-			$pageContentWrapper = $('#page-content-wrapper #top').html();
+	if ($('#conf-admin-panel').length === 0) {
+		$.ajax({
+			method: 'GET',
+			url: encodeURI('/api/events/' + acronym),
+			success: function(res) {
+				$pageContentWrapper = $('#page-content-wrapper #top').html();
 			
-			$("#page-content-wrapper #top .row").fadeTo(500, 0).slideUp(500, function() {
-				$("#page-content-wrapper #top").empty();
-				buildConfAdminPanel(res.conference);
-			});
-		},
-		error: function(err) {
-			$.notify({
-				message: JSON.parse(err.responseText).message,
-				icon: "fa fa-exclamation-triangle"
-			}, {
-				type: "danger",
-				delay: 3000,
-				mouse_over: "pause"
-			});
-		}
-	});
+				$("#page-content-wrapper #top .row").fadeTo(500, 0).slideUp(500, function() {
+					$("#page-content-wrapper #top").empty();
+					buildConfAdminPanel(res.conference);
+				});
+			},
+			error: function(err) {
+				$.notify({
+					message: JSON.parse(err.responseText).message,
+					icon: "fa fa-exclamation-triangle"
+				}, {
+					type: "danger",
+					delay: 3000,
+					mouse_over: "pause"
+				});
+			}
+		});
+	}
 }
 
 function buildConfAdminPanel(confData) {

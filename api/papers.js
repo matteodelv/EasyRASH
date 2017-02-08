@@ -38,6 +38,40 @@ router.get('/', function(req, res) {
 	} else res.status(404).send('404 sorry not found');
 });
 
+router.get('/:id/role', function(req, res) {
+	var filePath = path.resolve('storage/events.json');
+	if (fs.existsSync(filePath)) {
+		fs.readFile(filePath, (err, data) => {
+			var events = JSON.parse(data);
+			var paper;
+			var result = {
+				alreadyReviewed: false,
+				role: ""
+			};
+			for (i = 0; i < events.length; i++) {
+				paper = events[i].submissions.find(p => p.url === req.params.id);
+				if (paper) {
+					if (events[i].chairs.indexOf(req.jwtPayload.id) !== -1) result.role = "Chair";
+					break;
+				}
+			}
+			if (paper) {
+				if (result.role === "") {
+					if (paper.reviewers.indexOf(req.jwtPayload.id) !== -1) {
+						result.role = "Reviewer";
+						if (paper.reviewedBy.indexOf(req.jwtPayload.id) !== -1) result.alreadyReviewed = true;
+					}
+					else if (paper.authors.indexOf(req.jwtPayload.id) !== -1) result.role = "Author";
+					else result.role = "Reader";
+				}
+			}
+			else result.role = "Reader";
+
+			res.json(result);	// Gestire situazione d'errore
+		});
+	} else res.json(404).send('404 Data not found');
+});
+
 router.get("/user", function(req, res) {
 	var eventsPath = path.resolve("storage/events.json");
 	if (fs.existsSync(eventsPath)) {

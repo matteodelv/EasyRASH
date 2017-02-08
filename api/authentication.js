@@ -9,8 +9,8 @@ var nodemailer = require('nodemailer');
 //var transporter = nodemailer.createTransport('smtps://easyrashservice%40matteodv.me:#lickahorse19@smtp.mail.matteodv.me');
 var transporter = nodemailer.createTransport({
 	host: 'mail.matteodv.me',
-	port: 465,
-	secure: true,
+	port: 25,
+	secure: false,
 	auth: {
 		user: "easyrashservice@matteodv.me",
 		pass: "#lickahorse19"

@@ -134,6 +134,9 @@ function loadCurrentPaperContent() {
 
 		$('title').remove();
 
+		delete sessionStorage.paperRole;
+		delete sessionStorage.alreadyReviewed;
+
 		$.ajax({
 			url: '/api' + document.location.pathname,
 			method: 'GET',
@@ -149,6 +152,30 @@ function loadCurrentPaperContent() {
 					});
 					return;
 				}
+
+				var paperID = document.location.pathname.split('/').pop();
+				$.ajax({
+					url: encodeURI('/api/papers/' + paperID + '/role'),
+					method: 'GET',
+					success: function(result) {
+						sessionStorage.paperRole = result.role;
+						sessionStorage.alreadyReviewed = result.alreadyReviewed;
+					},
+					error: function(error) {
+						sessionStorage.paperRole = "Reader";
+						sessionStorage.alreadyReviewed = false;
+
+						$.notify({
+							message: JSON.parse(err.responseText).message,
+							icon: "fa fa-exclamation-triangle"
+						}, {
+							type: "danger",
+							delay: 3000,
+							mouse_over: "pause"
+						});
+					}
+				});
+
 				$('#placeholder').remove();
 				var $xml = $(xmlParsed);
 				//Head
@@ -275,6 +302,13 @@ function applyStatusLabel(paper, loadingConf) {
 }
 
 function fetchAndBuildSidebarMenu(result, loadingConf, callback) {
+	if ($('#conf-admin-panel').length !== 0) {
+		$("#conf-admin-panel").fadeTo(500, 0).slideUp(500, function() {
+			$(this).remove();
+			$('#page-content-wrapper #top').html($pageContentWrapper);
+		});
+	}
+
 	sessionStorage.papers = JSON.stringify(result); // NON rimuovere altrimenti gli articoli non vengono caricati
 	var parentObj = "";
 
@@ -308,6 +342,14 @@ function fetchAndBuildSidebarMenu(result, loadingConf, callback) {
 
 					li.on('click', function() {
 						redirectToPaper(urlComplete, paper);
+
+						if ($('#conf-admin-panel').length !== 0) {
+							$("#conf-admin-panel").fadeTo(500, 0).slideUp(500, function() {
+								$(this).remove();
+								$('#page-content-wrapper #top').html($pageContentWrapper);
+							});
+						}
+
 						return false;
 					});
 				});
