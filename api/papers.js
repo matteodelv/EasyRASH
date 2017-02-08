@@ -67,6 +67,8 @@ router.get('/:id/role', function(req, res) {
 			}
 			else result.role = "Reader";
 
+			console.log(`User ${req.jwtPayload.id}'s role for paper ${paper.url} is ${result.role}`);
+
 			res.json(result);	// Gestire situazione d'errore
 		});
 	} else res.json(404).send('404 Data not found');
@@ -115,8 +117,7 @@ router.get('/:id', function(req, res) {
 							(submission.authors.some(author => author === req.jwtPayload.id) || submission.reviewers.some(reviewer => reviewer === req.jwtPayload.id) || event.chairs.some(chair => chair === req.jwtPayload.id)))
 					})
 				);
-				//User can see annotations if the paper is accepted, he's a chair, or paper isn't pending and is the author or a pc_member
-				//TODO: FIX THIS
+				//Determine whether the user can see the annotations
 				var canSeeAnnotations = events.some(event =>
 					event.submissions.some(submission => {
 						if (submission.url === req.params.id){ //Found submission

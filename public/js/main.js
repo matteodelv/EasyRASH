@@ -153,7 +153,7 @@ function loadCurrentPaperContent() {
 					return;
 				}
 
-				var paperID = document.location.pathname.split('/').pop();
+				var paperID = document.location.pathname.split('papers/').pop().replace('/','');
 				$.ajax({
 					url: encodeURI('/api/papers/' + paperID + '/role'),
 					method: 'GET',

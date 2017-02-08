@@ -27,6 +27,7 @@ $(document).ready(function() {
 		}
 		else {
 			if (sessionStorage.paperRole) {
+				var alreadyReviewed = JSON.parse(sessionStorage.alreadyReviewed);
 				if (sessionStorage.paperRole !== "Reviewer") {
 					event.preventDefault();
 					$.notify({
@@ -38,7 +39,7 @@ $(document).ready(function() {
 						mouse_over: "pause"
 					});
 				}
-				else if (sessionStorage.alreadyReviewed) {
+				else if (alreadyReviewed) {
 					event.preventDefault();
 					$.notify({
 						message: "You have already reviewed this paper!",
