@@ -60,6 +60,11 @@
                <i aria-hidden="true" class="fa fa-key"></i>
             </a>
          </li>
+         <li>
+            <a class="btn-md admin-reviewers-btn" data-toggle="tooltip" data-placement="bottom" title="Assign Reviewers to Paper">
+               <i aria-hidden="true" class="fa fa-users"></i>
+            </a>
+         </li>
       </ul>
    </nav>
    <div class="container-fluid">
@@ -135,6 +140,27 @@
                      <span class="help-inline error-message"></span>
                      <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                      <button type="submit" id="newConfSubmit" class="btn btn-primary" name="create">Create</button>
+                  </div>
+               </form>
+            </div>
+         </div>
+      </div>
+      <!-- Assign Reviewers Modal -->
+      <div class="modal fade" id="assignReviewersModal" role="dialog" tabindex="-1">
+         <div class="modal-dialog">
+            <div class="modal-content">
+               <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                  <h4 class="modal-title">Assign Reviewers to Current Paper...</h4>
+                  <p>Select two or more reviewers who have to review the current paper. Chosen reviewers can't be removed later.</p>
+               </div>
+               <form id="assignRevForm" class="form ws-validate" action="javascript:assignReviewersToPaper()">
+                  <div class="modal-body">
+                  </div>
+                  <div class="modal-footer">
+                     <span class="help-inline error-message"></span>
+                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                     <button type="submit" id="assignRevSubmit" class="btn btn-primary" name="assign">Assign Reviewers</button>
                   </div>
                </form>
             </div>

@@ -155,6 +155,37 @@ router.get('/:id/papers', function(req, res) {
 	} else res.status(404).send("404 Conference Non Found");
 });
 
+router.get('/:id/reviewers', function(req, res) {
+	var eventsPath = path.resolve('storage/events.json');
+	if (fs.existsSync(eventsPath)) {
+		fs.readFile(eventsPath, (err, data) => {
+			var confs = JSON.parse(data);
+			var selectedConf = confs.find(elem => elem.acronym === decodeURI(req.params.id));
+			if (selectedConf) {
+				if (!selectedConf.pc_members) res.json([]);
+				else {
+					var reviewers = [];
+					// getting reviewers info
+					var usersPath = path.resolve('storage/users.json');
+					if (fs.existsSync(usersPath)) {
+						var usersData = fs.readFileSync(usersPath);
+						var users = JSON.parse(usersData);
+						selectedConf.pc_members.forEach(user => {
+							var selUser = users.find(u => u.id === user);
+							if (selUser) reviewers.push({
+								id: selUser.id,
+								family_name: selUser.family_name,
+								given_name: selUser.given_name,
+								email: selUser.email
+							});
+						});
+					} else res.status(404).send('Reviewers data not found');
 
+					res.json(reviewers);
+				}
+			}
+		});
+	} else res.status(404).send("Conferences data not found");
+});
 
 module.exports = router;

@@ -346,16 +346,37 @@ function buildConfAdminPanel(confData) {
 	});
 }
 
+function showAssignReviewersModal() {
+	if ($('#paper-container').children().length === 0) {
+		$.notify({
+			message: "You have to select a paper before assigning reviewers to it!",
+			icon: "fa fa-exclamation-triangle"
+		}, {
+			type: "danger",
+			delay: 3000,
+			mouse_over: "pause"
+		});
+	} else {
+		$('#assignReviewersModal').modal('show');
+	}
+}
+
 function checkCurrentRole() {
 	if (sessionStorage.userRole && sessionStorage.userRole === 'Chair') {
 		$('.admin-conference-btn').removeClass('hidden').animateCss('fadeIn');
+		$('.admin-reviewers-btn').removeClass('hidden').animateCss('fadeIn');
 
 		$('.admin-conference-btn').on("click", function() {
 			showConferenceAdminPanel(sessionStorage.currentAcronym);
 		});
+		$('.admin-reviewers-btn').on("click", function() {
+			showAssignReviewersModal();
+		});
 	}
 	else {
 		$('.admin-conference-btn').addClass('hidden');
-		$('.admin-conference-btn').off("click");
+		$('.admin-conference-btn').off('click');
+		$('.admin-reviewers-btn').addClass('hidden');
+		$('.admin-reviewers-btn').off('click');
 	}
 }
