@@ -457,6 +457,15 @@ section>section>.add-block-annotation-btn{
 	margin-bottom:10px;
 }
 
+#annotationsTable tbody tr {
+    cursor: pointer;
+}
+
+.modal-body .table-responsive{
+	max-height: 400px;
+    overflow: scoll;
+}
+
 .multiselect-container a label {
 	background-color:#FFF;
 }
