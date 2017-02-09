@@ -165,35 +165,63 @@ router.get('/:id/reviewers/:paper', function(req, res) {
 				if (!selectedConf.pc_members) res.json([]);
 				else {
 					var paper = selectedConf.submissions.find(paper => paper.url === decodeURI(req.params.paper));
-					var reviewers = [];
-					// getting reviewers info
-					var usersPath = path.resolve('storage/users.json');
-					if (fs.existsSync(usersPath)) {
-						var usersData = fs.readFileSync(usersPath);
-						var users = JSON.parse(usersData);
-						selectedConf.pc_members.forEach(user => {
-							var selUser = users.find(u => u.id === user);
-							if (selUser) {
-								var alreadyRev = (paper.reviewers.indexOf(selUser.id) !== -1) ? true : false;
-								reviewers.push({
-									id: selUser.id,
-									family_name: selUser.family_name,
-									given_name: selUser.given_name,
-									email: selUser.email,
-									alreadyReviewer: alreadyRev
-								});
-							}
-						});
-					} else res.status(404).send('Reviewers data not found');
+					if (paper) {
+						var reviewers = [];
+						// getting reviewers info
+						var usersPath = path.resolve('storage/users.json');
+						if (fs.existsSync(usersPath)) {
+							var usersData = fs.readFileSync(usersPath);
+							var users = JSON.parse(usersData);
+							selectedConf.pc_members.forEach(user => {
+								var selUser = users.find(u => u.id === user);
+								if (selUser) {
+									var alreadyRev = (paper.reviewers.indexOf(selUser.id) !== -1) ? true : false;
+									reviewers.push({
+										id: selUser.id,
+										family_name: selUser.family_name,
+										given_name: selUser.given_name,
+										email: selUser.email,
+										alreadyReviewer: alreadyRev
+									});
+								}
+							});
+						} else res.status(404).send('Reviewers data not found');
 
-					reviewers = utils.sortUsersAlphabetically(reviewers);
-					res.json(reviewers);
+						reviewers = utils.sortUsersAlphabetically(reviewers);
+						res.json(reviewers);
+					}
 				}
 			}
 		});
 	} else res.status(404).send("Conferences data not found");
 });
 
-// TODO: Add method to assign reviewers to a specific paper
+router.post('/:id/reviewers/:paper', function(req, res) {
+	var eventsPath = path.resolve('storage/events.json');
+	if (fs.existsSync(eventsPath)) {
+		var data = fs.readFileSync(eventsPath);
+		var events = JSON.parse(data);
+		var selectedConf = events.find(conf => conf.acronym === decodeURI(req.params.id));
+		if (selectedConf) {
+			var paper = selectedConf.submissions.find(p => p.url === decodeURI(req.params.paper));
+			if (paper) {;
+				var newRevs = req.body['revs'];
+				paper.reviewers.push.apply(paper.reviewers, newRevs);
+
+				if (paper.reviewers.length < 2) res.status(400).send({
+					success: false,
+					message: 'Each paper must have two or more reviewers'
+				});
+
+				if (events) {
+					fs.writeFile(eventsPath, JSON.stringify(events, null, '\t'), error => {
+						if (error) throw error;
+						res.json({ success: true, message: 'Reviewers correctly assigned to paper!' });
+					});
+				} else res.status(400).json({ success: false, message: 'Problems assigning reviewers to paper... Try again.' });
+			}
+		}
+	} else res.status(404).send('Conferences data not found');
+});
 
 module.exports = router;

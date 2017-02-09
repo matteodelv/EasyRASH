@@ -390,9 +390,32 @@ function showAssignReviewersModal() {
 }
 
 function assignReviewersToPaper() {
-	console.log("Assign Reviewers button clicked");
 	var selected = $('#reviewersSelector').val();
-	console.log(selected);
+	var paperID = document.location.pathname.split('papers/').pop().replace('/','');
+	var data = {
+		revs: selected
+	};
+	$.ajax({
+		method: 'POST',
+		url: encodeURI('/api/events/' + sessionStorage.currentAcronym + '/reviewers/' + paperID),
+		data: data,
+		success: function(result) {
+			$('#assignReviewersModal').modal('hide');
+			$.notify({
+				message: result.message,
+				icon: "fa fa-check"
+			}, {
+				type: 'success',
+				delay: 3000,
+				mouse_over: "pause",
+				z_index: 1051
+			});
+		},
+		error: function(error) {
+			$('#assignRevSubmit').animateCss('shake');
+			$('#assignRevForm .help-inline').animateCss('bounceIn').text(JSON.parse(error.responseText).message);
+		}
+	});
 }
 
 function checkCurrentRole() {
