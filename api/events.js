@@ -155,7 +155,7 @@ router.get('/:id/papers', function(req, res) {
 	} else res.status(404).send("404 Conference Non Found");
 });
 
-router.get('/:id/reviewers', function(req, res) {
+router.get('/:id/reviewers/:paper', function(req, res) {
 	var eventsPath = path.resolve('storage/events.json');
 	if (fs.existsSync(eventsPath)) {
 		fs.readFile(eventsPath, (err, data) => {
@@ -164,6 +164,7 @@ router.get('/:id/reviewers', function(req, res) {
 			if (selectedConf) {
 				if (!selectedConf.pc_members) res.json([]);
 				else {
+					var paper = selectedConf.submissions.find(paper => paper.url === decodeURI(req.params.paper));
 					var reviewers = [];
 					// getting reviewers info
 					var usersPath = path.resolve('storage/users.json');
@@ -172,20 +173,27 @@ router.get('/:id/reviewers', function(req, res) {
 						var users = JSON.parse(usersData);
 						selectedConf.pc_members.forEach(user => {
 							var selUser = users.find(u => u.id === user);
-							if (selUser) reviewers.push({
-								id: selUser.id,
-								family_name: selUser.family_name,
-								given_name: selUser.given_name,
-								email: selUser.email
-							});
+							if (selUser) {
+								var alreadyRev = (paper.reviewers.indexOf(selUser.id) !== -1) ? true : false;
+								reviewers.push({
+									id: selUser.id,
+									family_name: selUser.family_name,
+									given_name: selUser.given_name,
+									email: selUser.email,
+									alreadyReviewer: alreadyRev
+								});
+							}
 						});
 					} else res.status(404).send('Reviewers data not found');
 
+					reviewers = utils.sortUsersAlphabetically(reviewers);
 					res.json(reviewers);
 				}
 			}
 		});
 	} else res.status(404).send("Conferences data not found");
 });
+
+// TODO: Add method to assign reviewers to a specific paper
 
 module.exports = router;

@@ -18,7 +18,6 @@
    <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery.webui-popover/1.2.12/jquery.webui-popover.min.js"></script> -->
    <script type="text/javascript" src="/js/jquery.easing.1.3.js"></script>
    <script type="text/javascript" src="/js/jquery.injectCSS.js"></script>
-   <script type="text/javascript" src="https://use.fontawesome.com/5042c30d9c.js"></script>
    <script type="text/javascript" src="/js/rangy-1.3.0/rangy-core.js"></script>
    <script type="text/javascript" src="/js/rangy-1.3.0/rangy-serializer.js"></script>
    <script type="text/javascript" src="/js/rangy-1.3.0/rangy-classapplier.js"></script>
@@ -26,6 +25,7 @@
    <script type="text/javascript" src="/js/rangy-1.3.0/rangy-textrange.js"></script>
    <script type="text/javascript" src="/js/rangy-1.3.0/rangy-highlighter.js"></script>
    <script type="text/javascript" src="/js/annotations.js"></script>
+   <script type="text/javascript" src="/js/bootstrap-multiselect.js"></script>
    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" />
    <link rel="stylesheet" type="text/css" href="/css/style.css" />
    <link rel="stylesheet" type="text/css" href="/css/animate.css" />
@@ -34,6 +34,8 @@
    <link rel="stylesheet" type="text/css" href="/papers/css/rash.css" />
    <link rel="stylesheet" type="text/css" href="/css/flip-button.css" />
    <link rel="stylesheet" type="text/css" href="/css/jquery.webui-popover.min.css" />
+   <link rel="stylesheet" type="text/css" href="/css/font-awesome.min.css">
+   <link rel="stylesheet" type="text/css" href="/css/bootstrap-multiselect.css"/>
    <title>Homepage</title>
 </head>
 
@@ -154,8 +156,14 @@
                   <h4 class="modal-title">Assign Reviewers to Current Paper...</h4>
                   <p>Select two or more reviewers who have to review the current paper. Chosen reviewers can't be removed later.</p>
                </div>
-               <form id="assignRevForm" class="form ws-validate" action="javascript:assignReviewersToPaper()">
+               <form id="assignRevForm" class="form-horizontal ws-validate" action="javascript:assignReviewersToPaper()">
                   <div class="modal-body">
+                     <div class="form-group">
+                        <label class="control-label col-sm-3" for="reviewersSelector">Reviewers:</label>
+                        <div class="col-sm-7">
+                           <select class="form-control" multiple="multiple" id="reviewersSelector" name="reviewers[]"></select>
+                        </div>
+                     </div>
                   </div>
                   <div class="modal-footer">
                      <span class="help-inline error-message"></span>

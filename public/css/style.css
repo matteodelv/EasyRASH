@@ -457,6 +457,22 @@ section>section>.add-block-annotation-btn{
 	margin-bottom:10px;
 }
 
+.multiselect-container a label {
+	background-color:#FFF;
+}
+
+.multiselect-container a:hover label {
+	background-color:#EEE;
+}
+
+.multiselect-container .active a, .multiselect-container .active a:hover {
+	color:#333;
+}
+
+.multiselect-container .disabled a, .multiselect-container .disabled a:hover {
+	color:#777;
+}
+
 /*.inline-annotation::before {
   content: "";
   position: absolute;

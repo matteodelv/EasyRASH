@@ -19,3 +19,12 @@ exports.checkAcronymUsage = function(acronym, callback) {
 	}
 	return callback(check);
 };
+
+exports.sortUsersAlphabetically = function(usersArray) {
+	usersArray.sort((a, b) => {
+		a = a.family_name.toLowerCase();
+		b = b.family_name.toLowerCase();
+		return a < b ? -1 : a > b ? 1 : 0;
+	});
+	return usersArray;
+};

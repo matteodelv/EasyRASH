@@ -357,8 +357,42 @@ function showAssignReviewersModal() {
 			mouse_over: "pause"
 		});
 	} else {
+		$('#reviewersSelector').multiselect({
+			disableIfEmpty: true,
+			maxHeight: 180,
+			buttonWidth: '200px',
+			nonSelectedText: 'Choose...',
+			numberDisplayed: 0,
+			enableFiltering: true
+		});
+		var paperID = document.location.pathname.split('papers/').pop().replace('/','');
+		$.ajax({
+			url: encodeURI('/api/events/' + sessionStorage.currentAcronym + '/reviewers/' + paperID),
+			method: 'GET',
+			success: function(result) {
+				var dataSource = [];
+				result.forEach(rev => {
+					if (rev) dataSource.push({
+						value: rev.id,
+						label: rev.family_name + ' ' + rev.given_name + ' <' + rev.email + '>',
+						selected: rev.alreadyReviewer,
+						disabled: rev.alreadyReviewer
+					});
+				});
+				$('#reviewersSelector').multiselect('dataprovider', dataSource);
+			},
+			error: function(error) {
+				console.log("Error reviewers");
+			}
+		});
 		$('#assignReviewersModal').modal('show');
 	}
+}
+
+function assignReviewersToPaper() {
+	console.log("Assign Reviewers button clicked");
+	var selected = $('#reviewersSelector').val();
+	console.log(selected);
 }
 
 function checkCurrentRole() {

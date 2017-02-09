@@ -1,6 +1,7 @@
 var router = require('express').Router();
 var path = require('path');
 var fs = require('fs');
+var utils = require('../utils.js');
 
 router.get('/list', function(req, res) {
 	var usersPath = path.resolve('storage/users.json');
@@ -18,11 +19,7 @@ router.get('/list', function(req, res) {
 					"email": user.email
 				});
 			});
-			result.sort((a, b) => {
-				a = a.family_name.toLowerCase();
-				b = b.family_name.toLowerCase();
-				return a < b ? -1 : a > b ? 1 : 0;
-			});
+			result = utils.sortUsersAlphabetically(result);
 			res.json(result);
 		});
 	} else res.status(404).send('404 - User List not found');
