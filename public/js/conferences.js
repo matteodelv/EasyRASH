@@ -152,30 +152,90 @@ function buildConfAdminPanel(confData) {
 	var ccSelect = $('<select></select>');
 	ccSelect.addClass('form-control');
 	ccSelect.attr('multiple', 'multiple');
-	if (confData.status === "closed") ccSelect.attr('disabled', 'disabled');
-	
-	var defOption = $('<option value="notset">Choose...</option>');
-	$(ccSelect).append(defOption);
-
+	ccSelect.attr('id', 'confCochairs');
+	ccSelect.attr('name', 'cochairs');
 	var rSelect = ccSelect.clone();
+	rSelect.attr('id', 'confReviewers');
+	rSelect.attr('name', 'reviewers');
+
+	var dataSourceC = [];
+	var dataSourceR = [];
 
 	$.ajax({
 		url: "/api/users/list",
 		method: "GET",
 		success: function(res) {
 			res.forEach(user => {
-				var option = $('<option></option>');
-				option.attr('value', user.id);
-				if (confData.chairs.indexOf(user.id) > -1) option.attr('selected', 'selected');
-				$(option).append(user.family_name + ' ' + user.given_name + ' &lt;' + user.email + '&gt;');
-				$(ccSelect).append(option);
-				option = option.clone();
-				option.removeAttr('selected');
-				if (confData.pc_members.indexOf(user.id) > -1) option.attr('selected', 'selected'); // PERCHE' su chrome non funziona?
-				$(rSelect).append(option);
+				if (user) {
+					var u = {
+						value: user.id,
+						label: user.family_name + ' ' + user.given_name + ' <' + user.email + '>'
+					};
+
+					if (confData.chairs.indexOf(user.id) === -1 && confData.pc_members.indexOf(user.id) === -1) {
+						dataSourceC.push(u);
+						dataSourceR.push(u);
+					}
+					else if (confData.chairs.indexOf(user.id) > -1) {
+						u.selected = 'selected';
+						if (user.id !== sessionStorage.userID)
+							dataSourceC.push(u);
+					}
+					else {
+						u.selected = 'selected';
+						u.disabled = 'disabled';
+						dataSourceR.push(u);
+					}
+				}
 			});
+
+			ccSelect.add(rSelect).multiselect({
+				disableIfEmpty: true,
+				maxHeight: 180,
+				buttonWidth: '200px',
+				nonSelectedText: 'Choose...',
+				numberDisplayed: 0,
+				enableFiltering: true,
+				onChange: function(option, checked, select) {
+					// Making multiselects mutually exclusive
+					var selectID = $(option).closest('select').attr('id');
+					var otherSelect = (selectID === 'confCochairs') ? $('#confReviewers') : $('#confCochairs');
+					if (checked) {
+						var otherCheckbox = $(otherSelect).find('[value="'+$(option).val()+'"]');
+						if (!$(otherCheckbox).is(':disabled'))
+							$(otherSelect).multiselect('deselect', $(option).val());
+					}
+				}
+			});
+
+			$(ccSelect).multiselect('dataprovider', dataSourceC);
+			$(rSelect).multiselect('dataprovider', dataSourceR);
+
+			if (confData.status === "closed") {
+				$(ccSelect).multiselect('disable');
+				$(rSelect).multiselect('disable');
+			}
 		},
 		error: function(err) {
+			ccSelect.add(rSelect).multiselect({
+				disableIfEmpty: true,
+				maxHeight: 180,
+				buttonWidth: '200px',
+				nonSelectedText: 'Choose...',
+				numberDisplayed: 0,
+				enableFiltering: true,
+				onChange: function(option, checked, select) {
+					// Making multiselects mutually exclusive
+					var selectID = $(option).closest('select').attr('id');
+					var otherSelect = (selectID === 'confCochairs') ? $('#confReviewers') : $('#confCochairs');
+					if (checked) {
+						var otherCheckbox = $(otherSelect).find('[value="'+$(option).val()+'"]');
+						if (!$(otherCheckbox).is(':disabled'))
+							$(otherSelect).multiselect('deselect', $(option).val());
+					}
+				}
+			});
+
 			$(form).prepend('<div class="alert alert-warning fade in" role="alert"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>' + JSON.parse(err.responseText).message + ' Try again later...</div>');
 
 			window.setTimeout(function() {
@@ -209,16 +269,8 @@ function buildConfAdminPanel(confData) {
 			$(div).append(input);
 		}
 		else {
-			if ($i == 2) {
-				ccSelect.attr('id', ids[$i]);
-				ccSelect.attr('name', names[$i]);
-				$(div).append(ccSelect);
-			}
-			else {
-				rSelect.attr('id', ids[$i]);
-				rSelect.attr('name', names[$i]);
-				$(div).append(rSelect);
-			}
+			if ($i == 2) $(div).append(ccSelect);
+			else $(div).append(rSelect);
 		}
 
 		$(form).append(formGroup);
@@ -257,7 +309,7 @@ function buildConfAdminPanel(confData) {
 	var closeText = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam feugiat turpis vel leo aliquam, id ultrices ligula sodales. Nam venenatis bibendum ipsum nec aliquam. Praesent ut rutrum lorem. Nulla nec odio dolor. Aenean varius magna ut pretium ornare. Phasellus sit amet gravida lacus.';
 	$('#closeConfDiv').append('<p class="pull-right"></p>').append(closeText);
 
-	$('#conf-admin-panel form .btn-danger').on('click', function(e) {
+	$('#closeConfDiv .btn-danger').on('click', function(e) {
 		e.preventDefault();
 
 		$.ajax({
@@ -291,7 +343,7 @@ function buildConfAdminPanel(confData) {
 		});
 	});
 
-	$('#conf-admin-panel form .btn-primary').on('click', function(e) {
+	$('#conf-admin-panel form .form-group').last().find('.btn-primary').on('click', function(e) {
 		e.preventDefault();
 
 		var data = {		// confData.acronym serve ancora?
@@ -335,7 +387,7 @@ function buildConfAdminPanel(confData) {
 		});
 	});
 
-	$('#conf-admin-panel form .btn-default').on('click', function(e) {
+	$('#conf-admin-panel form .form-group').last().find('.btn-default').on('click', function(e) {
 		e.preventDefault();
 
 		// Remove admin panel and restore "your paper will appear here" or paper

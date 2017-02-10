@@ -96,8 +96,9 @@ router.put('/update/:id', function(req, res) {
 			var selectedConf = confs.find(elem => elem.acronym === decodeURI(req.params.id));
 			if (selectedConf.conference !== req.body.title) selectedConf.conference = req.body.title;
 			if (selectedConf.acronym !== req.body.acronym) selectedConf.acronym = req.body.acronym;
-			selectedConf.chairs = req.body['cochairs[]'].slice(0);
-			selectedConf.pc_members = req.body['reviewers[]'].slice(0);
+
+			selectedConf.chairs = req.body['cochairs'];
+			selectedConf.pc_members.push.apply(selectedConf.pc_members, req.body['reviewers']);
 
 			if (confs) {
 				fs.writeFile(eventsPath, JSON.stringify(confs, null, '\t'), error => {
