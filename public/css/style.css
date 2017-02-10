@@ -169,6 +169,10 @@ a.btn-md:active i {
 	user-select: none;
 }
 
+.topnav .navbar-right {
+	margin-right:0px;
+}
+
 
 /*Main view*/
 

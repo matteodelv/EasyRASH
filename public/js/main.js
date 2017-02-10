@@ -465,15 +465,6 @@ function signUp() {
 		},
 		error: function(result) {
 			$('#signupbutton').animateCss('shake').prev('.help-inline').animateCss('bounceIn').text(JSON.parse(result.responseText).message);
-			/*$.notify({
-				message: JSON.parse(result.responseText).message
-			}, {
-				type: 'danger',
-				mouse_over: 'pause',
-				delay: 5000,
-				z_index: 1051
-
-			});*/
 		}
 	});
 }
@@ -486,4 +477,8 @@ function logOut() {
 
 function redirectToPaper(url, paper) {
 	History.pushState(paper, paper.title, url);
+}
+
+function showProjectInfo() {
+	$('#projectInfoModal').modal('show');
 }

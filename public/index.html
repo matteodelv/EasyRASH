@@ -51,7 +51,7 @@
 		<ul class="nav navbar-nav">
 			<li>
 				<input id="mode-checkbox" type="checkbox" class="tgl tgl-flip" />
-				<label data-tg-off="Reader mode" data-tg-on="Reviewer mode" for="mode-checkbox" class="tgl-btn"></label>
+				<label data-tg-off="Reader mode" data-tg-on="Reviewer Mode" for="mode-checkbox" class="tgl-btn"></label>
 			</li>
 			<li>
 				<a class="btn-md send-review-btn" data-toggle="tooltip" data-placement="bottom" title="Send Review">
@@ -69,6 +69,13 @@
 				</a>
 			</li>
 		</ul>
+      <ul class="nav navbar-nav navbar-right">
+         <li>
+            <a class="btn-md info-btn" data-toggle="tooltip" data-placement="bottom" title="Project Info" href="javascript:showProjectInfo()">
+               <i aria-hidden="true" class="fa fa-info-circle"></i>
+            </a>
+         </li>
+      </ul>
 	</nav>
 	<div class="container-fluid">
 		<div id="wrapper" class="row">
@@ -288,6 +295,35 @@
 				</div>
 			</div>
 		</div>
+      <!-- Assign Reviewers Modal -->
+      <div class="modal fade" id="projectInfoModal" role="dialog" tabindex="-1">
+         <div class="modal-dialog">
+            <div class="modal-content">
+               <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                  <h4 class="modal-title">EasyRASH Project Info</h4>
+               </div>
+               <div class="modal-body">
+                  <div class="row">
+                     <div class="col-md-12">
+                        <p>EasyRASH is a simple web application that let you easily manage conferences and academic events by focusing on the Peer Review process for articles written in RASH. Click on the Help button <i class="fa fa-question-circle"></i> on top to discover all the features of EasyRASH, its usage and icon meanings.</p>
+                        <p>Made with <i class="fa fa-heart"></i> and (lots of) <i class="fa fa-coffee"></i> by:</p>
+                     </div>
+                  </div>
+                  <div class="row">
+                     <div class="col-sm-6 text-center">
+                        <img src="/img/matteo.png" alt="Matteo Del Vecchio" title="Matteo Del Vecchio">
+                        <h4>Matteo Del Vecchio</h4>
+                     </div>
+                     <div class="col-sm-6 text-center">
+                        <img src="/img/filippo.png" alt="Filippo Vigani" title="Filippo Vigani">
+                        <h4>Filippo Vigani</h4>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
 	</div>
 </body>
 
