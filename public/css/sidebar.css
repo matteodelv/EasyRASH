@@ -65,20 +65,24 @@
     background: none;
 }
 
-#conferenceSidebar .fa-check {
+#conferenceSidebar .fa-check, #helpModal .fa-check {
     color: #009874;
 }
 
-#conferenceSidebar .fa-user {
+#conferenceSidebar .fa-user, #helpModal .fa-user {
     color: #337ab7;
 }
 
-#conferenceSidebar .fa-certificate {
+#conferenceSidebar .fa-certificate, #helpModal .fa-certificate {
     color: #f1af08;
 }
 
-#conferenceSidebar .fa-exclamation-circle {
+#conferenceSidebar .fa-exclamation-circle, #helpModal .fa-exclamation-circle {
     color: #f1885c;
+}
+
+#conferenceSidebar .fa-times, #helpModal .fa-times {
+    color:#e64040;
 }
 
 

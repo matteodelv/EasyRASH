@@ -71,6 +71,11 @@
 		</ul>
       <ul class="nav navbar-nav navbar-right">
          <li>
+            <a class="btn-md help-btn" data-toggle="tooltip" data-placement="bottom" title="Help" href="javascript:showHelpModal()">
+               <i aria-hidden="true" class="fa fa-question-circle"></i>
+            </a>
+         </li>
+         <li>
             <a class="btn-md info-btn" data-toggle="tooltip" data-placement="bottom" title="Project Info" href="javascript:showProjectInfo()">
                <i aria-hidden="true" class="fa fa-info-circle"></i>
             </a>
@@ -295,7 +300,7 @@
 				</div>
 			</div>
 		</div>
-      <!-- Assign Reviewers Modal -->
+      <!-- Project Info Modal -->
       <div class="modal fade" id="projectInfoModal" role="dialog" tabindex="-1">
          <div class="modal-dialog">
             <div class="modal-content">
@@ -320,6 +325,73 @@
                         <h4>Filippo Vigani</h4>
                      </div>
                   </div>
+               </div>
+            </div>
+         </div>
+      </div>
+      <!-- Help Modal -->
+      <div class="modal fade" id="helpModal" role="dialog" tabindex="-1">
+         <div class="modal-dialog">
+            <div class="modal-content">
+               <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                  <h4 class="modal-title">EasyRASH Help</h4>
+                  <p>Here you can find some information about how to use EasyRASH and how to review an article or manage an event, icon meanings and a small description of the interface.</p>
+               </div>
+               <div class="modal-body">
+                  <h4>Icons</h4>
+                  <p class="text-info">Note: All the following icons are related to a conference.</p>
+                  <div class="row">
+                     <div class="col-sm-1  text-center">
+                        <span class="fa fa-user"></span>
+                     </div>
+                     <div class="col-sm-11">
+                        <p>The user that is currently logged in is one of the authors of the paper.</p>
+                     </div>
+                  </div>
+                  <div class="row">
+                     <div class="col-sm-1 text-center">
+                        <span class="fa fa-certificate"></span>
+                     </div>
+                     <div class="col-sm-11">
+                        <p>The user that is currently logged in is one of the reviewers of the paper and a review has already been sent.</p>
+                     </div>
+                  </div>
+                  <div class="row">
+                     <div class="col-sm-1 text-center">
+                        <span class="fa fa-exclamation-circle"></span>
+                     </div>
+                     <div class="col-sm-11">
+                        <p>The user that is currently logged in is one of the reviewers of the paper but its review hasn't been sent yet.</p>
+                     </div>
+                  </div>
+                  <div class="row">
+                     <div class="col-sm-1 text-center">
+                        <span class="fa fa-check"></span>
+                     </div>
+                     <div class="col-sm-11">
+                        <p>The paper has been accepted by the chair.</p>
+                     </div>
+                  </div>
+                  <div class="row">
+                     <div class="col-sm-1 text-center">
+                        <span class="fa fa-times"></span>
+                     </div>
+                     <div class="col-sm-11">
+                        <p>The paper has been rejected by the chair.</p>
+                     </div>
+                  </div>
+                  <h4>Interface</h4>
+                  <h5>Navigation Bar</h5>
+                  <p>Located on top just below the title, contains key elements to interact with events and papers. On the left side, there is the <b><i>"Mode Toggle"</i></b>, which let every reviewer to enter in <b><i>"Annotator Mode"</i></b> to add annotations to a paper as a review. Furthermore, there are two hidden buttons to let every chair manage an event: in fact, they will only appear when the logged in user is one of the chairs of the currently selected conference. The first button show the <b><i>Management Panel</i></b> for a conference, where every chair can edit its info, and add co-chairs or reviewers; the second button, instead, is used by every chair to assign reviewers to the currently open paper.</p>
+                  <p>On the right side, there are an Help button and an Info button.</p>
+                  <h5>Main Area</h5>
+                  <p>It is the biggest part of the interface and it is used to show papers, for both reading and review. In some specific conditions, based on paper status and user's role, annotations will also be displayed. In addition, papers can be shown in <i>RASH</i> or <i>Springer LNCS</i> layout.</p>
+                  <h5>Sidebar</h5>
+                  <p>Located on the left, the sidebar is the main way to navigate between papers and conferences. On top, it shows info about the currently logged in user. Below there is the <b><i>Conferences Selector</i></b>, where users can select specific events and get papers from that event, or they can create new conferences. The last section, divided in <b><i>"Authored By Me"</i></b> and <b><i>"Pending Reviews"</i></b>, shows a list of all the articles where the logged in user is author and all the papers that haven't been reviewed yet, since the user is reviewer for them.</p>
+                  <p class="text-info">Note: This last section can be considered as a summary of the work related to the user, no matter which conference is or is not selected.</p>
+                  <h4>Frequently Asked Questions</h4>
+                  <p class="text-danger">Aggiungere domande, soprattutto riguardo le assunzione fatte</p>
                </div>
             </div>
          </div>

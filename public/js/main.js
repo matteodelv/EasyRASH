@@ -482,3 +482,7 @@ function redirectToPaper(url, paper) {
 function showProjectInfo() {
 	$('#projectInfoModal').modal('show');
 }
+
+function showHelpModal() {
+	$('#helpModal').modal('show');
+}
