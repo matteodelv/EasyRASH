@@ -13,7 +13,6 @@ $(document).ready(function() {
 	distinctColors.splice(colorIndex, 1);
 
 	$('#mode-checkbox').on('click', function(event) {
-		console.log("onClick on mode checkbox");
 		if ($('#paper-container').children().length === 0) {
 			event.preventDefault();
 			$.notify({
@@ -67,20 +66,17 @@ function refreshMode() {
 	if (activeMode === 'reviewer') {
 		//Reviewer mode
 		$('section .cgen').addClass('hidden');
-		$(".inline-annotation-editor").attr("disabled", false);
-		$('.inline-annotation-editor ~ *').removeClass('hidden');
 		$('.send-review-btn').removeClass('hidden').animateCss('fadeIn');
 		$addBlockAnnotationPopup.removeClass('hidden');
 		$addAnnotationPopup.removeClass('hidden');
 	} else if (activeMode === 'reader') {
 		//Annotator mode
 		$('section .cgen').removeClass('hidden');
-		$(".inline-annotation-editor").attr("disabled", true);
-		$('.inline-annotation-editor ~ *').addClass('hidden');
 		$('.send-review-btn').addClass('hidden');
 		$addBlockAnnotationPopup.addClass('hidden');
 		$addAnnotationPopup.addClass('hidden');
 	}
+	$(document).trigger('modechanged');
 }
 
 function getXPath(node) {
@@ -161,7 +157,8 @@ $(window).load(function() {
 		}
 
 		$('.send-review-btn').off('click').click(function(e){
-			sendReview();
+			openReviewAnnotationsModal();
+			//sendReview();
 		});
 		$addAnnotationPopup.off('click').click(function(e) {
 			if (activeMode !== 'reviewer') {
@@ -292,8 +289,12 @@ function loadDraftAnnotation(annotation) {
 	var section = annotation.sectionId ? $('#' + annotation.sectionId)[0] : $('.paper-container')[0].childNodes[annotation.sectionIndex];
 	var range = rangy.createRange();
 	//range.selectCharacters(section, annotation.characterRanges[0].characterRange.start, annotation.characterRanges[0].characterRange.end);
-	range.setStart(getElementByXpath(annotation.startXPath), annotation.startOffset);
-	range.setEnd(getElementByXpath(annotation.endXPath), annotation.endOffset);
+	var startNode = getElementByXpath(annotation.startXPath);
+	if (!startNode) return;
+	range.setStart(startNode, Math.min(annotation.startOffset, startNode.length));
+	var endNode = getElementByXpath(annotation.endXPath);
+	if (!endNode) return;
+	range.setEnd(endNode, Math.min(annotation.endOffset, endNode.length));
 	var limitRange = rangy.createRange();
 	limitRange.selectNode(range.endContainer);
 	range = limitRange.intersection(range);
@@ -344,7 +345,7 @@ function loadDraftAnnotation(annotation) {
 
 	$popover.on("shown.webui.popover", function(e) {
 		$('#' + $wrapper.attr('id') + '-editor button.remove-annotation').click(function() {
-			$('#' + $wrapper.attr('id') + '-editor textarea').val('');
+			$('#' + $wrapper.attr('id') + '-editor textarea').val(''); //Empty text on popup and close
 			WebuiPopovers.hideAll();
 		});
 		$('#' + $wrapper.attr('id') + '-editor button.confirm-annotation').click(function() {
@@ -355,6 +356,7 @@ function loadDraftAnnotation(annotation) {
 	$popover.on("hidden.webui.popover", function(e) {
 		//Text is empty on popup close
 		if (!$('#' + $wrapper.attr('id') + '-editor textarea').val().length) {
+			var isNewWrapper = $wrapper[0].nextSibling && $wrapper[0].nextSibling.nodeType === 3 || $wrapper[0].previousSibling && $wrapper[0].previousSibling.nodeType === 3;
 			if (isNewWrapper) {
 				var p = $wrapper.parent();
 				$wrapper.contents().unwrap();
@@ -375,6 +377,7 @@ function loadDraftAnnotation(annotation) {
 		}
 		var annotations = JSON.parse(localStorage.getItem(paperId + 'draftAnnotations'));
 		annotations[annotation.id] = annotation;
+		//Remove annotation if empty
 		if (!annotation.content) {
 			delete annotations[annotation.id];
 		}
@@ -383,6 +386,29 @@ function loadDraftAnnotation(annotation) {
 
 	$wrapper.on("click", function(e) {
 		$('textarea').focus();
+	});
+}
+
+function openReviewAnnotationsModal(){
+	$('#reviewAnnotationsModal').modal('show');
+	var paperId = document.location.pathname.split('/papers/')[1].replace(/\/?$/, '/'); //Add trailing slash
+	if (!localStorage.getItem(paperId + 'draftAnnotations')) {
+		localStorage.setItem(paperId + 'draftAnnotations', JSON.stringify({}));
+	}
+	$('#annotationsTable>tbody').empty();
+	var draftAnnotations = JSON.parse(localStorage.getItem(paperId + 'draftAnnotations'));
+	Object.keys(draftAnnotations).forEach(function(annotationKey) {
+		loadDraftAnnotation(draftAnnotations[annotationKey]);
+
+		var annRow = $('<tr><td>' + draftAnnotations[annotationKey].text + '</td><td>' + draftAnnotations[annotationKey].content + '</tr></td>');
+		annRow.data('target', '#'+draftAnnotations[annotationKey].id);
+		annRow.on('click', function(e){
+			var hash = annRow.data('target');
+			var scrollTarget = hash && $(hash).offset() ? $(hash).offset().top : $('#top').offset().top;
+			$('#reviewAnnotationsModal').modal('hide');
+		    window.scrollTo(0, scrollTarget - 50);
+		});
+		$('#annotationsTable>tbody').append(annRow);
 	});
 }
 
@@ -649,6 +675,17 @@ function getInlineAnnotationEditor(id, content) {
 	$btngroup.append($('<button class="btn btn-danger remove-annotation">Delete</button>'));
 	$btngroup.append($('<button class="btn btn-success confirm-annotation">Confirm</button>'));
 	$container.append($btngroup);
+	$(document).on('modechanged', function(e){
+		if (activeMode === 'reviewer') {
+			//Reviewer mode
+			$textarea.attr("disabled", false);
+			$btngroup.removeClass('hidden');
+		} else if (activeMode === 'reader') {
+			//Annotator mode
+			$textarea.attr("disabled", true);
+			$btngroup.addClass('hidden');
+		}
+	});
 	return $container;
 }
 

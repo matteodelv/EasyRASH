@@ -21,6 +21,17 @@ $.ajaxSetup({
 	}
 });
 
+window.addEventListener("hashchange", onHashChange, false);
+
+function onHashChange(e){ //Scroll with offset to prevent sidebar from covering the target
+	
+	e.preventDefault();
+	var scrollTarget = window.location.hash && $(window.location.hash).offset() ? $(window.location.hash).offset().top : $('#top').offset().top;
+	setTimeout(function() {
+        window.scrollTo(0, scrollTarget - 50); // run it a bit later also for browser compatibility
+    }, 1);
+}
+
 distinctColors = ['#ff5972', '#a6637c', '#ff1a9f', '#ff99eb', '#c91aff', '#bb99ff', '#3419ff', '#1a62ff', '#1a94ff', '#1ac6ff', '#13babf', '#1affd5', '#1aff40', '#abf291', '#baff1a', '#ffe01a', '#ffdb99', '#ffaf1a', '#ff7d1a', '#ffaf99', '#ff1a1a'];
 var reviewerColors = {};
 
