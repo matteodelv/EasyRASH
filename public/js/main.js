@@ -376,6 +376,9 @@ function fetchAndBuildSidebarMenu(result, loadingConf, callback) {
 }
 
 function userReady(fullname) {
+	console.log("userReady");
+	console.log("fullname = " + fullname);
+	console.log("caller = " + arguments.callee.caller.toString());
 	$('.profile-panel').removeClass('hidden').animateCss('bounceIn');
 	$('.profile-panel>h4').text(fullname);
 	getConferences();
@@ -473,6 +476,231 @@ function logOut() {
 	localStorage.accessToken = null;
 	window.location.replace("/");
 	return false;
+}
+
+function showUserPanel() {
+	if ($('#user-profile-panel').length === 0) {
+		$.ajax({
+			url: encodeURI('/api/users/profile'),
+			method: 'GET',
+			success: function(result) {
+				console.log("USER PROFILE INFO CORRECTLY FETCHED");
+				console.log(result);
+				$pageContentWrapper = $('#page-content-wrapper #top').html();
+
+				$("#page-content-wrapper #top .row").fadeTo(500, 0).slideUp(500, function() {
+					$("#page-content-wrapper #top").empty();
+					buildUserPanel(result);
+				});
+			},
+			error: function(error) {
+				console.log("ERROR FETCHING USER PROFILE INFO");
+				console.log(error);
+			}
+		});
+	}
+}
+
+function buildUserPanel(userInfo) {
+	var panel = $('<div id="user-profile-panel"><div class="row"><div class="panel-content col-md-8 col-md-offset-2"></div></div></div>');
+	$('#page-content-wrapper #top').append(panel);
+
+	var closeButton = $('<button class="btn btn-default pull-right">Close User Panel</button>');
+
+	var ids = ["userName", "userSurname", "userEmail", "userSex", "updateInfoButton", "userNewPass", "userNewPassVerify", "updatePasswordButton"];
+	var texts = ["Name:", "Surname:", "Email:", "Sex:", "Update Profile Info", "New Password:", "Re-type New Password:", "Update Password"];
+	var types = ["text", "text", "email", "", "submit", "password", "password", "submit"];
+	var names = ["given_name", "family_name", "email", "sex", "", "newPassword", "newPasswordVerify", ""];
+
+	var formInfo = $('<form id="formInfo"></form>').append('<h4>Update Profile</h4>').append('<p class="text-info">Note: Email can\'t be edited because it has been verified and it\'s linked to reviews and annotations.<br>Note: Blank or unchanged fields will be ignored.</p>');
+
+	var row;
+	for (var $i = 0; $i < 5; $i++) {
+		if ($i % 2 === 0) {
+			row = $('<div class="row"></div>');
+			$(formInfo).append(row);
+		}
+		var formGroup = $('<div class="form-group"></div>');
+		$(formGroup).empty();
+		
+		if ($i === 2) $(formGroup).addClass('col-md-8');
+		else if ($i === 3) $(formGroup).addClass('col-md-4');
+		else $(formGroup).addClass('col-md-6');
+
+		if ($i !== 4) {
+			var label = $('<label></label>');
+			$(label).attr('for', ids[$i]);
+			$(label).text(texts[$i]);
+			$(formGroup).append(label);
+		}
+
+		if ($i === 4) {
+			$(formGroup).addClass('col-md-offset-6');
+			
+			var button = $('<button class="btn btn-primary pull-right"></button>');
+			$(button).empty();
+
+			$(button).attr('id', ids[$i]);
+			$(button).attr('type', types[$i]);
+			$(button).text(texts[$i]);
+
+			$(formGroup).append(button);
+		}
+		else if ($i === 3) {
+			var select = $('<select></select>');
+			$(select).attr('id', ids[$i]);
+			$(select).attr('name', names[$i]);
+			$(select).addClass('form-control');
+
+			var optionValues = ["male", "female"];
+			var optionLabels = ["Male", "Female"];
+
+			for ($j = 0; $j < 2; $j++) {
+				var option = $('<option></option>');
+				$(option).attr('value', optionValues[$j]);
+				$(option).text(optionLabels[$j]);
+				$(select).append(option);
+				if (optionValues[$j] === userInfo.sex) $(option).attr('selected', 'selected');
+			}
+			$(formGroup).append(select);
+		}
+		else {
+			var input = $('<input class="form-control"></inpu>');
+			$(input).attr('type', types[$i]);
+			$(input).attr('id', ids[$i]);
+			$(input).attr('name', names[$i]);
+			if ($i === 2) $(input).attr('disabled', 'disabled');
+			
+			var value;
+			if ($i === 0) value = userInfo.given_name;
+			else if ($i === 1) value = userInfo.family_name;
+			else if ($i === 2) value = userInfo.email;
+			else value = '';
+			
+			$(input).attr('value', value);
+			$(formGroup).append(input);
+		}
+		$(row).append(formGroup);
+	}
+
+	var formPass = $('<form id="formPass"></form>').append('<h4>Update Password</h4>');
+
+	for ($i = 5; $i < 8; $i++) {
+		if ($i % 2 !== 0) {
+			row = $('<div class="row"></div>');
+			$(formPass).append(row);
+		}
+		var formGroup = $('<div class="form-group"></div>');
+		$(formGroup).empty();
+		$(formGroup).addClass('col-md-6');
+
+		if ($i !== 7) {
+			var label = $('<label></label>');
+			$(label).attr('for', ids[$i]);
+			$(label).text(texts[$i]);
+			$(formGroup).append(label);
+		}
+
+		if ($i === 7) {
+			$(formGroup).addClass('col-md-offset-6');
+			
+			var button = $('<button class="btn btn-primary pull-right"></button>');
+			$(button).empty();
+
+			$(button).attr('id', ids[$i]);
+			$(button).attr('type', types[$i]);
+			$(button).text(texts[$i]);
+
+			$(formGroup).append(button);
+		}
+		else {
+			var input = $('<input class="form-control"></inpu>');
+			$(input).attr('type', types[$i]);
+			$(input).attr('id', ids[$i]);
+			$(input).attr('name', names[$i]);
+			$(formGroup).append(input);
+		}
+		$(row).append(formGroup);
+	}
+
+	$('#user-profile-panel .panel-content').append(closeButton).append(formInfo).append(formPass);
+
+	$('#user-profile-panel .btn-default').on('click', function(e) {
+		e.preventDefault();
+
+		$('#user-profile-panel').fadeTo(500, 0).slideUp(500, function() {
+			$(this).remove();
+			$('#page-content-wrapper #top').html($pageContentWrapper);
+		});
+	});
+
+	$('#user-profile-panel #formInfo .btn-primary').on('click', function(e) {
+		e.preventDefault();
+
+		var data = {};
+		$('#formInfo input[name], #formInfo select[name]').each(function(index) {
+			data[$(this).attr('name')] = $(this).val();
+		});
+
+		$.ajax({
+			method: 'PUT',
+			data: data,
+			url: encodeURI('/api/users/update/profile'),
+			success: function(result) {
+				$('#formInfo').prepend('<div class="alert alert-success fade in" role="alert"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>' + result.message + '</div>');
+
+				$('#sidebar-wrapper .profile-panel .name').text(data.given_name + ' ' + data.family_name);
+
+				window.setTimeout(function() {
+					$("#user-profile-panel .alert").fadeTo(500, 0).slideUp(500, function() {
+						$(this).remove(); 
+					});
+				}, 2000);
+			},
+			error: function(error) {
+				$('#formInfo').prepend('<div class="alert alert-warning fade in" role="alert"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>' + JSON.parse(error.responseText).message + '</div>');
+
+				window.setTimeout(function() {
+					$("#user-profile-panel .alert").fadeTo(500, 0).slideUp(500, function() {
+						$(this).remove(); 
+					});
+				}, 2000);
+			}
+		});
+	});
+
+	$('#user-profile-panel #formPass .btn-primary').on('click', function(e) {
+		e.preventDefault();
+
+		var data = {};
+		$('#formPass input[name]').each(function(index) {
+			data[$(this).attr('name')] = $(this).val();
+		});
+
+		$.ajax({
+			method: 'PUT',
+			url: encodeURI('/api/users/update/password'),
+			data: data,
+			success: function(result) {
+				$('#formPass').prepend('<div class="alert alert-success fade in" role="alert"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>' + result.message + '</div>');
+
+				window.setTimeout(function() {
+					$("#user-profile-panel .alert").fadeTo(500, 0).slideUp(500, function() {
+						$(this).remove(); 
+					});
+				}, 2000);
+			},
+			error: function(error) {
+				$('#formPass').prepend('<div class="alert alert-warning fade in" role="alert"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>' + JSON.parse(error.responseText).message + '</div>');
+
+				window.setTimeout(function() {
+					$("#user-profile-panel .alert").fadeTo(500, 0).slideUp(500, function() {
+						$(this).remove(); 
+					});
+				}, 2000);
+			}
+		});
+	});
 }
 
 function redirectToPaper(url, paper) {

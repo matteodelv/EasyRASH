@@ -231,9 +231,9 @@ a.btn-md:active i {
 }
 
 .profile-panel>.name, .profile-panel>.userRole {
-	margin: auto 0.2em;
+	/*margin: auto 0.2em;*/
 	color: #E5E5E5;
-	display: inline;
+	/*display: inline;*/
 }
 
 
@@ -489,6 +489,16 @@ section>section>.add-block-annotation-btn{
 #helpModal .modal-body {
 	max-height: calc(100vh - 212px);
     overflow-y: auto;
+}
+
+#formInfo {
+	clear:both;
+}
+
+#formPass {
+	border-top:1px dashed #CCC;
+	margin-top:15px;
+	padding-top:15px;
 }
 
 /*.inline-annotation::before {

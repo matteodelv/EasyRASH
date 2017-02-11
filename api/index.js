@@ -31,6 +31,7 @@ router.use(function(req, res, next) {
    }
 });
 
+// TODO: Aggiornare il contenuto del payload quando si aggiorna il nome o il cognome dell'utente loggato
 router.post('/verify', (req, res) => {
    return res.json({ success: true, message: 'Token active and verified.', id: req.jwtPayload.id, fullname: req.jwtPayload.given_name + ' ' + req.jwtPayload.family_name });
 }); 

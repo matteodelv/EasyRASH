@@ -28,3 +28,17 @@ exports.sortUsersAlphabetically = function(usersArray) {
 	});
 	return usersArray;
 };
+
+exports.loadDataFile = function(file, callback) {
+	var filePath = path.resolve(file);
+	if (fs.existsSync(filePath)) {
+		var data = fs.readFileSync(filePath);
+		if (!data) {
+			var error = { status: 400, message: 'Unable to load requested data. Please, try again!' };
+			return callback(error, null);
+		} else {
+			var parsed = JSON.parse(data);
+			return callback(null, parsed);
+		}
+	} else return callback({ status: 404, message: 'Requested data file not found. Please, try again!' }, null);
+}
