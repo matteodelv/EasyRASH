@@ -501,6 +501,11 @@ section>section>.add-block-annotation-btn{
 	padding-top:15px;
 }
 
+.avatar{
+	width: 128px;
+	height: 128px;
+}
+
 /*.inline-annotation::before {
   content: "";
   position: absolute;

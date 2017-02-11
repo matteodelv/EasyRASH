@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-model href="../grammar/rash.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
-<html xmlns="http://www.w3.org/1999/xhtml" 
-  prefix="
+<html xmlns="http://www.w3.org/1999/xhtml" prefix="
   schema: http://schema.org/
   prism: http://prismstandard.org/namespaces/basic/2.0/
   dcterms: http://purl.org/dc/terms/">
@@ -294,7 +293,7 @@
           performed the same task by only using 10 CiTO-Ps<a href="#ftn18"> </a>
             (<em>T10</em>). This reduced set of properties comes from a preliminary experiment we
           undertook in <a href="#AIC"> </a> that showed that only these properties had a
-          moderate inter-rater agreement (Fleiss' <em>k </em>&gt; 0.33). The goal in fact is to answer
+          moderate inter-rater agreement (Fleiss' <em>k </em>> 0.33). The goal in fact is to answer
           RQ4: does the number of properties affect the inter-rater agreement? </p>
         <p>Both groups were composed mainly by computer scientists (the main area of the Balisage
           Conference), none an expert user of CiTO. Each user read each citation sentence
@@ -519,7 +518,7 @@
           among users, we filtered only the 18 (in T41) and 24 (in T10) citations on which at least
           6 users used the same property, as mentioned earlier in <a href="#TableAgreements"> </a>. The <em>k</em> value on that subset showed a moderate
           positive agreement: <em>k </em>= 0.39 in T41 and <em>k</em> = 0.43 in T10. In addition, we had
-            <em>k</em> &gt; 0.5 for 5 CiTO-Ps in T41 – i.e., <em>agreesWith</em> (<em>k</em> = 0.54),
+            <em>k</em> > 0.5 for 5 CiTO-Ps in T41 – i.e., <em>agreesWith</em> (<em>k</em> = 0.54),
             <em>citesAsDataSource</em> (<em>k</em> = 0.52), <em>citesAsPotentialSolution</em> (<em>k</em> =
           0.66), <em>citesAsRecommendedReading</em> (<em>k</em> = 0.6), <em>usesMethodIn</em> (<em>k</em> =
           0.54) – and for 4 CiTO-Ps in T10 – <em>citesAsDataSource</em> (<em>k</em> = 0.63),
@@ -783,12 +782,12 @@
         mental model but they perceived this as a limitation of the model. To solve this issue, the
         latest release of CiTO – supported by our findings – includes an extension mechanism that
         allow users to use their own citation function. The syntax is briefly shown below:</p>
-      <pre><code> @prefix cito: &lt;http://purl.org/spar/cito/&gt; . @prefix oa:
-        &lt;http://www.w3.org/ns/oa#&gt; . @prefix dcterms: &lt;http://purl.org/dc/terms/&gt; . [] a
+      <pre><code> @prefix cito: &lt;http://purl.org/spar/cito/> . @prefix oa:
+        &lt;http://www.w3.org/ns/oa#> . @prefix dcterms: &lt;http://purl.org/dc/terms/> . [] a
         oa:Annotation ; oa:hasBody [ dcterms:description "The cited paper initiated a whole field of
         research" ] ; oa:hasTarget [ a cito:CitationAct ; cito:hasCitingEntity
-        &lt;uri-citing-paper&gt; ; cito:hasCitationEvent cito:cites ; cito:hasCitedEntity
-        &lt;uri-cited-paper&gt; ] .</code></pre>
+        &lt;uri-citing-paper> ; cito:hasCitationEvent cito:cites ; cito:hasCitedEntity
+        &lt;uri-cited-paper> ] .</code></pre>
       <p>The interesting aspect is that the overall organisation of the ontology (i.e., the TBox)
         does not change, while users are free to express precisely their characterisation capturing
         details and tones.</p>

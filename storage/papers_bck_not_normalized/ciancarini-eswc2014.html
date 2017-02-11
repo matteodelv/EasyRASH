@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-model href="../grammar/rash.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="grammar/rash.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
 <html xmlns="http://www.w3.org/1999/xhtml" prefix="
   schema: http://schema.org/
   prism: http://prismstandard.org/namespaces/basic/2.0/
@@ -8,39 +8,39 @@
     <!-- Visualisation requirements (mandatory for optimal reading) -->
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <link rel="stylesheet" href="../css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="../css/rash.css"/>
-    <script src="../js/jquery.min.js"><![CDATA[ ]]></script>
-    <script src="../js/bootstrap.min.js"><![CDATA[ ]]></script>
-    <script src="../js/rash.js"><![CDATA[ ]]></script>
+    <link rel="stylesheet" href="css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="css/rash.css"/>
+    <script src="js/jquery.min.js"><![CDATA[ ]]></script>
+    <script src="js/bootstrap.min.js"><![CDATA[ ]]></script>
+    <script src="js/rash.js"><![CDATA[ ]]></script>
     <!-- /END Visualisation requirements (mandatory for optimal reading) -->
 
     <title property="dcterms:title">Evaluating citation functions in CiTO: cognitive issues -- Preprint of
       http://dx.doi.org/10.1007/978-3-319-07443-6_39</title>
 
     <!-- Author's data (one or more) -->
-    <meta about="#pc" property="schema:name" name="dc.creator" content="Paolo Ciancarini"/>
-    <meta about="#pc" property="schema:email" content="ciancarini@cs.unibo.it"/>
-    <link about="#pc" property="schema:affiliation" href="#cs-unibo"/>
-    <link about="#pc" property="schema:affiliation" href="#stlab-cnr"/>
+    <meta about="mailto:paolo.ciancarini@example.com" property="schema:name" name="dc.creator" content="Paolo Ciancarini"/>
+    <meta about="mailto:paolo.ciancarini@example.com" property="schema:email" content="ciancarini@example.com"/>
+    <link about="mailto:paolo.ciancarini@example.com" property="schema:affiliation" href="#cs-unibo"/>
+    <link about="mailto:paolo.ciancarini@example.com" property="schema:affiliation" href="#stlab-cnr"/>
 
-    <meta about="#adi" property="schema:name" name="dc.creator" content="Angelo Di Iorio"/>
-    <meta about="#adi" property="schema:email" content="diiorio@cs.unibo.it"/>
-    <link about="#adi" property="schema:affiliation" href="#cs-unibo"/>
+    <meta about="mailto:angelo.diiorio@unibo.it" property="schema:name" name="dc.creator" content="Angelo Di Iorio"/>
+    <meta about="mailto:angelo.diiorio@unibo.it" property="schema:email" content="diiorio@cs.unibo.it"/>
+    <link about="mailto:angelo.diiorio@unibo.it" property="schema:affiliation" href="#cs-unibo"/>
 
-    <meta about="#an" property="schema:name" name="dc.creator" content="Andrea Nuzzolese"/>
-    <meta about="#an" property="schema:email" content="nuzzoles@cs.unibo.it"/>
-    <link about="#an" property="schema:affiliation" href="#cs-unibo"/>
-    <link about="#an" property="schema:affiliation" href="#stlab-cnr"/>
+    <meta about="mailto:andrea.nuzzolese@example.com" property="schema:name" name="dc.creator" content="Andrea Nuzzolese"/>
+    <meta about="mailto:andrea.nuzzolese@example.com" property="schema:email" content="nuzzoles@example.com"/>
+    <link about="mailto:andrea.nuzzolese@example.com" property="schema:affiliation" href="#cs-unibo"/>
+    <link about="mailto:andrea.nuzzolese@example.com" property="schema:affiliation" href="#stlab-cnr"/>
 
-    <meta about="#sp" property="schema:name" name="dc.creator" content="Silvio Peroni"/>
-    <meta about="#sp" property="schema:email" content="silvio.peroni@unibo.it"/>
-    <link about="#sp" property="schema:affiliation" href="#cs-unibo"/>
-    <link about="#sp" property="schema:affiliation" href="#stlab-cnr"/>
+    <meta about="mailto:silvio.peroni@unibo.it" property="schema:name" name="dc.creator" content="Silvio Peroni"/>
+    <meta about="mailto:silvio.peroni@unibo.it" property="schema:email" content="silvio.peroni@unibo.it"/>
+    <link about="mailto:silvio.peroni@unibo.it" property="schema:affiliation" href="#cs-unibo"/>
+    <link about="mailto:silvio.peroni@unibo.it" property="schema:affiliation" href="#stlab-cnr"/>
 
-    <meta about="#fv" property="schema:name" name="dc.creator" content="Fabio Vitali"/>
-    <meta about="#fv" property="schema:email" content="fabio@cs.unibo.it"/>
-    <link about="#fv" property="schema:affiliation" href="#cs-unibo"/>
+    <meta about="mailto:fabio.vitali@unibo.it" property="schema:name" name="dc.creator" content="Fabio Vitali"/>
+    <meta about="mailto:fabio.vitali@unibo.it" property="schema:email" content="fabio@cs.unibo.it"/>
+    <link about="mailto:fabio.vitali@unibo.it" property="schema:affiliation" href="#cs-unibo"/>
 
     <!-- Affiliations -->
     <meta about="#cs-unibo" property="schema:name" content="Department of Computer Science and Engineering, University of Bologna, Bologna, Italy"/>
@@ -270,7 +270,7 @@
         citations, in this experiment we identified them manually: we read the text and tried to
         understand which sequence of sentences around a particular citation conveyed its citation
         function at the best.</p>
-      <section id="SectionExperimentalSettings">
+      <section id="SectionExperimentalSetting">
         <h1>Experimental setting</h1>
         <p>The test bed includes some scientific papers encoded in XML DocBook chosen among the
           seventh volume of the proceedings Balisage Conference Series<a href="#ftn16"> </a>. We automatically extracted citation sentences, through an XSLT
