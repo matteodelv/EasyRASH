@@ -23,10 +23,10 @@ Under the following terms:
 
     <head>
         <!-- Visualisation requirements (mandatory for optimal reading) -->
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="stylesheet" href="css/bootstrap.min.css" />
-        <link rel="stylesheet" href="css/rash.css" />
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <link rel="stylesheet" href="css/bootstrap.min.css"/>
+        <link rel="stylesheet" href="css/rash.css"/>
         <script src="js/jquery.min.js">
         </script>
         <script src="js/bootstrap.min.js">
@@ -47,19 +47,19 @@ Under the following terms:
         <!-- Metadata -->
         <title property="dcterms:title">RASH: Research Articles in Simplified HTML -- Documentation - Version 0.5, February 15, 2016</title>
         <!-- Author's data (one or more) -->
-        <meta about="mailto:silvio.peroni@unibo.it" name="dc.creator" content="Silvio Peroni" />
-        <meta about="mailto:silvio.peroni@unibo.it" property="schema:email" content="silvio.peroni@unibo.it" />
-        <link about="mailto:silvio.peroni@unibo.it" property="schema:affiliation" href="#cs-unibo" />
+        <meta about="mailto:silvio.peroni@unibo.it" name="dc.creator" content="Silvio Peroni"/>
+        <meta about="mailto:silvio.peroni@unibo.it" property="schema:email" content="silvio.peroni@unibo.it"/>
+        <link about="mailto:silvio.peroni@unibo.it" property="schema:affiliation" href="#cs-unibo"/>
         <!-- Affiliations -->
-        <meta about="#cs-unibo" property="schema:name" content="Department of Computer Science and Engineering, University of Bologna, Bologna, Italy" />
+        <meta about="#cs-unibo" property="schema:name" content="Department of Computer Science and Engineering, University of Bologna, Bologna, Italy"/>
         <!-- Paper keywords (one or more) -->
-        <meta property="prism:keyword" content="format for scholarly papers" />
-        <meta property="prism:keyword" content="HTML" />
-        <meta property="prism:keyword" content="markup language" />
-        <meta property="prism:keyword" content="Semantic Publishing" />
+        <meta property="prism:keyword" content="format for scholarly papers"/>
+        <meta property="prism:keyword" content="HTML"/>
+        <meta property="prism:keyword" content="markup language"/>
+        <meta property="prism:keyword" content="Semantic Publishing"/>
         <!-- ACM category (one or more) -->
-        <meta name="dcterms.subject" content="Applied computing,Document management and text processing,Document preparation,Markup languages" />
-        <meta name="dcterms.subject" content="Applied computing,Document management and text processing,Document preparation,Annotation" />
+        <meta name="dcterms.subject" content="Applied computing,Document management and text processing,Document preparation,Markup languages"/>
+        <meta name="dcterms.subject" content="Applied computing,Document management and text processing,Document preparation,Annotation"/>
         <!-- /END Metadata -->
         <!-- Adding Turtle to the document -->
         <script type="text/turtle">
@@ -96,20 +96,20 @@ Under the following terms:
             <p>Note that this is a meta-document, since it has been actually defined by using RASH itself as markup language. Thus you can easily access the HTML code of this page to understand how the various elements are rendered by the browser.</p>
             <p>Any RASH documents begins as a simple (X)HTML5 document, by specifying the XML declaration and generic DOCTYPE followed by document element <code>html</code> with the usual namespace and with additional (and mandatory) prefix declarations (through the attribute <code>prefix</code>). The element <code>html</code> contains the element <code>head</code>, for defining metadata of the document, and the element <code>body</code>, for including the whole content of the document. The whole structure of a RASH document is then introduced as follows:</p>
             <pre><code>
-&lt;?xml version="1.0" encoding="UTF-8"?&gt;
-&lt;!DOCTYPE html&gt;
+&lt;?xml version="1.0" encoding="UTF-8"?>
+&lt;!DOCTYPE html>
 &lt;html
     xmlns="http://www.w3.org/1999/xhtml"
     prefix="
         schema: http://schema.org/
-        prism: http://prismstandard.org/namespaces/basic/2.0/"&gt;
-    &lt;head&gt;
-        &lt;-- Metadata about the document --&gt;
-    &lt;/head&gt;
-    &lt;body&gt;
-        &lt;-- Content of the document --&gt;
-    &lt;/body&gt;
-&lt;/html&gt;</code></pre>
+        prism: http://prismstandard.org/namespaces/basic/2.0/">
+    &lt;head>
+        &lt;-- Metadata about the document -->
+    &lt;/head>
+    &lt;body>
+        &lt;-- Content of the document -->
+    &lt;/body>
+&lt;/html></code></pre>
             <p>This document presents which elements are specifiable in each of the two document blocks, i.e., metadata and content. In
                 <a href="#metadata"></a> we explain how to specify the metadata of the article as appropriate elements within <code>head</code>, while the rest of the document mainly pertains elements within the element <code>body</code>. In particular:</p>
             <ul>
@@ -153,11 +153,11 @@ Under the following terms:
                 <h1>Title and subtitle</h1>
                 <p>We can specify the title of the paper by using the element <code>title</code>, as shown in the following excerpt.</p>
                 <pre><code>
-&lt;title&gt;Title of the paper&lt;/title&gt;</code></pre>
+&lt;title>Title of the paper&lt;/title></code></pre>
                 <p>In addition subtitles can be specified as well, by adding the characters
                     <q> -- </q> and the subtitle text after the text of the main title, as shown in the next excerpt.</p>
                 <pre><code>
-&lt;title&gt;Title of the paper -- subtitle of the paper&lt;/title&gt;</code></pre>
+&lt;title>Title of the paper -- subtitle of the paper&lt;/title></code></pre>
             </section>
             <section id="author">
                 <h1>Authors</h1>
@@ -179,18 +179,18 @@ Under the following terms:
                 </ul>
                 <p>An example of how to create all these author's information is shown in the following excerpt.</p>
                 <pre><code>
-&lt;meta about="mailto:silvio.peroni@unibo.it" name="dc.creator" content="Silvio Peroni" /&gt;
+&lt;meta about="mailto:silvio.peroni@unibo.it" name="dc.creator" content="Silvio Peroni" />
 &lt;meta about="mailto:silvio.peroni@unibo.it" property="schema:email" 
-    content="silvio.peroni@unibo.it" /&gt;
-&lt;link about="mailto:silvio.peroni@unibo.it" property="schema:affiliation" href="#cs-unibo" /&gt;</code></pre>
+    content="silvio.peroni@unibo.it" />
+&lt;link about="mailto:silvio.peroni@unibo.it" property="schema:affiliation" href="#cs-unibo" /></code></pre>
                 <p>Of course, it is possible to specify additional affiliations for an author by adding the appropriate number of elements <code>link</code>, as shown in the following excerpt.</p>
                 <pre><code>
 &lt;meta about="#an" name="dc.creator" 
-    content="Andrea Giovanni Nuzzolese" /&gt;
+    content="Andrea Giovanni Nuzzolese" />
 &lt;meta about="#an" property="schema:email" 
-    content="nuzzoles@cs.unibo.it" /&gt;
-&lt;link about="#an" property="schema:affiliation" href="#cs-unibo" /&gt;
-&lt;link about="#an" property="schema:affiliation" href="#stlab-cnr" /&gt;</code></pre>
+    content="nuzzoles@cs.unibo.it" />
+&lt;link about="#an" property="schema:affiliation" href="#cs-unibo" />
+&lt;link about="#an" property="schema:affiliation" href="#stlab-cnr" /></code></pre>
             </section>
             <section id="affiliation">
                 <h1>Affiliations</h1>
@@ -210,11 +210,11 @@ Under the following terms:
                 </ul>
                 <p>An example of how to create an affiliation is shown in the following excerpt.</p>
                 <pre><code>
-&lt;!-- Affiliations (one or more) --&gt;
+&lt;!-- Affiliations (one or more) -->
 &lt;meta 
     about="#cs-unibo" property="schema:name" 
     content="Department of Computer Science and Engineering, 
-             University of Bologna, Bologna, Italy" /&gt;</code></pre>
+             University of Bologna, Bologna, Italy" /></code></pre>
             </section>
             <section id="acm">
                 <h1>ACM subject categories and keywords</h1>
@@ -231,14 +231,14 @@ Under the following terms:
                 </ul>
                 <p>An example of how to create all these information is shown in the following excerpt.</p>
                 <pre><code>
-&lt;!-- Paper keywords (one or more) --&gt;
-&lt;meta property="prism:keyword" content="markup language" /&gt;
-&lt;meta property="prism:keyword" content="HTML" /&gt;
+&lt;!-- Paper keywords (one or more) -->
+&lt;meta property="prism:keyword" content="markup language" />
+&lt;meta property="prism:keyword" content="HTML" />
 
-&lt;!-- ACM category (one or more) --&gt;
+&lt;!-- ACM category (one or more) -->
 &lt;meta name="dcterms.subject" 
     content="I.7.2,Document And Text Processing,
-             Document Capture,Document analysis" /&gt;</code></pre>
+             Document Capture,Document analysis" /></code></pre>
             </section>
         </section>
         <section id="textualelements">
@@ -253,16 +253,16 @@ Under the following terms:
                     <a href="#metadata"></a>) and paragraphs with quotes.</p>
                 <p>The common paragraphs are described by the element <code>p</code>, as used as follows.</p>
                 <pre><code>
-&lt;p&gt;This is the text forming a paragraph&lt;/p&gt;</code></pre>
+&lt;p>This is the text forming a paragraph&lt;/p></code></pre>
             </section>
             <section id="blockcode">
                 <h1>Code blocks</h1>
                 <p>All the block of codes, such as the latest block in
                     <a href="#paragraphs"></a>, can be defined by using the element <code>pre</code> plus the element <code>code</code>, as shown as follows:</p>
                 <pre><code>
-&lt;pre&gt;&lt;code&gt;
+&lt;pre>&lt;code>
     &amp;lt;p&amp;gt;This is the text forming a paragraph&amp;lt;/p&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;</code></pre>
+&lt;/code>&lt;/pre></code></pre>
             </section>
             <section id="lists">
                 <h1>Lists</h1>
@@ -272,21 +272,21 @@ Under the following terms:
                     <a href="#sections"></a>).</p>
                 <p>An example of these two kinds of list is shown in the following excerpt.</p>
                 <pre><code>
-&lt;!-- An unordered list --&gt;
-&lt;ul&gt;
-    &lt;li&gt;
-        &lt;p&gt;A list item of an unordered list containing a paragraph.&lt;/p&gt;
-    &lt;/li&gt;
-    &lt;li&gt;
-        &lt;p&gt;Another item.&lt;/p&gt;
-        &lt;p&gt;Containing two paragraphs.&lt;/p&gt;
-    &lt;/li&gt;
-&lt;/ul&gt;
+&lt;!-- An unordered list -->
+&lt;ul>
+    &lt;li>
+        &lt;p>A list item of an unordered list containing a paragraph.&lt;/p>
+    &lt;/li>
+    &lt;li>
+        &lt;p>Another item.&lt;/p>
+        &lt;p>Containing two paragraphs.&lt;/p>
+    &lt;/li>
+&lt;/ul>
 
-&lt;!-- An ordered list --&gt;
-&lt;ol&gt;
-    &lt;li&gt;&lt;p&gt;A list item of an ordered list.&lt;/p&gt;&lt;/li&gt;
-&lt;/ol&gt;</code></pre>
+&lt;!-- An ordered list -->
+&lt;ol>
+    &lt;li>&lt;p>A list item of an ordered list.&lt;/p>&lt;/li>
+&lt;/ol></code></pre>
             </section>
             <section id="blockquote">
                 <h1>Block quotations</h1>
@@ -296,7 +296,7 @@ Under the following terms:
                 </blockquote>
                 <p>The source code of the above paragraph is shown as follows:</p>
                 <pre><code>
-&lt;blockquote&gt;&lt;p&gt;This is a block quotation.&lt;/p&gt;&lt;/blockquote&gt;</code></pre>
+&lt;blockquote>&lt;p>This is a block quotation.&lt;/p>&lt;/blockquote></code></pre>
             </section>
             <section id="inlines">
                 <h1>Inline elements</h1>
@@ -307,8 +307,8 @@ Under the following terms:
                     <a href="#rdfa"></a> for more details).</p>
                 <p>It is also possible to insert images as part of the text inside a paragraph. There are two ways for specify images in the document. The first one is to use the element <code>img</code> with the attribute <code>src</code> set to the URL of the image – and the attribute <code>alt</code> for providing an alternative description of the image. Alternatively, it is possible to use also the element <code>svg</code> compliant with the <a href="https://www.w3.org/TR/SVG/">SVG specification</a>, such as the following circle:
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16">
-                        <circle cx="8" cy="8" r="7" stroke="green" stroke-width="1" fill="yellow" />
-                    </svg>. In this case, the SVG namespace (i.e., <code>http://www.w3.org/2000/svg</code>) must be explicitly specified.</p>
+                        <circle cx="8" cy="8" r="7" stroke="green" stroke-width="1" fill="yellow"></circle>
+                    </svg>. In this case, the SVG namespace (i.e., <code xmlns="http://www.w3.org/1999/xhtml">http://www.w3.org/2000/svg</code>) must be explicitly specified.</p>
                 <p>Mathematical formulas can be specified as well, by means of three different elements. First of all, we can use the whole <a href="http://www.w3.org/TR/MathML3/">MathML specification</a> (i.e., the element <code>math</code> of namespace <code>http://www.w3.org/1998/Math/MathML</code>) for defining well-formed formulas
                     <a href="#fn5"></a> like
                     <math xmlns="http://www.w3.org/1998/Math/MathML">
@@ -322,37 +322,37 @@ Under the following terms:
                             <mi>r</mi>
                             <mn>2</mn>
                         </msup>
-                    </math>. In addition, one can specify formulas through an image, by using the element <code>img</code> with the attribute <code>role</code> set to
+                    </math>. In addition, one can specify formulas through an image, by using the element <code xmlns="http://www.w3.org/1999/xhtml">img</code> with the attribute <code>role</code> set to
                     <q>math</q>, and specifying the formula through the attribute <code>src</code>, remembering to use the attribute <code>alt</code> for providing an alternative description of it. It is also possible to create formulas by means of the LaTeX syntax, by using the element <code>span</code> with the attribute <code>role</code> specified to
                     <q>math</q>, e.g., <span role="math">\pi r^2</span>.
                 </p>
                 <p>Finally, the usual element <code>a</code>, accompanied by the attribute <code>href</code>, is used for defining <a href="https://en.wikipedia.org/wiki/Hyperlink">hyperlinks</a> to external pages.</p>
                 <p>In the following excerpt, we summarise the use of all these elements.</p>
                 <pre><code>
-&lt;p&gt;
+&lt;p>
     The text contained in this paragraph is annotated with markup for 
-    inline elements. In particular we have &lt;em&gt;normal&lt;/m&gt; and 
-    &lt;strong&gt;strong&lt;/strong&gt; emphasis, &lt;q&gt;quotations&lt;/q&gt;, 
-    &lt;sup&gt;superscripts&lt;/sup&gt; and &lt;sub&gt;subscripts&lt;/sub&gt;, 
-    &lt;code&gt;source code&lt;/code&gt; and
-    &lt;a href="https://en.wikipedia.org/wiki/Hyperlink"&gt;hyperlinks&lt;/a&gt;.
+    inline elements. In particular we have &lt;em>normal&lt;/m> and 
+    &lt;strong>strong&lt;/strong> emphasis, &lt;q>quotations&lt;/q>, 
+    &lt;sup>superscripts&lt;/sup> and &lt;sub>subscripts&lt;/sub>, 
+    &lt;code>source code&lt;/code> and
+    &lt;a href="https://en.wikipedia.org/wiki/Hyperlink">hyperlinks&lt;/a>.
     In addition to pure textual elements, we can also add images, 
-    like &lt;img src="logo.svg" alt="Picture with a logo" /&gt;, or
-    &lt;svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"&gt;
+    like &lt;img src="logo.svg" alt="Picture with a logo" />, or
+    &lt;svg xmlns="http://www.w3.org/2000/svg" width="16" height="16">
     &lt;circle cx="8" cy="8" r="7" stroke="green" stroke-width="1" 
-    fill="yellow" /&gt;&lt;/svg&gt;.
+    fill="yellow" />&lt;/svg>.
     Formulas can be specified by using the MathML specification, like
-    &lt;math xmlns="http://www.w3.org/1998/Math/MathML"&gt;
-        &lt;mi&gt;&amp;#x03C0;&lt;!-- π --&gt;&lt;/mi&gt;
-        &lt;mo&gt;&amp;#x2062;&lt;!-- &amp;InvisibleTimes; --&gt;&lt;/mo&gt;
-        &lt;msup&gt;
-            &lt;mi&gt;r&lt;/mi&gt;
-            &lt;mn&gt;2&lt;/mn&gt;
-        &lt;/msup&gt;
-    &lt;/math&gt;, by means of an image such as 
-    &lt;img role="math" src="formula.png" alt="r^2" /&gt;, or by using
-    LaTeX, e.g., &lt;span role="math"&gt;\pi r^2&lt;/span&gt;.
-&lt;/p&gt;</code></pre>
+    &lt;math xmlns="http://www.w3.org/1998/Math/MathML">
+        &lt;mi>&amp;#x03C0;&lt;!-- π -->&lt;/mi>
+        &lt;mo>&amp;#x2062;&lt;!-- &amp;InvisibleTimes; -->&lt;/mo>
+        &lt;msup>
+            &lt;mi>r&lt;/mi>
+            &lt;mn>2&lt;/mn>
+        &lt;/msup>
+    &lt;/math>, by means of an image such as 
+    &lt;img role="math" src="formula.png" alt="r^2" />, or by using
+    LaTeX, e.g., &lt;span role="math">\pi r^2&lt;/span>.
+&lt;/p></code></pre>
             </section>
         </section>
         <section id="sections">
@@ -361,20 +361,20 @@ Under the following terms:
                 <a href="#fn4"></a>) as first child and at least another block element containing text, i.e., a paragraph, a list, a blockquote, a code block or any of the structures described in
                 <a href="#floatings"></a>. The following excerpt shows how to create a section in RASH.</p>
             <pre><code>
-&lt;section&gt;
-    &lt;h1&gt;Title of the section&lt;/h1&gt;
-    &lt;p&gt;The first paragraph of the section&lt;/p&gt;
-&lt;/section&gt;</code></pre>
+&lt;section>
+    &lt;h1>Title of the section&lt;/h1>
+    &lt;p>The first paragraph of the section&lt;/p>
+&lt;/section></code></pre>
             <p>Similarly, it is possible to create subsection by simply nesting sections as children of an existing one. For instance, the following excerpt introduces these kinds of scenarios.</p>
             <pre><code>
-&lt;section&gt;
-    &lt;h1&gt;Title of the section&lt;/h1&gt;
-    &lt;p&gt;The first paragraph of the main section&lt;/p&gt;
-    &lt;section&gt;
-        &lt;h1&gt;The title of the subsection&lt;/h1&gt;
-        &lt;p&gt;The first paragraph of the subsection.&lt;/p&gt;
-    &lt;/section&gt;
-&lt;/section&gt;</code></pre>
+&lt;section>
+    &lt;h1>Title of the section&lt;/h1>
+    &lt;p>The first paragraph of the main section&lt;/p>
+    &lt;section>
+        &lt;h1>The title of the subsection&lt;/h1>
+        &lt;p>The first paragraph of the subsection.&lt;/p>
+    &lt;/section>
+&lt;/section></code></pre>
             <p>In RASH it is possible to define special sections that carry a particular semantics such as acknowledgements (attribute <code>role</code> set to
                 <q>doc-acknowledgements</q>), the references section (attribute <code>role</code> set to
                 <q>doc-bibliography</q>) and the abstract (attribute <code>role</code> set to
@@ -397,7 +397,7 @@ Under the following terms:
                 </ul>
                 <figure id="figure_1">
                     <p>
-                        <img src="img/rash.png" alt="The RASH logo!" />
+                        <img src="img/rash.png" alt="The RASH logo!"/>
                     </p>
                     <figcaption>Caption of the figure inserted through the element <code>img</code>.</figcaption>
                 </figure>
@@ -406,13 +406,13 @@ Under the following terms:
                         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="540" height="200" viewBox="0 0 270 100">
                             <defs>
                                 <radialGradient id="radial" cx="50%" cy="50%" fx="25%" fy="25%">
-                                    <stop offset="0%" stop-color="#60bafc" />
-                                    <stop offset="50%" stop-color="#409adc" />
-                                    <stop offset="100%" stop-color="#005a9c" />
+                                    <stop offset="0%" stop-color="#60bafc"></stop>
+                                    <stop offset="50%" stop-color="#409adc"></stop>
+                                    <stop offset="100%" stop-color="#005a9c"></stop>
                                 </radialGradient>
-                                <path id="curve" d="M18,60 C100,10 180,110 264,60" fill="none" />
+                                <path id="curve" d="M18,60 C100,10 180,110 264,60" fill="none"></path>
                             </defs>
-                            <circle cx="138" cy="50" r="38" fill="url(#radial)" stroke="#005a9c" />
+                            <circle cx="138" cy="50" r="38" fill="url(#radial)" stroke="#005a9c"></circle>
                             <text font-family="Verdana" font-size="20" fill="#ff9900">
                                 <textPath xlink:href="#curve" method="stretch" style="visibility: visible;">
                                     Scalable
@@ -421,56 +421,56 @@ Under the following terms:
                             </text>
                         </svg>
                     </p>
-                    <figcaption>Caption of the figure inserted through the element <code>svg</code>.</figcaption>
+                    <figcaption xmlns="http://www.w3.org/1999/xhtml">Caption of the figure inserted through the element <code>svg</code>.</figcaption>
                 </figure>
                 <p>Each figure box should have the attribute <code>id</code> set to some value in order to be referenced and must contain the element <code>figcaption</code> for defining the caption of the figure. For instance the figures shown in
                     <a href="#figure_1"></a> and
                     <a href="#figure_2"></a> are defined in RASH through the following code.</p>
                 <pre><code>
-&lt;figure id="figure_1"&gt;
-    &lt;p&gt;
-        &lt;img src="img/rash.png" alt="The RASH logo!"/&gt;
-    &lt;/p&gt;
-    &lt;figcaption&gt;
+&lt;figure id="figure_1">
+    &lt;p>
+        &lt;img src="img/rash.png" alt="The RASH logo!"/>
+    &lt;/p>
+    &lt;figcaption>
         Caption of the figure inserted through the element 
-        &lt;code&gt;img&lt;/code&gt;.
-    &lt;/figcaption&gt;
-&lt;/figure&gt;
+        &lt;code>img&lt;/code>.
+    &lt;/figcaption>
+&lt;/figure>
 
-&lt;figure id="figure_2"&gt;
-    &lt;p&gt;
+&lt;figure id="figure_2">
+    &lt;p>
         &lt;svg xmlns="http://www.w3.org/2000/svg"
             xmlns:xlink="http://www.w3.org/1999/xlink"
-            width="540" height="200" viewBox="0 0 270 100"&gt;
-            &lt;defs&gt;
+            width="540" height="200" viewBox="0 0 270 100">
+            &lt;defs>
                 &lt;radialGradient id="radial" 
-                    cx="50%" cy="50%" fx="25%" fy="25%"&gt;
-                    &lt;stop offset="0%" stop-color="#60bafc" /&gt;
-                    &lt;stop offset="50%" stop-color="#409adc" /&gt;
-                    &lt;stop offset="100%" stop-color="#005a9c" /&gt;
-                &lt;/radialGradient&gt;
+                    cx="50%" cy="50%" fx="25%" fy="25%">
+                    &lt;stop offset="0%" stop-color="#60bafc" />
+                    &lt;stop offset="50%" stop-color="#409adc" />
+                    &lt;stop offset="100%" stop-color="#005a9c" />
+                &lt;/radialGradient>
                 &lt;path id="curve" d="M18,60 C100,10 180,110 264,60" 
-                    fill="none"/&gt;
-            &lt;/defs&gt;
+                    fill="none"/>
+            &lt;/defs>
             
             &lt;circle cx="138" cy="50" r="38" 
-                fill="url(#radial)" stroke="#005a9c" /&gt;
+                fill="url(#radial)" stroke="#005a9c" />
             
             &lt;text font-family="Verdana" font-size="20" 
-                fill="#ff9900"&gt;
+                fill="#ff9900">
                 &lt;textPath xlink:href="#curve" 
-                    method="stretch" style="visibility: visible;"&gt;
+                    method="stretch" style="visibility: visible;">
                     Scalable 
-                    &lt;tspan fill="white"&gt;Vector&lt;/tspan&gt; Graphics
-                &lt;/textPath&gt;
-            &lt;/text&gt;
-        &lt;/svg&gt;
-    &lt;/p&gt;
-    &lt;figcaption&gt;
+                    &lt;tspan fill="white">Vector&lt;/tspan> Graphics
+                &lt;/textPath>
+            &lt;/text>
+        &lt;/svg>
+    &lt;/p>
+    &lt;figcaption>
         Caption of the figure inserted through the element 
-        &lt;code&gt;svg&lt;/code&gt;.
-    &lt;/figcaption&gt;
-&lt;/figure&gt;</code></pre>
+        &lt;code>svg&lt;/code>.
+    &lt;/figcaption>
+&lt;/figure></code></pre>
             </section>
             <section id="tables">
                 <h1>Table boxes</h1>
@@ -523,33 +523,33 @@ Under the following terms:
                 <p>For instance the table shown in
                     <a href="#table_1"></a> is defined in RASH through the following code.</p>
                 <pre><code>
-&lt;figure id="table_1"&gt;
-    &lt;table&gt;
-        &lt;tr&gt;
-            &lt;th&gt;Heading cell 1&lt;/th&gt;
-            &lt;th&gt;Heading cell 2&lt;/th&gt;
-        &lt;/tr&gt;
-        &lt;tr&gt;
-            &lt;td&gt;&lt;p&gt;Data cell 1&lt;/p&gt;&lt;/td&gt;
-            &lt;td&gt;&lt;p&gt;Data cell 2&lt;/p&gt;&lt;/td&gt;
-        &lt;/tr&gt;
-        &lt;tr&gt;
-            &lt;td&gt;
-                &lt;p&gt;Data cell 3&lt;/p&gt;
-                &lt;p&gt;With multiple paragraphs&lt;/p&gt;
-            &lt;/td&gt;
-            &lt;td&gt;&lt;p&gt;Data cell 4&lt;/p&gt;&lt;/td&gt;
-        &lt;/tr&gt;
-    &lt;/table&gt;
-    &lt;figcaption&gt;Caption of the table.&lt;/figcaption&gt;
-&lt;/figure&gt;</code></pre>
+&lt;figure id="table_1">
+    &lt;table>
+        &lt;tr>
+            &lt;th>Heading cell 1&lt;/th>
+            &lt;th>Heading cell 2&lt;/th>
+        &lt;/tr>
+        &lt;tr>
+            &lt;td>&lt;p>Data cell 1&lt;/p>&lt;/td>
+            &lt;td>&lt;p>Data cell 2&lt;/p>&lt;/td>
+        &lt;/tr>
+        &lt;tr>
+            &lt;td>
+                &lt;p>Data cell 3&lt;/p>
+                &lt;p>With multiple paragraphs&lt;/p>
+            &lt;/td>
+            &lt;td>&lt;p>Data cell 4&lt;/p>&lt;/td>
+        &lt;/tr>
+    &lt;/table>
+    &lt;figcaption>Caption of the table.&lt;/figcaption>
+&lt;/figure></code></pre>
             </section>
             <section id="formulaboxes">
                 <h1>Formula boxes</h1>
                 <p>We can define a formula box containing a formula by using the element <code>figure</code> with an element <code>p</code> that can contain either an element <code>img</code>, an element <code>math</code>, or an element <code>span</code>, and the attribute <code>id</code> set to some value in order to refer to this item.</p>
                 <figure id="formula_1">
                     <p>
-                        <img role="math" src="img/formula.png" alt="[a + b]^260 + {a + b}_i" />
+                        <img role="math" src="img/formula.png" alt="[a + b]^260 + {a + b}_i"/>
                     </p>
                 </figure>
                 <figure id="formula_2">
@@ -581,7 +581,7 @@ Under the following terms:
                         </math>
                     </p>
                 </figure>
-                <figure id="formula_3">
+                <figure id="formula_3" xmlns="http://www.w3.org/1999/xhtml">
                     <p>
                         <span role="math">[a + b]^{260} + \{a + b\}_i</span>
                     </p>
@@ -608,71 +608,71 @@ Under the following terms:
                     <a href="#formula_2"></a>, and
                     <a href="#formula_3"></a> are defined in RASH through the following code.</p>
                 <pre><code>
-&lt;!-- Formula defined as an image --&gt;
-&lt;figure id="formula_1"&gt;
-    &lt;p&gt;
-        &lt;img role="math" src="formula.png" alt="[a+b]^{260}+{a+b}_i"/&gt;
-    &lt;/p&gt;
-&lt;/figure&gt;
+&lt;!-- Formula defined as an image -->
+&lt;figure id="formula_1">
+    &lt;p>
+        &lt;img role="math" src="formula.png" alt="[a+b]^{260}+{a+b}_i"/>
+    &lt;/p>
+&lt;/figure>
 
-&lt;!-- Formula defined using the MathML specification --&gt;
-&lt;figure id="formula_2"&gt;
-    &lt;p&gt;
-        &lt;math xmlns="http://www.w3.org/1998/Math/MathML"&gt;
-            &lt;mrow&gt;
-                &lt;msup&gt;
-                    &lt;mfenced open="[" close="]"&gt;
-                        &lt;mrow&gt;
-                            &lt;mi&gt;a&lt;/mi&gt;
-                            &lt;mo&gt;+&lt;/mo&gt;
-                            &lt;mi&gt;b&lt;/mi&gt;
-                        &lt;/mrow&gt;
-                    &lt;/mfenced&gt;
-                    &lt;mn&gt;260&lt;/mn&gt;
-                &lt;/msup&gt;
-                &lt;mo&gt;+&lt;/mo&gt;
-                &lt;msub&gt;
-                    &lt;mfenced open="{" close="}"&gt;
-                        &lt;mrow&gt;
-                            &lt;mi&gt;a&lt;/mi&gt;
-                            &lt;mo&gt;+&lt;/mo&gt;
-                            &lt;mi&gt;b&lt;/mi&gt;
-                        &lt;/mrow&gt;
-                    &lt;/mfenced&gt;
-                    &lt;mi&gt;i&lt;/mi&gt;
-                &lt;/msub&gt;
-            &lt;/mrow&gt;
-        &lt;/math&gt;
-    &lt;/p&gt;
-&lt;/figure&gt;
+&lt;!-- Formula defined using the MathML specification -->
+&lt;figure id="formula_2">
+    &lt;p>
+        &lt;math xmlns="http://www.w3.org/1998/Math/MathML">
+            &lt;mrow>
+                &lt;msup>
+                    &lt;mfenced open="[" close="]">
+                        &lt;mrow>
+                            &lt;mi>a&lt;/mi>
+                            &lt;mo>+&lt;/mo>
+                            &lt;mi>b&lt;/mi>
+                        &lt;/mrow>
+                    &lt;/mfenced>
+                    &lt;mn>260&lt;/mn>
+                &lt;/msup>
+                &lt;mo>+&lt;/mo>
+                &lt;msub>
+                    &lt;mfenced open="{" close="}">
+                        &lt;mrow>
+                            &lt;mi>a&lt;/mi>
+                            &lt;mo>+&lt;/mo>
+                            &lt;mi>b&lt;/mi>
+                        &lt;/mrow>
+                    &lt;/mfenced>
+                    &lt;mi>i&lt;/mi>
+                &lt;/msub>
+            &lt;/mrow>
+        &lt;/math>
+    &lt;/p>
+&lt;/figure>
 
-&lt;!-- Formula defined through LaTeX --&gt;
-&lt;figure id="formula_3"&gt;
-    &lt;p&gt;
-        &lt;span role="math"&gt;[a + b]^{260} + \{a + b\}_i&lt;/span&gt;
-    &lt;/p&gt;
-&lt;/figure&gt;</code></pre>
+&lt;!-- Formula defined through LaTeX -->
+&lt;figure id="formula_3">
+    &lt;p>
+        &lt;span role="math">[a + b]^{260} + \{a + b\}_i&lt;/span>
+    &lt;/p>
+&lt;/figure></code></pre>
             </section>
             <section id="listingboxes">
                 <h1>Listing boxes</h1>
                 <p>We can define a listing box containing a code excerpt with a caption by using the element <code>figure</code> containing the element <code>pre</code>, and with the attribute <code>id</code> set to some value in order to refer to this item.</p>
                 <figure id="listing_1">
                     <pre><code>
-&lt;define name="listingbox"&gt;
-    &lt;element name="figure"&gt;
-        &lt;ref name="attributes_html_element_no_role" /&gt;
-        &lt;ref name="pre" /&gt;
-        &lt;ref name="caption" /&gt;
-    &lt;/element&gt;
-&lt;/define&gt;</code></pre>
+&lt;define name="listingbox">
+    &lt;element name="figure">
+        &lt;ref name="attributes_html_element_no_role" />
+        &lt;ref name="pre" />
+        &lt;ref name="caption" />
+    &lt;/element>
+&lt;/define></code></pre>
                     <figcaption>Caption of the listing.</figcaption>
                 </figure>
                 <p>The element <code>pre</code> must contain the content of the listing in an element <code>code</code>, as introduced in
                     <a href="#blockcode"></a>. In addition, a mandatory element <code>figcaption</code> must be specified and defines a caption for the listing. For instance the listing shown in
                     <a href="#listing_1"></a> is defined in RASH through the following code.</p>
                 <pre><code>
-&lt;figure id="listing_1"&gt;
-    &lt;pre&gt;&lt;code&gt;
+&lt;figure id="listing_1">
+    &lt;pre>&lt;code>
 &amp;lt;define name="listingbox"&amp;gt;
     &amp;lt;element name="figure"&amp;gt;
         &amp;lt;ref name="attributes_html_element_no_role" /&amp;gt;
@@ -680,9 +680,9 @@ Under the following terms:
         &amp;lt;ref name="caption" /&amp;gt;
     &amp;lt;/element&amp;gt;
 &amp;lt;/define&amp;gt;
-    &lt;/pre&gt;&lt;/code&gt;
-    &lt;figcaption&gt;Caption of the figure.&lt;/figcaption&gt;
-&lt;/figure&gt;</code></pre>
+    &lt;/pre>&lt;/code>
+    &lt;figcaption>Caption of the figure.&lt;/figcaption>
+&lt;/figure></code></pre>
             </section>
         </section>
         <section id="references">
@@ -696,27 +696,27 @@ Under the following terms:
             <p>For instance, the reference section in
                 <a href="#bibreflist"></a> is defined in RASH through the following code.</p>
             <pre><code>
-&lt;section id="bibreflist" role="doc-bibliography"&gt;
-    &lt;h1&gt;References&lt;/h1&gt;
-    &lt;ol&gt;
-        &lt;li id="Per2014" role="doc-biblioentry"&gt;
-            &lt;p&gt;
+&lt;section id="bibreflist" role="doc-bibliography">
+    &lt;h1>References&lt;/h1>
+    &lt;ol>
+        &lt;li id="Per2014" role="doc-biblioentry">
+            &lt;p>
                 Peroni, S. (2014). Research Articles in Simplified HTML 
                 (RASH). 
-                &lt;a href="http://cs.unibo.it/save-sd/rush.rng"&gt;
-                    http://cs.unibo.it/save-sd/rush/rush.rng&lt;/a&gt;
-            &lt;/p&gt;
-        &lt;/li&gt;
-        &lt;li id="ParagraphWikipedia" role="doc-biblioentry"&gt;
-            &lt;p&gt;
-                Wikipedia entry &lt;q&gt;Paragraph&lt;/q&gt;. 
-                &lt;a href="https://en.wikipedia.org/wiki/Paragraph"&gt;
-                    https://en.wikipedia.org/wiki/Paragraph&lt;/a&gt; 
+                &lt;a href="http://cs.unibo.it/save-sd/rush.rng">
+                    http://cs.unibo.it/save-sd/rush/rush.rng&lt;/a>
+            &lt;/p>
+        &lt;/li>
+        &lt;li id="ParagraphWikipedia" role="doc-biblioentry">
+            &lt;p>
+                Wikipedia entry &lt;q>Paragraph&lt;/q>. 
+                &lt;a href="https://en.wikipedia.org/wiki/Paragraph">
+                    https://en.wikipedia.org/wiki/Paragraph&lt;/a> 
                     (last visited, December 17, 2014).
-            &lt;/p&gt;
-        &lt;/li&gt;
-        &lt;li id="CDN2014" role="doc-biblioentry"&gt;
-            &lt;p&gt;
+            &lt;/p>
+        &lt;/li>
+        &lt;li id="CDN2014" role="doc-biblioentry">
+            &lt;p>
                 Ciancarini, P., Di Iorio, A., Nuzzolese, A. G., 
                 Peroni, S., Vitali, F. (2014). Evaluating citation 
                 functions in CiTO: cognitive issues. In Presutti, V., 
@@ -725,12 +725,12 @@ Under the following terms:
                 Semantic Web Conference (ESWC 2014), Lecture Notes 
                 in Computer Science 8465: 580-594. Berlin, Germany: 
                 Springer. &lt;a 
-                href="http://dx.doi.org/10.1007/978-3-319-07443-6_39"&gt;
-                    http://dx.doi.org/10.1007/978-3-319-07443-6_39&lt;/a&gt;
-            &lt;/p&gt;
-        &lt;/li&gt;
-    &lt;/ol&gt;
-&lt;/section&gt;</code></pre>
+                href="http://dx.doi.org/10.1007/978-3-319-07443-6_39">
+                    http://dx.doi.org/10.1007/978-3-319-07443-6_39&lt;/a>
+            &lt;/p>
+        &lt;/li>
+    &lt;/ol>
+&lt;/section></code></pre>
         </section>
         <section id="footnotes">
             <h1>Footnotes</h1>
@@ -743,15 +743,15 @@ Under the following terms:
             <p>For instance, the footnote section in
                 <a href="#fnlist"></a> is defined in RASH through the following code.</p>
             <pre><code>
-&lt;section id="fnlist" role="doc-footnotes"&gt;
-    &lt;section role="doc-footnote" id="fn1"&gt;
-        &lt;p&gt;This is the text of a footnote.&lt;/p&gt;
-    &lt;/section&gt;
-    &lt;section role="doc-footnote" id="fn2"&gt;
-        &lt;p&gt;This is the text of another footnote.&lt;/p&gt;
-    &lt;/section&gt;
+&lt;section id="fnlist" role="doc-footnotes">
+    &lt;section role="doc-footnote" id="fn1">
+        &lt;p>This is the text of a footnote.&lt;/p>
+    &lt;/section>
+    &lt;section role="doc-footnote" id="fn2">
+        &lt;p>This is the text of another footnote.&lt;/p>
+    &lt;/section>
     ...
-&lt;/section&gt;
+&lt;/section>
             </code></pre>
         </section>
         <section id="referencing">
@@ -770,40 +770,40 @@ Under the following terms:
                 <q>#</q>).</p>
             <p>For instance, the reference pointers introduced in the above paragraph are defined in RASH through the following code.</p>
             <pre><code>
-&lt;p&gt;
-    All the sections (e.g., &lt;a href="#sections"&gt;&lt;/a&gt;), 
-    figures (e.g., &lt;a href="#figure_1"&gt;&lt;/a&gt;), tables (e.g., 
-    &lt;a href="#table_1"&gt;&lt;/a&gt;), formulas (e.g., 
-    &lt;a href="#formula_1"&gt;&lt;/a&gt;), bibliographic references 
-    (e.g., &lt;a href="#Per2014"&gt;&lt;/a&gt;), footnotes 
-    (e.g., &lt;a href="#fn3"&gt;&lt;/a&gt;) and even multiple 
-    footnotes (e.g., &lt;a href="#fn5"&gt;&lt;/a&gt;
-    &lt;a href="#fn4"&gt;&lt;/a&gt;, that will be 
-    automatically separated through a &lt;q&gt;&lt;sup&gt;,&lt;/sup&gt;&lt;/q&gt;) 
-    can be referenced within the text by using the &lt;b&gt;empty&lt;/b&gt;
-    element &lt;code&gt;a&lt;code&gt;.
-&lt;/p&gt;</code></pre>
+&lt;p>
+    All the sections (e.g., &lt;a href="#sections">&lt;/a>), 
+    figures (e.g., &lt;a href="#figure_1">&lt;/a>), tables (e.g., 
+    &lt;a href="#table_1">&lt;/a>), formulas (e.g., 
+    &lt;a href="#formula_1">&lt;/a>), bibliographic references 
+    (e.g., &lt;a href="#Per2014">&lt;/a>), footnotes 
+    (e.g., &lt;a href="#fn3">&lt;/a>) and even multiple 
+    footnotes (e.g., &lt;a href="#fn5">&lt;/a>
+    &lt;a href="#fn4">&lt;/a>, that will be 
+    automatically separated through a &lt;q>&lt;sup>,&lt;/sup>&lt;/q>) 
+    can be referenced within the text by using the &lt;b>empty&lt;/b>
+    element &lt;code>a&lt;code>.
+&lt;/p></code></pre>
         </section>
         <section id="rdfa">
             <h1>Specifying RDF data</h1>
             <p>RASH has been developed in order to allow anyone to add <a property="cito:credits" href="http://www.w3.org/TR/rdfa-syntax/">RDFa</a> annotations to any element of the document. For instance, we have injected the following triples (in Turtle) within the above paragraph.</p>
             <pre><code>
-@prefix cito: &lt;http://purl.org/spar/cito/&gt; .
+@prefix cito: &lt;http://purl.org/spar/cito/> .
 
-&lt;&gt; cito:credits &lt;http://www.w3.org/TR/rdfa-syntax/&gt; .</code></pre>
+&lt;> cito:credits &lt;http://www.w3.org/TR/rdfa-syntax/> .</code></pre>
             <p>That was possible by adding RDFa annotations by using the appropriate attribute within the paragraph content, while the prefixes were defined in the element <code>html</code>, as shown in the following excerpt.</p>
             <pre><code>
-&lt;html prefix="cito: http://purl.org/spar/cito/"&gt;
+&lt;html prefix="cito: http://purl.org/spar/cito/">
     ...
-    &lt;p&gt;
+    &lt;p>
         RASH has been developed in order to allow anyone to add 
         &lt;a 
             property="cito:credits" 
-            href="http://www.w3.org/TR/rdfa-syntax/"&gt;RDFa&lt;/a&gt; 
+            href="http://www.w3.org/TR/rdfa-syntax/">RDFa&lt;/a> 
         annotations to any element of the document.
-    &lt;/p&gt;
+    &lt;/p>
     ...
-&lt;/html&gt;
+&lt;/html>
             </code></pre>
             <p>For a complete introduction of RDFa within HTML documents, please read the official documentation
                 <a href="#RDFa2013"></a>.</p>
@@ -824,21 +824,21 @@ Under the following terms:
             </ul>
             <p>An example of use of such element for Turtle and JSON-LD statements in introduced in the following excerpt.</p>
             <pre><code>
-&lt;script type="text/turtle"&gt;
-    @prefix pro: &lt;http://purl.org/spar/pro/&gt; .
-    @prefix foaf: &lt;http://xmlns.com/foaf/0.1/&gt; .
-    &lt;mailto:silvio.peroni@unibo.it&gt; a foaf:Person ;
+&lt;script type="text/turtle">
+    @prefix pro: &lt;http://purl.org/spar/pro/> .
+    @prefix foaf: &lt;http://xmlns.com/foaf/0.1/> .
+    &lt;mailto:silvio.peroni@unibo.it> a foaf:Person ;
         foaf:givenName "Silvio" ;
         foaf:familyName "Peroni" ;
-        foaf:homepage &lt;http://www.essepuntato.it&gt; ;
+        foaf:homepage &lt;http://www.essepuntato.it> ;
         pro:holdsRoleInTime [
             a pro:RoleInTime ;
             pro:withRole pro:author ;
-            pro:relatesToDocument &lt;&gt;
+            pro:relatesToDocument &lt;>
         ] .
-&lt;/script&gt;
+&lt;/script>
 
-&lt;script type="application/ld+json"&gt;
+&lt;script type="application/ld+json">
         {
             "@context":
                 {
@@ -847,7 +847,7 @@ Under the following terms:
             "@id": "mailto:silvio.peroni@unibo.it",
             "nick": ["S.", "essepuntato"]
         }
-&lt;/script&gt;
+&lt;/script>
             </code></pre>
             <p>For a complete introduction of Turtle
                 <a href="#Turtle2014"></a>, JSON-LD
@@ -861,18 +861,18 @@ Under the following terms:
             <p>The whole visualisation of this document (as any other RASH document) is rendered by the browser in the current form by means of appropriate <a href="http://www.w3.org/Style/CSS/specs.en.html">CSS3</a> stylesheets and javascript scripts developed for this purpose. We are actually some external libraries, i.e., <a href="http://getbootstrap.com/">Bootstrap</a> and <a href="http://jquery.com/">JQuery</a>, in order to guarantee this clear visualisation and for adding additional tools to the user – such as the footbar with statistics about the paper (i.e., number of words, figures, tables and formulas) and with a menu to change the actual layout of the page (the layouts currently available are: Web-based and Springer's <a href="http://www.springer.com/computer/lncs?SGWID=0-164-6-793341-0">Lecture Note in Computer Science</a>), the automatic reordering of footnotes and references, the visualisation of the metadata of the paper, etc.</p>
             <p>In order to permit a correct visualisation of RASH documents, it is needed to add few line of HTML code at the very beginning of the document, within the element <code>head</code>, as shown in the following excerpt.</p>
             <pre><code>
-&lt;!-- Visualisation requirements (mandatory for optimal reading) --&gt;
-&lt;meta charset="UTF-8" /&gt;
-&lt;meta name="viewport" content="width=device-width, initial-scale=1" /&gt;
-&lt;link href="bootstrap.min.css" rel="stylesheet" /&gt;
-&lt;link rel="stylesheet" href="rash.css" /&gt;
-&lt;script src="jquery.min.js"&gt; &lt;/script&gt;
-&lt;script src="bootstrap.min.js"&gt; &lt;/script&gt;
-&lt;script src="rash.js"&gt; &lt;/script&gt;
+&lt;!-- Visualisation requirements (mandatory for optimal reading) -->
+&lt;meta charset="UTF-8" />
+&lt;meta name="viewport" content="width=device-width, initial-scale=1" />
+&lt;link href="bootstrap.min.css" rel="stylesheet" />
+&lt;link rel="stylesheet" href="rash.css" />
+&lt;script src="jquery.min.js"> &lt;/script>
+&lt;script src="bootstrap.min.js"> &lt;/script>
+&lt;script src="rash.js"> &lt;/script>
 
-&lt;!-- MathJax for multi-browser support of LaTeX formulas and MathML --&gt;
-&lt;script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"&gt; &lt;/script&gt;
-&lt;!-- /END Visualisation requirements (mandatory for optimal reading) --&gt;</code></pre>
+&lt;!-- MathJax for multi-browser support of LaTeX formulas and MathML -->
+&lt;script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"> &lt;/script>
+&lt;!-- /END Visualisation requirements (mandatory for optimal reading) --></code></pre>
             <p>Note that the RASH file you are writing must be placed in the same location where the aforementioned scripts and stylesheets are. We have made available a <a href="../rash.zip">ZIP package</a> containing all these files with this documentation and a full example of a real research article
                 <a href="#CDN2014"></a> written in RASH format.</p>
             <p>In addition to these Javascript files, we also suggest the use of <a href="https://www.mathjax.org/">MathJax</a>, which is a Javascript display engine for mathematics that works in all browsers. It is used for rendering particular elements used in RASH, i.e., MathML formulas (by means of the element <code>math</code>) as well as LaTeX formulas (through the element <code>span</code> with the attribute <code>role</code> set to
@@ -880,7 +880,7 @@ Under the following terms:
                 <a href="#inlines"></a>. Please note that the use of MathJax as introduced in the excerpt above is guaranteed only if there is internet connection. However, for offline rendering, one should store the whole <a href="https://docs.mathjax.org/en/v2.5-latest/installation.html">MathJax package</a> locally and should refer to it by means of a relative path, as shown in the following excerpt.</p>
             <pre><code>
 &lt;script 
-    src="[local-dir]/MathJax.js?config=TeX-AMS-MML_HTMLorMML"&gt; &lt;/script&gt;
+    src="[local-dir]/MathJax.js?config=TeX-AMS-MML_HTMLorMML"> &lt;/script>
             </code></pre>
         </section>
         <!-- Acknowledgements -->

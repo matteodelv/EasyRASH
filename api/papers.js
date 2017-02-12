@@ -62,16 +62,14 @@ router.get('/:id/role', function(req, res) {
 					if (paper.reviewers.indexOf(req.jwtPayload.id) !== -1) {
 						result.role = "Reviewer";
 						if (paper.reviewedBy.indexOf(req.jwtPayload.id) !== -1) result.alreadyReviewed = true;
-					}
-					else if (paper.authors.indexOf(req.jwtPayload.id) !== -1) result.role = "Author";
+					} else if (paper.authors.indexOf(req.jwtPayload.id) !== -1) result.role = "Author";
 					else result.role = "Reader";
 				}
-			}
-			else result.role = "Reader";
+			} else result.role = "Reader";
 
 			console.log(`User ${req.jwtPayload.id}'s role for paper ${paper.url} is ${result.role}`);
 
-			res.json(result);	// Gestire situazione d'errore
+			res.json(result); // Gestire situazione d'errore
 		});
 	} else res.json(404).send('404 Data not found');
 });
@@ -158,7 +156,7 @@ router.get('/:id', function(req, res) {
 				//Determine whether the user can see the annotations
 				var canSeeAnnotations = events.some(event =>
 					event.submissions.some(submission => {
-						if (submission.url === req.params.id){ //Found submission
+						if (submission.url === req.params.id) { //Found submission
 							var paperIsAccepted = submission.status === 'accepted';
 							var userIsChairOfThisEvent = (event.chairs.some(chair => chair === req.jwtPayload.id));
 							var isAlreadyReviewedByUser = submission.reviewedBy.some(reviewer => reviewer == req.jwtPayload.id);
@@ -169,12 +167,7 @@ router.get('/:id', function(req, res) {
 
 							var csa = paperIsAccepted || userIsChairOfThisEvent || isAlreadyReviewedByUser || (paperIsNotPending && (userIsAuthorOfPaper || userIsPcMemberofThisEvent));
 
-							console.log(`Requested paper ${submission.url} ${paperIsAccepted ? "is" : "is not"} in accepted status and ${paperIsNotPending ? "is not" : "is"} pending.\n`
-								+`User ${req.jwtPayload.id} ${userIsChairOfThisEvent ? "is" : "is not"} chair of event ${event.acronym}, `
-							 	+`${userIsAuthorOfPaper ? "is" : "is not"} author of this paper, `
-							 	+`${userIsPcMemberofThisEvent ? "is" : "is not"} pc member of this event, `
-							 	+`${isAlreadyReviewedByUser ? "has" : "has not"} reviewed this paper.\n`
-							 	+`Therefore ${req.jwtPayload.sex === "female" ? "she" : (req.jwtPayload.sex === "male" ? "he" : "they")} ${csa ? "can" : "cannot"} view the underlying annotations.`);
+							console.log(`Requested paper ${submission.url} ${paperIsAccepted ? "is" : "is not"} in accepted status and ${paperIsNotPending ? "is not" : "is"} pending.\n` + `User ${req.jwtPayload.id} ${userIsChairOfThisEvent ? "is" : "is not"} chair of event ${event.acronym}, ` + `${userIsAuthorOfPaper ? "is" : "is not"} author of this paper, ` + `${userIsPcMemberofThisEvent ? "is" : "is not"} pc member of this event, ` + `${isAlreadyReviewedByUser ? "has" : "has not"} reviewed this paper.\n` + `Therefore ${req.jwtPayload.sex === "female" ? "she" : (req.jwtPayload.sex === "male" ? "he" : "they")} ${csa ? "can" : "cannot"} view the underlying annotations.`);
 
 							return csa;
 						}
@@ -206,7 +199,6 @@ router.get('/:id', function(req, res) {
 });
 
 router.post('/:id/review', function(req, res) {
-	//TODO: Check if user can actually review that paper
 	var eventsFilePath = path.resolve('storage/events.json');
 	if (fs.existsSync(eventsFilePath)) {
 		fs.readFile(eventsFilePath, (err, data) => {
@@ -300,7 +292,7 @@ router.post('/:id/review', function(req, res) {
 							var eval = {};
 							eval["@id"] = reviewId + "-eval";
 							eval["@type"] = "score";
-							eval["status"] = "pso:under-review"
+							eval["status"] = req.body.decision === "accepted" ? "pso:accepted-for-publication" : "pso:rejected-for-publication"
 							eval["author"] = req.jwtPayload.id;
 							eval["date"] = new Date().toISOString();
 							article["eval"] = eval;
@@ -359,5 +351,23 @@ router.post('/:id/review', function(req, res) {
 		});
 	} else res.status(404).send('404 sorry not found');
 });
+
+function normalizePapers() {
+	return null;
+	console.log("Normalizing all papers");
+	fs.readdir("storage/papers", (err, files) => {
+		files.forEach(file => {
+			var filePath = "storage/papers/" + file;
+			if (!fs.statSync(filePath).isDirectory()) {
+				console.log("Normalizing" + "storage/papers/" + file);
+				fs.readFile(filePath, function(err, html) {
+					if (err) throw err;
+					var doc = new dom().parseFromString(html.toString());
+					fs.writeFileSync(filePath, serializer.serializeToString(doc));
+				});
+			}
+		});
+	});
+}
 
 module.exports = router;

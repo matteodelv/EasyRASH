@@ -44,6 +44,7 @@ $(document).ready(function() {
 			}, {
 				type: "danger",
 				delay: 3000,
+				z_index: 1051,
 				mouse_over: "pause"
 			});
 		}
@@ -58,6 +59,7 @@ $(document).ready(function() {
 					}, {
 						type: "danger",
 						delay: 3000,
+						z_index: 1051,
 						mouse_over: "pause"
 					});
 				}
@@ -69,6 +71,7 @@ $(document).ready(function() {
 					}, {
 						type: "danger",
 						delay: 3000,
+						z_index: 1051,
 						mouse_over: "pause"
 					});
 				}
@@ -465,10 +468,12 @@ function openReviewAnnotationsModal(){
 }
 
 function sendReview(){
+	var decision = $("input[name=decisionradio]:checked").val();
 	var paperId = document.location.pathname.split('/papers/')[1].replace(/\/?$/, '/');
 	
 	var review = {
-		annotations: JSON.parse(localStorage.getItem(paperId + 'draftAnnotations'))
+		annotations: JSON.parse(localStorage.getItem(paperId + 'draftAnnotations')),
+		decision: decision
 	}
 	console.log(review);
 	$.ajax({
@@ -482,9 +487,12 @@ function sendReview(){
 			}, {
 				type: 'success',
 				delay: 3000,
+				z_index: 1051,
 				mouse_over: "pause"
 			});
 			localStorage.removeItem(paperId + 'draftAnnotations');
+			$('#reviewAnnotationsModal').modal('hide');
+			loadCurrentPaperContent();
 		},
 		error: function(result) {
 			$('.send-review-btn').animateCss('shake');
@@ -494,6 +502,7 @@ function sendReview(){
 			}, {
 				type: "danger",
 				delay: 3000,
+				z_index: 1051,
 				mouse_over: "pause"
 			});
 		}
