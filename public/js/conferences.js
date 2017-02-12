@@ -151,7 +151,7 @@ function buildConfAdminPanel(confData) {
 
 	var ccSelect = $('<select></select>');
 	ccSelect.addClass('form-control');
-	ccSelect.attr('multiple', 'multiple');
+	ccSelect.prop('multiple', true);
 	ccSelect.attr('id', 'confCochairs');
 	ccSelect.attr('name', 'cochairs');
 	var rSelect = ccSelect.clone();
@@ -262,9 +262,9 @@ function buildConfAdminPanel(confData) {
 			var input = $('<input class="form-control">');
 			$(input).attr('type', types[$i]);
 			$(input).attr('id', ids[$i]);
-			$(input).attr('value', $i == 0 ? confData.conference : confData.acronym);
+			$(input).prop('value', $i == 0 ? confData.conference : confData.acronym);
 			$(input).attr('name', names[$i]);
-			if (confData.status === "closed") $(input).attr('disabled', 'disabled');
+			if (confData.status === "closed") $(input).prop('disabled', true);
 
 			$(div).append(input);
 		}
@@ -288,7 +288,7 @@ function buildConfAdminPanel(confData) {
 		$(button).append(texts[$i]);
 		$(button).addClass($i == 4 ? 'btn btn-primary' : 'btn btn-default');
 		if ($i == 5) $(button).addClass('pull-right');
-		if ($i == 4 && confData.status === "closed") $(button).attr('disabled', 'disabled');
+		if ($i == 4 && confData.status === "closed") $(button).prop('disabled', true);
 
 		$(group).append(button);
 	}
@@ -316,7 +316,7 @@ function buildConfAdminPanel(confData) {
 			url: encodeURI('/api/events/close/' + confData.acronym),
 			method: 'PUT',
 			success: function(result) {
-				$(this).attr('disabled', 'disabled');
+				$(this).prop('disabled', true);
 				$.notify({
 					message: result.message,
 					icon: "fa fa-check"
@@ -327,7 +327,7 @@ function buildConfAdminPanel(confData) {
 				});
 
 				$('#conf-admin-panel form *').filter(':input').each(function() {
-					if (!$(this).hasClass('btn-default')) $(this).attr('disabled', 'disabled');
+					if (!$(this).hasClass('btn-default')) $(this).prop('disabled', true);
 				});
 			},
 			error: function(error) {

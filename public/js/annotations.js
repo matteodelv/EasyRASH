@@ -739,11 +739,11 @@ function getInlineAnnotationEditor(id, content) {
 	$(document).on('modechanged', function(e){
 		if (activeMode === 'reviewer') {
 			//Reviewer mode
-			$textarea.attr("disabled", false);
+			$textarea.prop("disabled", false);
 			$btngroup.removeClass('hidden');
 		} else if (activeMode === 'reader') {
 			//Annotator mode
-			$textarea.attr("disabled", true);
+			$textarea.prop("disabled", true);
 			$btngroup.addClass('hidden');
 		}
 	});

@@ -557,10 +557,10 @@ function buildUserPanel(userInfo) {
 
 			for ($j = 0; $j < 2; $j++) {
 				var option = $('<option></option>');
-				$(option).attr('value', optionValues[$j]);
+				$(option).prop('value', optionValues[$j]);
 				$(option).text(optionLabels[$j]);
 				$(select).append(option);
-				if (optionValues[$j] === userInfo.sex) $(option).attr('selected', 'selected');
+				if (optionValues[$j] === userInfo.sex) $(option).prop('selected', true);
 			}
 			$(formGroup).append(select);
 		}
@@ -569,7 +569,7 @@ function buildUserPanel(userInfo) {
 			$(input).attr('type', types[$i]);
 			$(input).attr('id', ids[$i]);
 			$(input).attr('name', names[$i]);
-			if ($i === 2) $(input).attr('disabled', 'disabled');
+			if ($i === 2) $(input).prop('disabled', true);
 			
 			var value;
 			if ($i === 0) value = userInfo.given_name;
@@ -577,7 +577,7 @@ function buildUserPanel(userInfo) {
 			else if ($i === 2) value = userInfo.email;
 			else value = '';
 			
-			$(input).attr('value', value);
+			$(input).prop('value', value);
 			$(formGroup).append(input);
 		}
 		$(row).append(formGroup);
