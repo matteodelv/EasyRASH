@@ -12,7 +12,7 @@ var utils = require('./utils.js');
 const lock = require('proper-lockfile');
 
 const CONTEXT = "http://vitali.web.cs.unibo.it/twiki/pub/TechWeb16/context.json";
-const LOCK_EXPIRE_TIME_MS = 60000;//3600000;
+const LOCK_EXPIRE_TIME_MS = 3600000;//3600000;
 
 //Responds with all the paper associated with a particular user
 router.get('/', function(req, res) {

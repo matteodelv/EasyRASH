@@ -95,6 +95,9 @@ a.btn-md:active i {
 	text-decoration:none;
 }
 
+.banner>div{
+	float:none;
+}
 
 /* Affixes */
 
@@ -114,7 +117,6 @@ a.btn-md:active i {
 
 .topnav.affix {
 	top: 0;
-	width: 100%;
 }
 
 .topnav.affix + .container-fluid {

@@ -71,6 +71,7 @@ $(document).ready(function() {
 	});
 
 	//Fixes affix width changing when on top
+	
 	$('[data-clampedwidth]').each(function() {
 		var elem = $(this);
 		var parentPanel = elem.data('clampedwidth');
