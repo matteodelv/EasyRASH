@@ -1,7 +1,7 @@
 var router = require('express').Router();
 var path = require('path');
 var fs = require('fs');
-var utils = require('../utils.js');
+var utils = require('./utils.js');
 
 router.get('/list', function(req, res) {
 	var usersPath = path.resolve('storage/users.json');

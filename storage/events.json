@@ -66,9 +66,9 @@
 					"arabella.strange",
 					"john.constantine"
 				],
-				"reviewedBy": [
-					"john.constantine"
-				]
+				"reviewedBy": [],
+				"lockedBy": "",
+				"lockedAt": null
 			},
 			{
 				"title": "RASH: Research Articles in Simplified HTML -- Documentation - Version 0.5, February 15, 2016",

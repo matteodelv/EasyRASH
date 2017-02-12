@@ -11,20 +11,20 @@ var inlineAnnotationElements = ['span', 'em', 'code', 'a', 'time', 'cite', 'h1',
 // release lock on current paper, if opened 
 window.onbeforeunload = function(event) {
 	if (activeMode === 'reviewer' && $('#paper-container').children().length !== 0) {
-		var status = { exiting: true };
 		var paperID = document.location.pathname.split('papers/').pop().replace('/','');
-
-		$.ajax({
-			method: 'PUT',
-			data: status,
-			url: encodeURI('/api/papers/' + paperID + '/locking'),
-			success: function(result) {
-				updateModeCheckbox(result.lockAcquired);
-			},
-			error: function(error) {
-				updateModeCheckbox(false);	
-			}
-		});
+		var draftAnnotations = JSON.parse(localStorage.getItem(paperID + 'draftAnnotations'));
+		if (!draftAnnotations){ //Release lock if there are no unsaved annotations
+			$.ajax({
+				method: 'DELETE',
+				url: encodeURI('/api/papers/' + paperID + '/lock'),
+				success: function(result) {
+					updateModeCheckbox(result.lockAcquired);
+				},
+				error: function(error) {
+					updateModeCheckbox(false);	
+				}
+			});
+		}
 	}
 
 	return undefined;	// Must be undefined for avoiding the default pop up to show
@@ -76,30 +76,45 @@ $(document).ready(function() {
 					});
 				}
 				else {	// L'utente è un reviewer per il paper ma prima bisogna controllare il lock sull'articolo
-					var status = {};
-					status.exiting = !$(this).is(':checked') ? true : false;
+					var isEnteringAnnotator = $(this).is(':checked') ? true : false;
 					var paperID = document.location.pathname.split('papers/').pop().replace('/','');
+					if (isEnteringAnnotator){
+						$.ajax({
+							method: 'PUT',
+							url: encodeURI('/api/papers/' + paperID + '/lock'),
+							success: function(result) {
+								updateModeCheckbox(result.lockAcquired);
+							},
+							error: function(error) {
+								$.notify({
+									message: JSON.parse(error.responseText).message,
+									icon: "fa fa-exclamation-triangle"
+								}, {
+									type: "danger",
+									delay: 3000,
+									z_index: 1051,
+									mouse_over: "pause"
+								});
 
-					$.ajax({
-						method: 'PUT',
-						data: status,
-						url: encodeURI('/api/papers/' + paperID + '/locking'),
-						success: function(result) {
-							updateModeCheckbox(result.lockAcquired);
-						},
-						error: function(error) {
-							$.notify({
-								message: JSON.parse(error.responseText).message,
-								icon: "fa fa-exclamation-triangle"
-							}, {
-								type: "danger",
-								delay: 3000,
-								mouse_over: "pause"
+								updateModeCheckbox(false);	
+							}
+						});
+					} else {
+						var paperID = document.location.pathname.split('papers/').pop().replace('/','');
+						var draftAnnotations = JSON.parse(localStorage.getItem(paperID + 'draftAnnotations'));
+						if (!draftAnnotations){ //Release lock if there are no unsaved annotations
+							$.ajax({
+								method: 'DELETE',
+								url: encodeURI('/api/papers/' + paperID + '/lock'),
+								success: function(result) {
+									updateModeCheckbox(result.lockAcquired);
+								},
+								error: function(error) {
+									updateModeCheckbox(false);	
+								}
 							});
-
-							updateModeCheckbox(false);	
 						}
-					});
+					}
 				}
 			}
 		}

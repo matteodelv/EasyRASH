@@ -7,11 +7,12 @@ var xmlser = require('xmlserializer');
 var xmldom = require('xmldom');
 var dom = xmldom.DOMParser;
 var serializer = new xmldom.XMLSerializer();
-var util = require('util');
+var utils = require('./utils.js');
 
 const lock = require('proper-lockfile');
 
 const CONTEXT = "http://vitali.web.cs.unibo.it/twiki/pub/TechWeb16/context.json";
+const LOCK_EXPIRE_TIME_MS = 60000;//3600000;
 
 //Responds with all the paper associated with a particular user
 router.get('/', function(req, res) {
@@ -74,41 +75,110 @@ router.get('/:id/role', function(req, res) {
 	} else res.json(404).send('404 Data not found');
 });
 
-router.put('/:id/locking', function(req, res) {
-	var paperPath = decodeURI('storage/papers/' + req.params.id + '.html');
-	var exitingAnnotatorMode;
-	if (req.body['exiting']) exitingAnnotatorMode = JSON.parse(req.body['exiting']);
-	else res.status(400).json({ message: 'Errore nella richiesta del lock!' });
+router.put('/:id/lock', function(req, res) {
+	//var paperPath = decodeURI('storage/papers/' + req.params.id + '.html');
 
-	lock.check(paperPath, (err, isLocked) => {
+	checkPaperLock(req.params.id, req.jwtPayload.id, (err, isLocked) => {
 		if (err) throw err;
 
 		if (isLocked) {
 			console.log('Il paper ' + req.params.id + ' è BLOCCATO');
-
-			if (!exitingAnnotatorMode)
-				res.status(400).json({ message: 'Another reviewer is currently reviewing this paper. Please, try again later! ' });
-			else {
-				console.log("Esco da Annotator Mode e rilascio il lock");
-
-				lock.unlock(paperPath);
-				res.json({ lockAcquired: false });
-			}
+			res.status(400).json({ lockAcquired: false, message: 'Another reviewer is currently reviewing this paper. Please, try again later! ' });
 		}
 		else {
 			console.log('Il paper ' + req.params.id + ' NON è bloccato');
-
-			if (!exitingAnnotatorMode) {
-				lock.lock(paperPath, (err, release) => {
-					if (err) res.status(400).json({ message: 'Unable to acquire lock on the paper for reviewing it. Please, try again later! ' });
-
+			lockPaper(req.params.id, req.jwtPayload.id, (err) => {
+				if (err) {
+					res.status(400).json({lockAcquired: false,  message: 'Unable to acquire lock on the paper for reviewing it. Please, try again later! ' });
+				} else {
 					console.log("Il lock sul paper è stato acquisito!");
 					res.json({ lockAcquired: true });
-				});
-			}
+				}
+			});
 		}
 	});
 });
+
+router.delete('/:id/lock', function(req, res) {
+	releasePaperLock(req.params.id, req.jwtPayload.id, (err) => {
+		res.status(200).send();
+	});
+});
+
+function checkPaperLock(paperId, userId, callback){
+	var isLocked = false;
+	var err = {};
+	eventsFilePath = 'storage/events.json';
+	utils.loadDataFile(eventsFilePath, (error, events) => {
+		err = error;
+		var submission;
+		events.forEach(event => {
+			if (!submission) {
+				submission = event.submissions.find(s => paperId === s.url);
+			};
+		});
+		if (submission){
+			var lockedBySomeoneElse = submission.lockedBy && submission.lockedBy !== userId;
+			var isLockExpired = (new Date).getTime() - submission.lockedAt > LOCK_EXPIRE_TIME_MS;
+			console.log('Locked by someone else: ' + lockedBySomeoneElse + ', lock expired: ' + isLockExpired);
+			if (lockedBySomeoneElse && !isLockExpired){
+				isLocked = true;
+			}
+		} else err = { message: 'Unable to find paper info!' };
+	});
+
+	return callback(err, isLocked);
+}
+
+function lockPaper(paperId, userId, callback){
+	var err = {};
+	eventsFilePath = 'storage/events.json';
+	utils.loadDataFile(eventsFilePath, (error, events) => {
+		err = error;
+		var submission;
+		events.forEach(event => {
+			if (!submission) {
+				submission = event.submissions.find(s => paperId === s.url);
+			};
+		});
+		if (submission){
+			var lockedBySomeoneElse = submission.lockedBy && submission.lockedBy !== userId;
+			var isLockExpired = (new Date).getTime() - submission.lockedAt > LOCK_EXPIRE_TIME_MS;
+			console.log('Locked by someone else: ' + lockedBySomeoneElse + ', lock expired: ' + isLockExpired);
+			if (lockedBySomeoneElse && !isLockExpired){
+				err = { message: 'Cannot lock paper. Paper is already locked by .' + submission.lockedBy}
+				isLocked = true;
+			} else {
+				submission.lockedBy = userId;
+				submission.lockedAt = (new Date).getTime();
+			}
+			fs.writeFileSync(eventsFilePath, JSON.stringify(events, null, "\t"));
+		} else err = { message: 'Unable to find paper info!' };
+	});
+
+	return callback(err);
+}
+
+function releasePaperLock(paperId, userId, callback){
+	var err = {};
+	eventsFilePath = 'storage/events.json';
+	utils.loadDataFile(eventsFilePath, (error, events) => {
+		err = error;
+		var submission;
+		events.forEach(event => {
+			if (!submission) {
+				submission = event.submissions.find(s => paperId === s.url);
+			};
+		});
+		if (submission){
+			submission.lockedBy = '';
+			submission.lockedAt = null;
+			fs.writeFileSync(eventsFilePath, JSON.stringify(events, null, "\t"));
+		} else err = { message: 'Unable to find paper info!' };
+	});
+
+	return callback(err);
+}
 
 router.get("/user", function(req, res) {
 	var eventsPath = path.resolve("storage/events.json");
