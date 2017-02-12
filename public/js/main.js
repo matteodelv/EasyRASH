@@ -28,7 +28,7 @@ function onHashChange(e){ //Scroll with offset to prevent sidebar from covering 
 	e.preventDefault();
 	var scrollTarget = window.location.hash && $(window.location.hash).offset() ? $(window.location.hash).offset().top : $('#top').offset().top;
 	setTimeout(function() {
-        window.scrollTo(0, scrollTarget - 50); // run it a bit later also for browser compatibility
+        window.scrollTo(0, scrollTarget - $('.topnav').height()); // run it a bit later also for browser compatibility
     }, 1);
 }
 
@@ -71,7 +71,7 @@ $(document).ready(function() {
 	});
 
 	//Fixes affix width changing when on top
-	
+
 	$('[data-clampedwidth]').each(function() {
 		var elem = $(this);
 		var parentPanel = elem.data('clampedwidth');
@@ -116,7 +116,7 @@ var $addedHeadTags; //Contains head tags belonging to a single paper, to be remo
 var reviews; //Contains RASH review
 //Loads the content of the current paper in the appropriate div
 function loadCurrentPaperContent() {
-
+	//TODO: Set to reader mode
 	if (document.location.pathname === "/") {
 		$addedHeadTags && $addedHeadTags.remove();
 		$('.paper-container').empty();
@@ -222,7 +222,7 @@ function loadCurrentPaperContent() {
 						event.preventDefault();
 						//remove topnav distance
 						$root.animate({
-							scrollTop: $(href).offset().top - 50
+							scrollTop: $(href).offset().top - $('.topnav').height()
 						}, 400, function() {
 							history.pushState({}, '', href);
 						});
@@ -232,7 +232,7 @@ function loadCurrentPaperContent() {
 				var scrollTarget = window.location.hash && $(window.location.hash).offset() ? $(window.location.hash).offset().top : $('#top').offset().top;
 				if (scrollTarget !== $(window).scrollTop()) {
 					$root.animate({
-						scrollTop: scrollTarget - 50
+						scrollTop: scrollTarget - $('.topnav').height()
 					}, 400);
 				}
 				$('[data-spy="scroll"]').each(function() {

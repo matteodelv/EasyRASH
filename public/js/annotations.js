@@ -282,7 +282,9 @@ $(window).load(function() {
 	});
 
 	var repositionAddAnnotationButton = function() {
-		var parent = currentSelection.anchorNode.parentNode;
+		var anchor = currentSelection.anchorNode;
+		if (!anchor) return;
+		var parent = anchor.parentNode;
 		var relative = getRelativePosition(parent.getBoundingClientRect(), currentSelection.nativeSelection.getRangeAt(0).getBoundingClientRect());
 		$addAnnotationPopup.css({
 			'top': (relative.top - $addAnnotationPopup.height()) + 'px',
@@ -476,7 +478,7 @@ function openReviewAnnotationsModal(){
 			var hash = annRow.data('target');
 			var scrollTarget = hash && $(hash).offset() ? $(hash).offset().top : $('#top').offset().top;
 			$('#reviewAnnotationsModal').modal('hide');
-		    window.scrollTo(0, scrollTarget - 50);
+		    window.scrollTo(0, scrollTarget - $('.topnav').height());
 		});
 		$('#annotationsTable>tbody').append(annRow);
 	});
