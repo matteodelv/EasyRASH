@@ -494,11 +494,19 @@ function showPaperDecisionModal() {
 				}
 
 				// Getting reviews judgements
-				var scripts = $('script[type="application/ld+json"]').val();
+				var scripts = $('script[type="application/ld+json"]');
 				console.log(scripts);
 			},
 			error: function(error) {
-				console.log(error);
+				$.notify({
+					message: JSON.parse(error.responseText).message,
+					icon: "fa fa-exclamation-triangle"
+				}, {
+					type: 'danger',
+					delay: 3000,
+					mouse_over: "pause",
+					z_index: 1051
+				});
 			}
 		});
 
@@ -507,7 +515,12 @@ function showPaperDecisionModal() {
 }
 
 function sendPaperDecision() {
-
+	var selected = $('#adminPaperDecision input[name="decisionradio"]').val();
+	var paperID = document.location.pathname.split('papers/').pop().replace('/','');
+	var data = {
+		decision: selected
+	};
+	console.log(selected);
 }
 
 function checkCurrentRole() {
