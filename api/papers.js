@@ -9,6 +9,8 @@ var dom = xmldom.DOMParser;
 var serializer = new xmldom.XMLSerializer();
 var util = require('util');
 
+const lock = require('proper-lockfile');
+
 const CONTEXT = "http://vitali.web.cs.unibo.it/twiki/pub/TechWeb16/context.json";
 
 //Responds with all the paper associated with a particular user
@@ -72,6 +74,42 @@ router.get('/:id/role', function(req, res) {
 			res.json(result);	// Gestire situazione d'errore
 		});
 	} else res.json(404).send('404 Data not found');
+});
+
+router.put('/:id/locking', function(req, res) {
+	var paperPath = decodeURI('storage/papers/' + req.params.id + '.html');
+	var exitingAnnotatorMode;
+	if (req.body['exiting']) exitingAnnotatorMode = JSON.parse(req.body['exiting']);
+	else res.status(400).json({ message: 'Errore nella richiesta del lock!' });
+
+	lock.check(paperPath, (err, isLocked) => {
+		if (err) throw err;
+
+		if (isLocked) {
+			console.log('Il paper ' + req.params.id + ' è BLOCCATO');
+
+			if (!exitingAnnotatorMode)
+				res.status(400).json({ message: 'Another reviewer is currently reviewing this paper. Please, try again later! ' });
+			else {
+				console.log("Esco da Annotator Mode e rilascio il lock");
+
+				lock.unlock(paperPath);
+				res.json({ lockAcquired: false });
+			}
+		}
+		else {
+			console.log('Il paper ' + req.params.id + ' NON è bloccato');
+
+			if (!exitingAnnotatorMode) {
+				lock.lock(paperPath, (err, release) => {
+					if (err) res.status(400).json({ message: 'Unable to acquire lock on the paper for reviewing it. Please, try again later! ' });
+
+					console.log("Il lock sul paper è stato acquisito!");
+					res.json({ lockAcquired: true });
+				});
+			}
+		}
+	});
 });
 
 router.get("/user", function(req, res) {

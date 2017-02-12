@@ -7,6 +7,29 @@ var reviewerColor;
 var activeMode = 'reader';
 var blockAnnotationElements = ['p', 'div', 'section', 'figure', 'footer', 'header'];
 var inlineAnnotationElements = ['span', 'em', 'code', 'a', 'time', 'cite', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'];
+
+// release lock on current paper, if opened 
+window.onbeforeunload = function(event) {
+	if (activeMode === 'reviewer' && $('#paper-container').children().length !== 0) {
+		var status = { exiting: true };
+		var paperID = document.location.pathname.split('papers/').pop().replace('/','');
+
+		$.ajax({
+			method: 'PUT',
+			data: status,
+			url: encodeURI('/api/papers/' + paperID + '/locking'),
+			success: function(result) {
+				updateModeCheckbox(result.lockAcquired);
+			},
+			error: function(error) {
+				updateModeCheckbox(false);	
+			}
+		});
+	}
+
+	return undefined;	// Must be undefined for avoiding the default pop up to show
+};
+
 $(document).ready(function() {
 	var colorIndex = Math.floor(Math.random() * distinctColors.length);
 	reviewerColor = hexToRgbA(distinctColors[colorIndex], 0.4);
@@ -49,18 +72,47 @@ $(document).ready(function() {
 						mouse_over: "pause"
 					});
 				}
-				else {
-					if ($(this).is(':checked')) {
-						activeMode = 'reviewer';
-					} else {
-						activeMode = 'reader';
-					}
-					refreshMode();
+				else {	// L'utente è un reviewer per il paper ma prima bisogna controllare il lock sull'articolo
+					var status = {};
+					status.exiting = !$(this).is(':checked') ? true : false;
+					var paperID = document.location.pathname.split('papers/').pop().replace('/','');
+
+					$.ajax({
+						method: 'PUT',
+						data: status,
+						url: encodeURI('/api/papers/' + paperID + '/locking'),
+						success: function(result) {
+							updateModeCheckbox(result.lockAcquired);
+						},
+						error: function(error) {
+							$.notify({
+								message: JSON.parse(error.responseText).message,
+								icon: "fa fa-exclamation-triangle"
+							}, {
+								type: "danger",
+								delay: 3000,
+								mouse_over: "pause"
+							});
+
+							updateModeCheckbox(false);	
+						}
+					});
 				}
 			}
 		}
 	});
 });
+
+function updateModeCheckbox(checked) {
+	$('#mode-checkbox').prop('checked', checked);
+
+	if ($('#mode-checkbox').is(':checked')) {
+		activeMode = 'reviewer';
+	} else {
+		activeMode = 'reader';
+	}
+	refreshMode();
+}
 
 function refreshMode() {
 	if (activeMode === 'reviewer') {
