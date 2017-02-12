@@ -470,10 +470,51 @@ function assignReviewersToPaper() {
 	});
 }
 
+function showPaperDecisionModal() {
+	if ($('#paper-container').children().length === 0) {
+		$.notify({
+			message: "You have to select a paper before accept or reject it!",
+			icon: "fa fa-exclamation-triangle"
+		}, {
+			type: "danger",
+			delay: 3000,
+			mouse_over: "pause"
+		});
+	} else {
+		var paperID = document.location.pathname.split('papers/').pop().replace('/','');
+		
+		$.ajax({
+			method: 'GET',
+			url: encodeURI('/api/papers/' + sessionStorage.currentAcronym + '/' + paperID + '/reviewsInfo'),
+			success: function(result) {
+				console.log(result);
+				if (result.reviewersCount !== result.reviewersInfo.length) {
+					$('#adminPaperDecision .btn-primary').prop('disabled', true);
+					$('#adminPaperDecision .help-inline').text('Reviews for this paper have not been completed!');
+				}
+
+				// Getting reviews judgements
+				var scripts = $('script[type="application/ld+json"]').val();
+				console.log(scripts);
+			},
+			error: function(error) {
+				console.log(error);
+			}
+		});
+
+		$('#adminPaperDecision').modal('show');
+	}
+}
+
+function sendPaperDecision() {
+
+}
+
 function checkCurrentRole() {
 	if (sessionStorage.userRole && sessionStorage.userRole === 'Chair') {
 		$('.admin-conference-btn').removeClass('hidden').animateCss('fadeIn');
 		$('.admin-reviewers-btn').removeClass('hidden').animateCss('fadeIn');
+		$('.admin-paper-decision').removeClass('hidden').animateCss('fadeIn');
 
 		$('.admin-conference-btn').on("click", function() {
 			showConferenceAdminPanel(sessionStorage.currentAcronym);
@@ -481,11 +522,16 @@ function checkCurrentRole() {
 		$('.admin-reviewers-btn').on("click", function() {
 			showAssignReviewersModal();
 		});
+		$('.admin-paper-decision').on('click', function() {
+			showPaperDecisionModal();
+		});
 	}
 	else {
 		$('.admin-conference-btn').addClass('hidden');
 		$('.admin-conference-btn').off('click');
 		$('.admin-reviewers-btn').addClass('hidden');
 		$('.admin-reviewers-btn').off('click');
+		$('.admin-paper-decision').addClass('hidden');
+		$('.admin-paper-decision').off('click');
 	}
 }

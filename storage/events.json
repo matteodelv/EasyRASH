@@ -155,7 +155,9 @@
 					"arabella.strange",
 					"john.constantine"
 				],
-				"reviewedBy": []
+				"reviewedBy": [
+					"arthur.dent"
+				]
 			},
 			{
 				"title": "The RASH Framework: enabling HTML+RDF submissions in scholarly venues",

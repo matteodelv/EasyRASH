@@ -68,6 +68,11 @@
 					<i aria-hidden="true" class="fa fa-users"></i>
 				</a>
 			</li>
+         <li>
+            <a class="btn-md admin-paper-decision" data-toggle="tooltip" data-placement="bottom" title="Make Decision About a Paper">
+               <i aria-hidden="true" class="fa fa-gavel"></i>
+            </a>
+         </li>
 		</ul>
       <ul class="nav navbar-nav navbar-right">
          <li>
@@ -233,6 +238,48 @@
 				</div>
 			</div>
 		</div>
+      <!-- Review Annotations Modal -->
+      <div class="modal fade" id="adminPaperDecision" role="dialog" tabindex="-1">
+         <div class="modal-dialog">
+            <div class="modal-content">
+               <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                  <h4 class="modal-title">Paper Decision</h4>
+               </div>
+               <form id="reviewerJudgements" class="form ws-validate" action="javascript:sendPaperDecision()">
+                  <div class="modal-body">
+                     <div class="table-responsive">
+                        <table class="table table-hover" id="judgementsTable">
+                           <thead>
+                              <tr>
+                                 <th>Reviewer</th>
+                                 <th>Judgement</th>
+                              </tr>
+                           </thead>
+                           <tbody>
+                           </tbody>
+                        </table>
+                     </div>
+                     <div class="funkyradio">
+                        <div class="funkyradio-success">
+                           <input type="radio" name="decisionradio" id="acceptedradio" value="accepted" checked="checked" />
+                           <label for="acceptedradio">Paper Accepted</label>
+                        </div>
+                        <div class="funkyradio-danger">
+                           <input type="radio" name="decisionradio" id="rejectedradio" value="rejected" />
+                           <label for="rejectedradio">Paper Rejected</label>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="modal-footer">
+                     <span class="help-inline error-message"></span>
+                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                     <button type="submit" id="reviewSubmit" class="btn btn-primary" name="create">Submit Decision</button>
+                  </div>
+               </form>
+            </div>
+         </div>
+      </div>
 		<!-- SignIn SignUp Modal -->
 		<div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="loginpanel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
 			<div class="modal-dialog">

@@ -75,9 +75,39 @@ router.get('/:id/role', function(req, res) {
 	} else res.json(404).send('404 Data not found');
 });
 
-router.put('/:id/lock', function(req, res) {
-	//var paperPath = decodeURI('storage/papers/' + req.params.id + '.html');
+router.get('/:conf/:paper/reviewsInfo', function(req, res) {
+	console.log("JUDGEMENTS");
+	utils.loadDataFile('storage/events.json', (err, events) => {
+		if (err) res.status(err.status).json(err);
 
+		console.log("LOADDATAFILE");
+
+		var conf = events.find(e => e.acronym === decodeURI(req.params.conf));
+		if (conf) {
+			var paper = conf.submissions.find(p => p.url === decodeURI(req.params.paper));
+			if (paper) {
+				var revsInfo = [];
+
+				console.log("IF PAPER");
+
+				utils.loadDataFile('storage/users.json', (error, users) => {
+					users.forEach(u => {
+						if (paper.reviewedBy.indexOf(u.id) !== -1) {
+							delete u.pass;
+							delete u.sex;
+
+							revsInfo.push(u);
+						}
+					});
+
+					res.json({ reviewersCount: paper.reviewers.length, reviewersInfo: revsInfo });
+				});
+			}
+		}
+	});
+});
+
+router.put('/:id/lock', function(req, res) {
 	checkPaperLock(req.params.id, req.jwtPayload.id, (err, isLocked) => {
 		if (err) throw err;
 
