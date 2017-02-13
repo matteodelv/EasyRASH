@@ -9,13 +9,8 @@ function showErrorAlert(selector, message, timed) {
 
 	if (timed) {
 		window.setTimeout(function() {
-<<<<<<< Updated upstream
-			$(alertSelector).fadeTo(500, 0).slideUp(500, function() {
-				$(this).addClass('hidden'); 
-=======
 			$(alertSelector).fadeIn(PANEL_TRANSITION_TIME, function() {
-				$(this).remove(); 
->>>>>>> Stashed changes
+				$(this).addClass('hidden');
 			});
 		}, 3000);
 	}
@@ -70,14 +65,7 @@ function getConferences() {
 							});
 						},
 						error: function(err) {
-							$.notify({
-								message: JSON.parse(err.responseText).message,
-								icon: "fa fa-exclamation-triangle"
-							}, {
-								type: "danger",
-								delay: 3000,
-								mouse_over: "pause"
-							});
+							showNotify(JSON.parse(err.responseText).message, true);
 						}
 					});
 				});
@@ -92,14 +80,7 @@ function getConferences() {
 			conferencesUl.append($newConfButton);
 		},
 		error: function(err) {
-			$.notify({
-				message: JSON.parse(err.responseText).message,
-				icon: "fa fa-exclamation-triangle"
-			}, {
-				type: "danger",
-				delay: 3000,
-				mouse_over: "pause"
-			});
+			showNotify(JSON.parse(err.responseText).message, true);
 		}
 	});
 }
@@ -146,14 +127,7 @@ function showConferenceAdminPanel(acronym) {
 				});
 			},
 			error: function(err) {
-				$.notify({
-					message: JSON.parse(err.responseText).message,
-					icon: "fa fa-exclamation-triangle"
-				}, {
-					type: "danger",
-					delay: 3000,
-					mouse_over: "pause"
-				});
+				showNotify(JSON.parse(err.responseText).message, true);
 			}
 		});
 	}
@@ -336,28 +310,14 @@ function buildConfAdminPanel(confData) {
 			method: 'PUT',
 			success: function(result) {
 				$(this).prop('disabled', true);
-				$.notify({
-					message: result.message,
-					icon: "fa fa-check"
-				}, {
-					type: "success",
-					delay: 3000,
-					mouse_over: "pause"
-				});
+				showNotify(result.message, false);
 
 				$('#conf-admin-panel form *').filter(':input').each(function() {
 					if (!$(this).hasClass('btn-default')) $(this).prop('disabled', true);
 				});
 			},
 			error: function(error) {
-				$.notify({
-					message: JSON.parse(error.responseText).message,
-					icon: "fa fa-exclamation-triangle"
-				}, {
-					type: "danger",
-					delay: 3000,
-					mouse_over: "pause"
-				});
+				showNotify(JSON.parse(error.responseText).message, true);
 			}
 		});
 	});
@@ -413,14 +373,7 @@ function buildConfAdminPanel(confData) {
 
 function showAssignReviewersModal() {
 	if ($('#paper-container').children().length === 0) {
-		$.notify({
-			message: "You have to select a paper before assigning reviewers to it!",
-			icon: "fa fa-exclamation-triangle"
-		}, {
-			type: "danger",
-			delay: 3000,
-			mouse_over: "pause"
-		});
+		showNotify('You have to select a paper before assigning reviewers to it!', true);
 	} else {
 		$('#reviewersSelector').multiselect({
 			disableIfEmpty: true,
@@ -466,15 +419,7 @@ function assignReviewersToPaper() {
 		data: data,
 		success: function(result) {
 			$('#assignReviewersModal').modal('hide');
-			$.notify({
-				message: result.message,
-				icon: "fa fa-check"
-			}, {
-				type: 'success',
-				delay: 3000,
-				mouse_over: "pause",
-				z_index: 1051
-			});
+			showNotify(result.message, false);
 		},
 		error: function(error) {
 			$('#assignRevSubmit').animateCss('shake');
@@ -485,14 +430,7 @@ function assignReviewersToPaper() {
 
 function showPaperDecisionModal() {
 	if ($('#paper-container').children().length === 0) {
-		$.notify({
-			message: "You have to select a paper before accepting or rejecting it!",
-			icon: "fa fa-exclamation-triangle"
-		}, {
-			type: "danger",
-			delay: 3000,
-			mouse_over: "pause"
-		});
+		showNotify('You have to select a paper before accepting or rejecting it!', true);
 	} else {
 		var paperID = document.location.pathname.split('papers/').pop().replace('/','');
 		
@@ -518,15 +456,7 @@ function showPaperDecisionModal() {
 				});
 			},
 			error: function(error) {
-				$.notify({
-					message: JSON.parse(error.responseText).message,
-					icon: "fa fa-exclamation-triangle"
-				}, {
-					type: 'danger',
-					delay: 3000,
-					mouse_over: "pause",
-					z_index: 1051
-				});
+				showNotify(JSON.parse(error.responseText).message, true);
 			}
 		});
 
@@ -550,14 +480,7 @@ function sendPaperDecision() {
 		data: data,
 		success: function(result) {
 			$('#adminPaperDecision').modal('hide');
-			$.notify({
-				message: result.message,
-				icon: "fa fa-check"
-			}, {
-				type: "success",
-				delay: 3000,
-				mouse_over: "pause"
-			});
+			showNotify(result.message, false);
 		},
 		error: function(error) {
 			showErrorAlert('#adminPaperDecision .modal-body', JSON.parse(error.responseText).message, true);

@@ -38,15 +38,7 @@ $(document).ready(function() {
 	$('#mode-checkbox').on('click', function(event) {
 		if ($('#paper-container').children().length === 0) {
 			event.preventDefault();
-			$.notify({
-				message: "You are not allowed to change mode if no paper is selected",
-				icon: "fa fa-exclamation-triangle"
-			}, {
-				type: "danger",
-				delay: 3000,
-				z_index: 1051,
-				mouse_over: "pause"
-			});
+			showNotify('You are not allowed to change mode if no paper is selected', true);
 		}
 		else {
 			var userIsRev = JSON.parse(sessionStorage.revForPaper);
@@ -63,27 +55,11 @@ $(document).ready(function() {
 					if (sessionStorage.userRole === 'Chair')
 						message = 'You are not allowed to enter Annotator Mode since you are Chair of the selected conference!';
 					else message = 'You are not allowed to enter Annotator Mode because you haven\'t Reviewer rights on this paper!';
-					$.notify({
-						message: message,
-						icon: "fa fa-exclamation-triangle"
-					}, {
-						type: "danger",
-						delay: 3000,
-						z_index: 1051,
-						mouse_over: "pause"
-					});
+					showNotify(message, true);
 				}
 				else if (alreadyReviewed) {
 					event.preventDefault();
-					$.notify({
-						message: "You have already reviewed this paper!",
-						icon: "fa fa-exclamation-triangle"
-					}, {
-						type: "danger",
-						delay: 3000,
-						z_index: 1051,
-						mouse_over: "pause"
-					});
+					showNotify('You have already reviewed this paper!', true);
 				}
 				else {	// L'utente è un reviewer per il paper ma prima bisogna controllare il lock sull'articolo
 					var isEnteringAnnotator = $(this).is(':checked') ? true : false;
@@ -96,16 +72,7 @@ $(document).ready(function() {
 								updateModeCheckbox(result.lockAcquired);
 							},
 							error: function(error) {
-								$.notify({
-									message: JSON.parse(error.responseText).message,
-									icon: "fa fa-exclamation-triangle"
-								}, {
-									type: "danger",
-									delay: 3000,
-									z_index: 1051,
-									mouse_over: "pause"
-								});
-
+								showNotify(JSON.parse(error.responseText).message, true);
 								updateModeCheckbox(false);	
 							}
 						});
@@ -523,30 +490,14 @@ function sendReview(){
 		method: 'POST',
 		data: review,
 		success: function(result) {
-			$.notify({ 
-				message: 'Review sent successfully.',
-				icon: "fa fa-check"
-			}, {
-				type: 'success',
-				delay: 3000,
-				z_index: 1051,
-				mouse_over: "pause"
-			});
+			showNotify('Review sent successfully!', false);
 			localStorage.removeItem(paperId + 'draftAnnotations');
 			$('#reviewAnnotationsModal').modal('hide');
 			loadCurrentPaperContent();
 		},
-		error: function(result) {
+		error: function(error) {
 			$('.send-review-btn').animateCss('shake');
-			$.notify({
-				message: result.responseText,
-				icon: "fa fa-exclamation-triangle"
-			}, {
-				type: "danger",
-				delay: 3000,
-				z_index: 1051,
-				mouse_over: "pause"
-			});
+			showNotify(JSON.parse(error.responseText).message, true);		// Controllare formato errore ritornato
 		}
 	});
 }

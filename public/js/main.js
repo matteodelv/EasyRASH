@@ -160,12 +160,7 @@ function loadCurrentPaperContent() {
 				try {
 					var xmlParsed = $.parseXML(result);
 				} catch (err) {
-					$.notify({
-						message: 'Error while parsing XML.'
-					}, {
-						type: 'danger',
-						delay: 2000
-					});
+					showNotify('Error while parsing XML. Please, try again!', true);
 					return;
 				}
 
@@ -183,14 +178,7 @@ function loadCurrentPaperContent() {
 						sessionStorage.alreadyReviewed = false;
 						checkCurrentRole();
 
-						$.notify({
-							message: JSON.parse(err.responseText).message,
-							icon: "fa fa-exclamation-triangle"
-						}, {
-							type: "danger",
-							delay: 3000,
-							mouse_over: "pause"
-						});
+						showNotify(JSON.parse(error.responseText).message, true);
 					}
 				});
 
@@ -273,14 +261,7 @@ function getUserPapers() {
 			});
 		},
 		error: function(err) {
-			$.notify({
-				message: JSON.parse(err.responseText).message,
-				icon: "fa fa-exclamation-triangle"
-			}, {
-				type: "danger",
-				delay: 3000,
-				mouse_over: "pause"
-			});
+			showNotify(JSON.parse(err.responseText).message, true);
 		}
 	});
 }
@@ -423,30 +404,14 @@ function logIn() {
 		success: function(result) {
 			localStorage.accessToken = result.accessToken;
 			$('#login-modal').modal('hide');
-			$.notify({ //http://bootstrap-notify.remabledesigns.com/
-				message: 'Welcome ' + result.id,
-				icon: "fa fa-check"
-			}, {
-				type: 'success',
-				delay: 3000,
-				mouse_over: "pause",
-				z_index: 1051
-			});
+			showNotify('Welcome ' + result.fullname, false);
 			sessionStorage.userID = result.id;
 			userReady(result.fullname, true);
 		},
-		error: function(result) {
-			$('#loginbutton').animateCss('shake').prev('.help-inline').animateCss('bounceIn').text(JSON.parse(result.responseText).message);
+		error: function(error) {
+			$('#loginbutton').animateCss('shake').prev('.help-inline').animateCss('bounceIn').text(JSON.parse(error.responseText).message);
 			$('#submitButtonLogin').animateCss('shake');
-			$.notify({
-				message: JSON.parse(result.responseText).message,
-				icon: "fa fa-exclamation-triangle"
-			}, {
-				type: "danger",
-				delay: 3000,
-				mouse_over: "pause",
-				z_index: 1051
-			});
+			//showNotify(JSON.parse(error.responseText).message, true);
 			$("#emailFieldLogin").val("");
 			$("#passFieldLogin").val("");
 		}
