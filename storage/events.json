@@ -221,17 +221,18 @@
 		]
 	},
 	{
-		"conference": "Conference Title 1234",
+		"conference": "Conference Title 12343",
 		"acronym": "CA161234",
 		"status": "open",
 		"chairs": [
-			"p.groth",
-			"paolo.manghi",
-			"arabella.strange"
+			"arthur.dent",
+			"angelo.diiorio"
 		],
 		"pc_members": [
 			"alessia.bardi",
-			"lyra.belacqua"
+			"lyra.belacqua",
+			"paolo.ciancarini",
+			"john.constantine"
 		],
 		"submissions": []
 	},

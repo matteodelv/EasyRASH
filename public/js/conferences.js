@@ -191,7 +191,7 @@ function buildConfAdminPanel(confData) {
 			ccSelect.add(rSelect).multiselect({
 				disableIfEmpty: true,
 				maxHeight: 180,
-				buttonWidth: '200px',
+				buttonWidth: '100%',
 				nonSelectedText: 'Choose...',
 				numberDisplayed: 0,
 				enableFiltering: true,
@@ -219,7 +219,7 @@ function buildConfAdminPanel(confData) {
 			ccSelect.add(rSelect).multiselect({
 				disableIfEmpty: true,
 				maxHeight: 180,
-				buttonWidth: '200px',
+				buttonWidth: '100%',
 				nonSelectedText: 'Choose...',
 				numberDisplayed: 0,
 				enableFiltering: true,
@@ -344,15 +344,14 @@ function buildConfAdminPanel(confData) {
 			data: data,
 			url: encodeURI('/api/events/' + confData.acronym),
 			success: function(res) {
-				$(form).prepend('<div class="alert alert-success fade in" role="alert"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>' + res.message + '</div>');
+				showNotify(res.message, false);
 
 				getConferences();
 
-				window.setTimeout(function() {
-					$("#conf-admin-panel .alert").fadeIn(PANEL_TRANSITION_TIME, function() {
-						$(this).remove(); 
-					});
-				}, 2000);
+				$("#conf-admin-panel").fadeOut(PANEL_TRANSITION_TIME, function() {
+					$(this).remove();
+					$('#page-content-wrapper #top').html($pageContentWrapper);
+				});
 			},
 			error: function(err) {
 				showErrorAlert('#conf-admin-panel form', JSON.parse(err.responseText).message, true);
@@ -378,7 +377,7 @@ function showAssignReviewersModal() {
 		$('#reviewersSelector').multiselect({
 			disableIfEmpty: true,
 			maxHeight: 180,
-			buttonWidth: '200px',
+			buttonWidth: '100%',
 			nonSelectedText: 'Choose...',
 			numberDisplayed: 0,
 			enableFiltering: true
