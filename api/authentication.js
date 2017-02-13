@@ -38,8 +38,9 @@ router.post('/signin', function(req, res) {
 			// Return JWT and info as JSON
 			res.json({
 				success: true,
-				message: 'Authentication successfulNaN',
+				message: 'Authentication successful',
 				id: user.id,
+				email: user.email,
 				fullname: user.given_name + ' ' + user.family_name,
 				accessToken: accessToken
 			});
@@ -52,7 +53,7 @@ router.post('/signup', function(req, res) {
 		if (error){
 			console.log(error);
 		} else {
-			console.log("Servizio email funziona correttamente");
+			console.log("Il servizio email funziona correttamente");
 		}
 	});
 	fs.readFile('./storage/users.json', 'utf8', (err, data) => {

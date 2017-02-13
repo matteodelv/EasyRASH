@@ -450,6 +450,9 @@ router.post('/:id/review', function(req, res) {
 							as["role_type"] = "pro:reviewer";
 							as["in"] = "";
 							person["as"] = as;
+							var mbox = {};
+							mbox["@id"] = 'mailto:' + req.jwtPayload.email;
+							person["foaf:mbox"] = mbox;
 							reviewBlock.push(person);
 
 							var jsonText = doc.createTextNode(JSON.stringify(reviewBlock, null, "\t"));
