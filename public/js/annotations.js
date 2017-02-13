@@ -32,7 +32,7 @@ window.onbeforeunload = function(event) {
 
 $(document).ready(function() {
 	var colorIndex = Math.floor(Math.random() * distinctColors.length);
-	reviewerColor = hexToRgbA(distinctColors[colorIndex], 0.4);
+	reviewerColor = hexToRgbA(distinctColors[colorIndex], 0.5);
 	distinctColors.splice(colorIndex, 1);
 
 	$('#mode-checkbox').on('click', function(event) {
@@ -278,15 +278,19 @@ $(window).load(function() {
 			/* END Build path strings */
 			annotation.text = currentSelection.text();
 
-			annotation.isBackwards = currentSelection.isBackwards();
-
 			annotation.content = '';
+			if (!currentSelection.isBackwards()){
+				annotation.startXPath = getXPath(currentSelection.anchorNode);
+				annotation.startOffset = currentSelection.anchorOffset;
+				annotation.endXPath = getXPath(currentSelection.focusNode);
+				annotation.endOffset = currentSelection.focusOffset;
+			} else {
+				annotation.startXPath = getXPath(currentSelection.focusNode);
+				annotation.startOffset = currentSelection.focusOffset;
+				annotation.endXPath = getXPath(currentSelection.anchorNode);
+				annotation.endOffset = currentSelection.anchorOffset;
+			}
 			
-			annotation.startXPath = getXPath(currentSelection.anchorNode);
-			annotation.startOffset = currentSelection.anchorOffset;
-			annotation.endXPath = getXPath(currentSelection.focusNode);
-			annotation.endOffset = currentSelection.focusOffset;
-
 			loadDraftAnnotation(annotation);
 		});
 	});
@@ -590,6 +594,7 @@ function loadAnnotations() {
 		review.forEach(function(annotation) {
 			if (annotation.ref) {
 				annotation.name = person.name;
+				annotation.email = person['foaf:mbox'] ? person['foaf:mbox']['@id'] : null;
 				var refs = [].concat(annotation.ref);
 				refs.forEach(function(ref) {
 					if (annotationsById[ref]) {
@@ -754,7 +759,9 @@ function getInlineAnnotationHtml(id) {
 	annotations.forEach(function(annotation, index) {
 		$carouselIndicatorsContainer.append($('<li data-target="#' + carouselId + '" data-slide-to="' + index + '" ' + (index === 0 ? 'class="active"' : '') + '></li>'));
 		$carouselInner.append($('<div class="item ' + (index === 0 ? 'active' : '') + '">\
-								<div class="comment-header" style="border-color:' + reviewerColors[annotations[index].author] + '"><span>' + annotation.name + '</span><time datetime="' + annotation.date + '" >' + moment(annotation.date).fromNow() + '</time></div>\
+								<div class="comment-header" style="border-color:' + reviewerColors[annotations[index].author] + '"><span>' 
+								+ (annotation.email ? ('<a href="' + annotation.email + '">' + annotation.name + '</a>') : annotation.name)
+								+ '</span><time datetime="' + annotation.date + '" >' + moment(annotation.date).fromNow() + '</time></div>\
 								<p>' + annotation.text + '</p>\
 								</div>'));
 	});

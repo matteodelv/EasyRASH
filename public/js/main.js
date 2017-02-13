@@ -1,3 +1,5 @@
+const PANEL_TRANSITION_TIME = 200;
+
 //JQuery animation of an element
 $.fn.extend({
 	animateCss: function(animationName) {
@@ -32,7 +34,7 @@ function onHashChange(e){ //Scroll with offset to prevent sidebar from covering 
     }, 1);
 }
 
-distinctColors = ['#ff5972', '#a6637c', '#ff1a9f', '#ff99eb', '#c91aff', '#bb99ff', '#3419ff', '#1a62ff', '#1a94ff', '#1ac6ff', '#13babf', '#1affd5', '#1aff40', '#abf291', '#baff1a', '#ffe01a', '#ffdb99', '#ffaf1a', '#ff7d1a', '#ffaf99', '#ff1a1a'];
+distinctColors = ['#ff5972', '#a6637c', '#ff1a9f', '#ff99eb', '#c91aff', '#bb99ff', '#3419ff', '#1a62ff', '#1a94ff', '#1ac6ff', '#13babf', '#1affd5', '#1aff40', '#abf291', '#baff1a', '#ffe01a', '#ffaf1a', '#ff7d1a', '#ffaf99', '#ff1a1a'];
 var reviewerColors = {};
 
 //Verify if user agent has a valid token, if not show login form
@@ -43,7 +45,7 @@ window.onload = function() {
 			type: 'POST',
 			success: function(result) {
 				sessionStorage.userID = result.id;
-				userReady(result.fullname);
+				userReady(result.fullname, true);
 			},
 			error: function(result) {
 				$('#login-modal').modal('show');
@@ -324,7 +326,7 @@ function applyStatusLabel(paper, loadingConf) {
 
 function fetchAndBuildSidebarMenu(result, loadingConf, callback) {
 	if ($('#conf-admin-panel').length !== 0) {
-		$("#conf-admin-panel").fadeTo(500, 0).slideUp(500, function() {
+		$("#conf-admin-panel").fadeIn(PANEL_TRANSITION_TIME, function() {
 			$(this).remove();
 			$('#page-content-wrapper #top').html($pageContentWrapper);
 		});
@@ -365,7 +367,7 @@ function fetchAndBuildSidebarMenu(result, loadingConf, callback) {
 						redirectToPaper(urlComplete, paper);
 
 						if ($('#conf-admin-panel').length !== 0) {
-							$("#conf-admin-panel").fadeTo(500, 0).slideUp(500, function() {
+							$("#conf-admin-panel").fadeIn(PANEL_TRANSITION_TIME, function() {
 								$(this).remove();
 								$('#page-content-wrapper #top').html($pageContentWrapper);
 							});
@@ -385,14 +387,13 @@ function fetchAndBuildSidebarMenu(result, loadingConf, callback) {
 	if (callback) callback();
 }
 
-function userReady(fullname) {
-	console.log("userReady");
-	console.log("fullname = " + fullname);
-	console.log("caller = " + arguments.callee.caller.toString());
+function userReady(fullname, requestData) {
 	$('.profile-panel').removeClass('hidden').animateCss('bounceIn');
 	$('.profile-panel>h4').text(fullname);
-	getConferences();
-	getUserPapers();
+	if (requestData){
+		getConferences();
+		getUserPapers();
+	}
 }
 
 //TODO: Move to a different file
@@ -432,7 +433,7 @@ function logIn() {
 				z_index: 1051
 			});
 			sessionStorage.userID = result.id;
-			userReady(result.fullname);
+			userReady(result.fullname, true);
 		},
 		error: function(result) {
 			$('#loginbutton').animateCss('shake').prev('.help-inline').animateCss('bounceIn').text(JSON.parse(result.responseText).message);
@@ -494,17 +495,14 @@ function showUserPanel() {
 			url: encodeURI('/api/users/profile'),
 			method: 'GET',
 			success: function(result) {
-				console.log("USER PROFILE INFO CORRECTLY FETCHED");
-				console.log(result);
 				$pageContentWrapper = $('#page-content-wrapper #top').html();
 
-				$("#page-content-wrapper #top .row").fadeTo(500, 0).slideUp(500, function() {
+				$("#page-content-wrapper #top .row").fadeIn(PANEL_TRANSITION_TIME, function() {
 					$("#page-content-wrapper #top").empty();
 					buildUserPanel(result);
 				});
 			},
 			error: function(error) {
-				console.log("ERROR FETCHING USER PROFILE INFO");
 				console.log(error);
 			}
 		});
@@ -638,7 +636,7 @@ function buildUserPanel(userInfo) {
 	$('#user-profile-panel .btn-default').on('click', function(e) {
 		e.preventDefault();
 
-		$('#user-profile-panel').fadeTo(500, 0).slideUp(500, function() {
+		$('#user-profile-panel').fadeIn(PANEL_TRANSITION_TIME, function() {
 			$(this).remove();
 			$('#page-content-wrapper #top').html($pageContentWrapper);
 		});
@@ -655,17 +653,20 @@ function buildUserPanel(userInfo) {
 		$.ajax({
 			method: 'PUT',
 			data: data,
-			url: encodeURI('/api/users/update/profile'),
+			url: encodeURI('/api/users/profile'),
 			success: function(result) {
-				$('#formInfo').prepend('<div class="alert alert-success fade in" role="alert"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>' + result.message + '</div>');
-
-				$('#sidebar-wrapper .profile-panel .name').text(data.given_name + ' ' + data.family_name);
-
-				window.setTimeout(function() {
-					$("#user-profile-panel .alert").fadeTo(500, 0).slideUp(500, function() {
-						$(this).remove(); 
-					});
-				}, 2000);
+				localStorage.accessToken = result.accessToken;
+				$.notify({ //http://bootstrap-notify.remabledesigns.com/
+					message: result.message,
+					icon: "fa fa-check"
+				}, {
+					type: 'success',
+					delay: 3000,
+					mouse_over: "pause",
+					z_index: 1051
+				});
+				sessionStorage.userID = result.id;
+				userReady(result.fullname, false);
 			},
 			error: function(error) {
 				showErrorAlert('#formInfo', JSON.parse(error.responseText).message, true);
@@ -683,16 +684,18 @@ function buildUserPanel(userInfo) {
 
 		$.ajax({
 			method: 'PUT',
-			url: encodeURI('/api/users/update/password'),
+			url: encodeURI('/api/users/profile/password'),
 			data: data,
 			success: function(result) {
-				$('#formPass').prepend('<div class="alert alert-success fade in" role="alert"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>' + result.message + '</div>');
-
-				window.setTimeout(function() {
-					$("#user-profile-panel .alert").fadeTo(500, 0).slideUp(500, function() {
-						$(this).remove(); 
-					});
-				}, 2000);
+				$.notify({ //http://bootstrap-notify.remabledesigns.com/
+					message: result.message,
+					icon: "fa fa-check"
+				}, {
+					type: 'success',
+					delay: 3000,
+					mouse_over: "pause",
+					z_index: 1051
+				});
 			},
 			error: function(error) {
 				showErrorAlert('#formPass', JSON.parse(error.responseText).message, true);

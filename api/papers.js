@@ -9,10 +9,8 @@ var dom = xmldom.DOMParser;
 var serializer = new xmldom.XMLSerializer();
 var utils = require('./utils.js');
 
-const lock = require('proper-lockfile');
-
 const CONTEXT = "http://vitali.web.cs.unibo.it/twiki/pub/TechWeb16/context.json";
-const LOCK_EXPIRE_TIME_MS = 3600000;//3600000;
+const LOCK_EXPIRE_TIME_MS = 3600000;
 
 //Responds with all the paper associated with a particular user
 router.get('/', function(req, res) {
@@ -24,7 +22,6 @@ router.get('/', function(req, res) {
 			var reviewableArticles = [];
 			events.forEach(event => {
 				event.submissions.forEach(submission => {
-					//TODO: change full description to ids
 					if (submission.authors.some(author => author === req.jwtPayload.id)) {
 						submittedArticles.push(submission);
 					}

@@ -2,8 +2,10 @@ var router = require('express').Router();
 var path = require('path');
 var fs = require('fs');
 var utils = require('./utils.js');
+var jwt = require('jsonwebtoken');
 
-router.get('/list', function(req, res) {
+//TODO: use loadData function from utils
+router.get('/', function(req, res) {
 	var usersPath = path.resolve('storage/users.json');
 	if (fs.existsSync(usersPath)) {
 		fs.readFile(usersPath, 'utf8', (err, data) => {
@@ -43,25 +45,35 @@ router.get('/profile', function(req, res) {
 	} else res.status(404).json({ success: false, message: 'Unable to locate users info!' });
 });
 
-router.put('/update/profile', function(req, res) {
+router.put('/profile', function(req, res) {
 	utils.loadDataFile('storage/users.json', (error, users) => {
 		if (error) res.status(error.status).json(error);
 
 		var loggedUser = users.find(u => u.id === req.jwtPayload.id);
 		if (loggedUser) {
-			if (req.body['family_name'] && req.body['family_name'] !== loggedUser.family_name) loggedUser.family_name = req.body['family_name'];
-			if (req.body['given_name'] && req.body['given_name'] !== loggedUser.given_name) loggedUser.given_name = req.body['given_name'];
-			if (req.body['sex'] && req.body['sex'] !== loggedUser.sex) loggedUser.sex = req.body['sex'];
+			if (req.body['family_name']) loggedUser.family_name = req.body['family_name'];
+			if (req.body['given_name']) loggedUser.given_name = req.body['given_name'];
+			if (req.body['sex']) loggedUser.sex = req.body['sex'];
 
 			fs.writeFile(path.resolve('storage/users.json'), JSON.stringify(users, null, '\t'), error => {
 				if (error) throw error;
-				res.json({ message: "User profile correctly updated!" });
+				var accessToken = jwt.sign(loggedUser, app.get('secret'), {
+					expiresIn: 86400
+				});
+				res.json({
+					success: true,
+					message: 'User profile correctly updated!',
+					id: loggedUser.id,
+					email: loggedUser.email,
+					fullname: loggedUser.given_name + ' ' + loggedUser.family_name,
+					accessToken: accessToken
+				});
 			});
 		} else res.status(404).json({ message: 'Unable to find logged user info!' });
 	});
 });
 
-router.put('/update/password', function(req, res) {
+router.put('/profile/password', function(req, res) {
 	utils.loadDataFile('storage/users.json', (error, users) => {
 		if (error) res.status(error.status).json(error);
 		

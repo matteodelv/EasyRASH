@@ -9,8 +9,13 @@ function showErrorAlert(selector, message, timed) {
 
 	if (timed) {
 		window.setTimeout(function() {
+<<<<<<< Updated upstream
 			$(alertSelector).fadeTo(500, 0).slideUp(500, function() {
 				$(this).addClass('hidden'); 
+=======
+			$(alertSelector).fadeIn(PANEL_TRANSITION_TIME, function() {
+				$(this).remove(); 
+>>>>>>> Stashed changes
 			});
 		}, 3000);
 	}
@@ -135,7 +140,7 @@ function showConferenceAdminPanel(acronym) {
 			success: function(res) {
 				$pageContentWrapper = $('#page-content-wrapper #top').html();
 			
-				$("#page-content-wrapper #top .row").fadeTo(500, 0).slideUp(500, function() {
+				$("#page-content-wrapper #top .row").fadeIn(PANEL_TRANSITION_TIME, function() {
 					$("#page-content-wrapper #top").empty();
 					buildConfAdminPanel(res.conference);
 				});
@@ -182,7 +187,7 @@ function buildConfAdminPanel(confData) {
 	var dataSourceR = [];
 
 	$.ajax({
-		url: "/api/users/list",
+		url: "/api/users/",
 		method: "GET",
 		success: function(res) {
 			res.forEach(user => {
@@ -384,7 +389,7 @@ function buildConfAdminPanel(confData) {
 				getConferences();
 
 				window.setTimeout(function() {
-					$("#conf-admin-panel .alert").fadeTo(500, 0).slideUp(500, function() {
+					$("#conf-admin-panel .alert").fadeIn(PANEL_TRANSITION_TIME, function() {
 						$(this).remove(); 
 					});
 				}, 2000);
@@ -399,7 +404,7 @@ function buildConfAdminPanel(confData) {
 		e.preventDefault();
 
 		// Remove admin panel and restore "your paper will appear here" or paper
-		$("#conf-admin-panel").fadeTo(500, 0).slideUp(500, function() {
+		$("#conf-admin-panel").fadeOut(PANEL_TRANSITION_TIME, function() {
 			$(this).remove();
 			$('#page-content-wrapper #top').html($pageContentWrapper);
 		});
@@ -481,7 +486,7 @@ function assignReviewersToPaper() {
 function showPaperDecisionModal() {
 	if ($('#paper-container').children().length === 0) {
 		$.notify({
-			message: "You have to select a paper before accept or reject it!",
+			message: "You have to select a paper before accepting or rejecting it!",
 			icon: "fa fa-exclamation-triangle"
 		}, {
 			type: "danger",
