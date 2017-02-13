@@ -1,5 +1,18 @@
 var $pageContentWrapper;
 
+function showErrorAlert(selector, message, timed) {
+	$(selector).prepend('<div class="alert alert-danger fade in" role="alert"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>' + message + '</div>');
+
+	if (timed) {
+		var alertSelector = selector + ' .alert';
+		window.setTimeout(function() {
+			$(alertSelector).fadeTo(500, 0).slideUp(500, function() {
+				$(this).remove(); 
+			});
+		}, 2000);
+	}
+}
+
 $(document).ready(function() {
 	sessionStorage.userRole = 'Reader';
 	checkCurrentRole();
@@ -106,14 +119,7 @@ function createNewConference() {
 			showConferenceAdminPanel(data.acronym);
 		},
 		error: function(error) {
-			$('#newConfForm .modal-body .alert').empty();
-			$('#newConfForm .modal-body').prepend($('<div class="alert alert-danger fade in" role="alert"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>' + JSON.parse(error.responseText).message + '</div>'));
-
-			window.setTimeout(function() {
-				$("#newConfForm .alert").fadeTo(500, 0).slideUp(500, function() {
-					$(this).remove(); 
-				});
-			}, 2000);
+			showErrorAlert('#newConfForm .modal-body', JSON.parse(error.responseText).message, true);
 		}
 	});
 }
@@ -246,13 +252,7 @@ function buildConfAdminPanel(confData) {
 				}
 			});
 
-			$(form).prepend('<div class="alert alert-warning fade in" role="alert"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>' + JSON.parse(err.responseText).message + ' Try again later...</div>');
-
-			window.setTimeout(function() {
-				$("#conf-admin-panel .alert").fadeTo(500, 0).slideUp(500, function() {
-					$(this).remove(); 
-				});
-			}, 2000);
+			showErrorAlert('#conf-admin-panel form', JSON.parse(err.responseText).message, true);
 		}
 	});
 
@@ -386,13 +386,7 @@ function buildConfAdminPanel(confData) {
 				}, 2000);
 			},
 			error: function(err) {
-				$(form).prepend('<div class="alert alert-warning fade in" role="alert"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>' + JSON.parse(err.responseText).message + '</div>');
-
-				window.setTimeout(function() {
-					$("#conf-admin-panel .alert").fadeTo(500, 0).slideUp(500, function() {
-						$(this).remove(); 
-					});
-				}, 2000);
+				showErrorAlert('#conf-admin-panel form', JSON.parse(err.responseText).message, true);
 			}
 		});
 	});
@@ -475,7 +469,7 @@ function assignReviewersToPaper() {
 		},
 		error: function(error) {
 			$('#assignRevSubmit').animateCss('shake');
-			$('#assignRevForm .help-inline').animateCss('bounceIn').text(JSON.parse(error.responseText).message);
+			showErrorAlert('#assignRevForm .modal-body', JSON.parse(error.responseText).message, true);
 		}
 	});
 }
@@ -497,10 +491,13 @@ function showPaperDecisionModal() {
 			method: 'GET',
 			url: encodeURI('/api/papers/' + paperID + '/reviews'),
 			success: function(result) {
-				console.log(result);
-				if (result.reviews.some(r => r.decision === 'pending')) {
+				if (result.isAuthor) {
 					$('#adminPaperDecision .btn-primary').prop('disabled', true);
-					$('#adminPaperDecision .help-inline').text('Reviews for this paper have not been completed!');
+					showErrorAlert('#reviewJudgementsForm .modal-body', 'You are not allowed to judge this paper because you are one of its Authors, even though you are Chair!', false);
+				}
+				else if (result.reviews.some(r => r.decision === 'pending')) {
+					$('#adminPaperDecision .btn-primary').prop('disabled', true);
+					showErrorAlert('#reviewJudgementsForm .modal-body', 'Reviews for this paper have not been completed!', false);
 				}
 
 				$('#judgementsTable>tbody').empty();
@@ -511,8 +508,8 @@ function showPaperDecisionModal() {
 				});
 
 				// Getting reviews judgements
-				var scripts = $('script[type="application/ld+json"]');
-				console.log(scripts);
+				// var scripts = $('script[type="application/ld+json"]');
+				// console.log(scripts);
 			},
 			error: function(error) {
 				$.notify({
@@ -546,7 +543,6 @@ function sendPaperDecision() {
 // TODO: Ricontrollare i controlli per i pulsanti e la modalità annotator ://
 function checkCurrentRole() {
 	if (sessionStorage.userRole && sessionStorage.userRole === 'Chair') {
-
 		/*if (activeMode === 'reviewer') {
 			
 			updateModeCheckbox(false);
@@ -562,7 +558,7 @@ function checkCurrentRole() {
 			var userIsRev = JSON.parse(sessionStorage.revForPaper);
 			if (!userIsRev) {*/
 				if ($('.admin-conference-btn').hasClass('hidden')) $('.admin-conference-btn').removeClass('hidden').animateCss('fadeIn');
-				if ($('.min-reviewers-btn').hasClass('hidden')) $('.admin-reviewers-btn').removeClass('hidden').animateCss('fadeIn');
+				if ($('.admin-reviewers-btn').hasClass('hidden')) $('.admin-reviewers-btn').removeClass('hidden').animateCss('fadeIn');
 				if ($('.admin-paper-decision').hasClass('hidden')) $('.admin-paper-decision').removeClass('hidden').animateCss('fadeIn');
 
 				$('.admin-conference-btn').on("click", function() {

@@ -144,6 +144,7 @@ router.get('/:id/reviews', function(req, res) {
 						}
 						reviews.push(review);
 					});
+
 					res.json({ reviews: reviews });
 				});
 			} else res.status(404).send('404 sorry not found');

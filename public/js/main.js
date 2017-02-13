@@ -668,13 +668,7 @@ function buildUserPanel(userInfo) {
 				}, 2000);
 			},
 			error: function(error) {
-				$('#formInfo').prepend('<div class="alert alert-warning fade in" role="alert"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>' + JSON.parse(error.responseText).message + '</div>');
-
-				window.setTimeout(function() {
-					$("#user-profile-panel .alert").fadeTo(500, 0).slideUp(500, function() {
-						$(this).remove(); 
-					});
-				}, 2000);
+				showErrorAlert('#formInfo', JSON.parse(error.responseText).message, true);
 			}
 		});
 	});
@@ -701,13 +695,7 @@ function buildUserPanel(userInfo) {
 				}, 2000);
 			},
 			error: function(error) {
-				$('#formPass').prepend('<div class="alert alert-warning fade in" role="alert"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>' + JSON.parse(error.responseText).message + '</div>');
-
-				window.setTimeout(function() {
-					$("#user-profile-panel .alert").fadeTo(500, 0).slideUp(500, function() {
-						$(this).remove(); 
-					});
-				}, 2000);
+				showErrorAlert('#formPass', JSON.parse(error.responseText).message, true);
 			}
 		});
 	});

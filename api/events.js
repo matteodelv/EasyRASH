@@ -198,21 +198,15 @@ router.get('/:id/:paper/reviewers', function(req, res) {
 });
 
 router.post('/:id/:paper/reviewers', function(req, res) {
-	var eventsPath = path.resolve('storage/events.json');
-	if (fs.existsSync(eventsPath)) {
-		var data = fs.readFileSync(eventsPath);
-		var events = JSON.parse(data);
+	utils.loadDataFile('storage/events.json', (error, events) => {
 		var selectedConf = events.find(conf => conf.acronym === decodeURI(req.params.id));
 		if (selectedConf) {
 			var paper = selectedConf.submissions.find(p => p.url === decodeURI(req.params.paper));
-			if (paper) {;
+			if (paper) {
 				var newRevs = req.body['revs'];
 				paper.reviewers.push.apply(paper.reviewers, newRevs);
 
-				if (paper.reviewers.length < 2) res.status(400).send({
-					success: false,
-					message: 'Each paper must have two or more reviewers'
-				});
+				if (paper.reviewers.length < 2) res.status(400).send({ message: 'Each paper must have two or more reviewers' });
 
 				if (events) {
 					fs.writeFile(eventsPath, JSON.stringify(events, null, '\t'), error => {
@@ -220,9 +214,9 @@ router.post('/:id/:paper/reviewers', function(req, res) {
 						res.json({ success: true, message: 'Reviewers correctly assigned to paper!' });
 					});
 				} else res.status(400).json({ success: false, message: 'Problems assigning reviewers to paper... Try again.' });
-			}
-		}
-	} else res.status(404).send('Conferences data not found');
+			} else res.status(404).json({ message: 'Paper not found. Please, try again!' });
+		} else res.status(404).json({ message: 'Conference not found. Please, try again!' });
+	});
 });
 
 module.exports = router;
