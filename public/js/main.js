@@ -192,7 +192,7 @@ function loadCurrentPaperContent() {
 					}
 				});
 
-				$('#placeholder').remove();
+				$('#placeholder').addClass('hidden');
 				var $xml = $(xmlParsed);
 				//Head
 				$addedHeadTags && $addedHeadTags.remove();

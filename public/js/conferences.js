@@ -15,7 +15,7 @@ function getConferences() {
 
 			for (var i = 0; i < res.length; i++) {
 				var completeTitle = res[i].conference;
-				completeTitle += (res[i].status === 'closed') ? ' [CLOSED]' : '';
+				completeTitle += (res[i].status === 'closed') ? ' <span class="error-message">[CLOSED]</span>' : '';
 				var $li = $('<li><a>' + completeTitle + '</a></li>');
 				$('a', $li).data('acronym', res[i].acronym);
 				$('a', $li).on("click", function() {
@@ -32,7 +32,17 @@ function getConferences() {
 							sessionStorage.currentAcronym = result.acronym;
 
 							checkCurrentRole();
-							//History.pushState("", "EasyRash", "/");
+
+							if ($('#paper-container').children().length !== 0) {
+								History.pushState({}, '', "/");
+								document.title = 'EasyRASH Web App';
+								$(this).empty();
+								$('#top ul.nav').empty();
+								$('#placeholder p').text('Selected Conference: ' + sessionStorage.currentAcronym);
+								$('#placeholder').removeClass('hidden');
+								$(window).scrollTop(0);
+							}
+							else $('#placeholder p').text('Selected Conference: ' + sessionStorage.currentAcronym);
 
 							fetchAndBuildSidebarMenu(result, true, function() {
 								loadCurrentPaperContent();
