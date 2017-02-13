@@ -522,7 +522,7 @@ function buildUserPanel(userInfo) {
 	var types = ["text", "text", "email", "", "submit", "password", "password", "submit"];
 	var names = ["given_name", "family_name", "email", "sex", "", "newPassword", "newPasswordVerify", ""];
 
-	var formInfo = $('<form id="formInfo"></form>').append('<h4>Update Profile</h4>').append('<p class="text-info">Note: Email can\'t be edited because it has been verified and it\'s linked to reviews and annotations.<br>Note: Blank or unchanged fields will be ignored.</p>');
+	var formInfo = $('<form id="formInfo"></form>').append('<div class="alert alert-danger fade in hidden" role="alert"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a></div>').append('<h4>Update Profile</h4>').append('<p class="text-info">Note: Email can\'t be edited because it has been verified and it\'s linked to reviews and annotations.<br>Note: Blank or unchanged fields will be ignored.</p>');
 
 	var row;
 	for (var $i = 0; $i < 5; $i++) {
@@ -593,7 +593,7 @@ function buildUserPanel(userInfo) {
 		$(row).append(formGroup);
 	}
 
-	var formPass = $('<form id="formPass"></form>').append('<h4>Update Password</h4>');
+	var formPass = $('<form id="formPass"></form>').append('<div class="alert alert-danger fade in hidden" role="alert"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a></div>').append('<h4>Update Password</h4>');
 
 	for ($i = 5; $i < 8; $i++) {
 		if ($i % 2 !== 0) {

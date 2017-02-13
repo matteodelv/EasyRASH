@@ -1,15 +1,18 @@
 var $pageContentWrapper;
 
 function showErrorAlert(selector, message, timed) {
-	$(selector).prepend('<div class="alert alert-danger fade in" role="alert"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>' + message + '</div>');
+	var alertSelector = selector + ' .alert';
+	if (!timed) $(alertSelector).addClass('hidden');
+	
+	$(alertSelector).text(message);
+	$(alertSelector).removeClass('hidden');
 
 	if (timed) {
-		var alertSelector = selector + ' .alert';
 		window.setTimeout(function() {
 			$(alertSelector).fadeTo(500, 0).slideUp(500, function() {
-				$(this).remove(); 
+				$(this).addClass('hidden'); 
 			});
-		}, 2000);
+		}, 3000);
 	}
 }
 
@@ -164,6 +167,7 @@ function buildConfAdminPanel(confData) {
 	var names = ["title", "acronym", "cochairs", "reviewers"];
 
 	var form = $('<form class="form-horizontal"></form>');
+	form.append('<div class="alert alert-danger fade in hidden" role="alert"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a></div>');
 
 	var ccSelect = $('<select></select>');
 	ccSelect.addClass('form-control');
@@ -491,14 +495,15 @@ function showPaperDecisionModal() {
 			method: 'GET',
 			url: encodeURI('/api/papers/' + paperID + '/reviews'),
 			success: function(result) {
-				if (result.isAuthor) {
-					$('#adminPaperDecision .btn-primary').prop('disabled', true);
-					showErrorAlert('#reviewJudgementsForm .modal-body', 'You are not allowed to judge this paper because you are one of its Authors, even though you are Chair!', false);
-				}
-				else if (result.reviews.some(r => r.decision === 'pending')) {
-					$('#adminPaperDecision .btn-primary').prop('disabled', true);
+				// if (result.isAuthor) {
+				// 	$('#adminPaperDecision .btn-primary').prop('disabled', true);
+				// 	showErrorAlert('#reviewJudgementsForm .modal-body', 'You are not allowed to judge this paper because you are one of its Authors, even though you are Chair!', false);
+				// }
+				var pendingRevs = result.reviews.some(r => r.decision === 'pending');
+				$('#adminPaperDecision .btn-primary').prop('disabled', pendingRevs);
+				if (pendingRevs)
 					showErrorAlert('#reviewJudgementsForm .modal-body', 'Reviews for this paper have not been completed!', false);
-				}
+				else $('#adminPaperDecision .modal-body .alert').addClass('hidden');
 
 				$('#judgementsTable>tbody').empty();
 				result.reviews.forEach(review => {
@@ -506,10 +511,6 @@ function showPaperDecisionModal() {
 					var revRow = $('<tr><td><a href="mailto:' + review.reviewer.email + '">' + review.reviewer.fullName + '</a></td><td>' + decisionTD + '</tr></td>');
 					$('#judgementsTable>tbody').append(revRow);
 				});
-
-				// Getting reviews judgements
-				// var scripts = $('script[type="application/ld+json"]');
-				// console.log(scripts);
 			},
 			error: function(error) {
 				$.notify({
@@ -530,14 +531,33 @@ function showPaperDecisionModal() {
 
 function sendPaperDecision() {
 	var decision = $("input[name=decisionradiochair]:checked").val();
-	var paperId = document.location.pathname.split('/papers/')[1].replace(/\/?$/, '/');
+	var paperID = document.location.pathname.split('papers/').pop().replace('/','');
 	var data = {
 		decision: decision
 	};
 
+	console.log(decision);
+
 	//TODO: ajax call
-	
-	console.log(selected);
+	$.ajax({
+		method: 'POST',
+		url: encodeURI('/api/papers/' + paperID + '/judge'),
+		data: data,
+		success: function(result) {
+			$('#adminPaperDecision').modal('hide');
+			$.notify({
+				message: result.message,
+				icon: "fa fa-check"
+			}, {
+				type: "success",
+				delay: 3000,
+				mouse_over: "pause"
+			});
+		},
+		error: function(error) {
+			showErrorAlert('#adminPaperDecision .modal-body', JSON.parse(error.responseText).message, true);
+		}
+	});
 }
 
 // TODO: Ricontrollare i controlli per i pulsanti e la modalità annotator ://
@@ -561,13 +581,13 @@ function checkCurrentRole() {
 				if ($('.admin-reviewers-btn').hasClass('hidden')) $('.admin-reviewers-btn').removeClass('hidden').animateCss('fadeIn');
 				if ($('.admin-paper-decision').hasClass('hidden')) $('.admin-paper-decision').removeClass('hidden').animateCss('fadeIn');
 
-				$('.admin-conference-btn').on("click", function() {
+				$('.admin-conference-btn').off('click').on("click", function() {
 					showConferenceAdminPanel(sessionStorage.currentAcronym);
 				});
-				$('.admin-reviewers-btn').on("click", function() {
+				$('.admin-reviewers-btn').off('click').on("click", function() {
 					showAssignReviewersModal();
 				});
-				$('.admin-paper-decision').on('click', function() {
+				$('.admin-paper-decision').off('click').on('click', function() {
 					showPaperDecisionModal();
 				});
 			/*}

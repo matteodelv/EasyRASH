@@ -152,6 +152,21 @@ router.get('/:id/reviews', function(req, res) {
 	});
 });
 
+router.post('/:id/judge', (req, res) => {
+	utils.loadDataFile('storage/events.json', (error, events, save) => {
+		if (error) res.status(error.status).json(error);
+
+		var paper = utils.findSubmission(events, req.params.id);
+		if (paper) {
+			if (paper.authors.indexOf(req.jwtPayload.id) !== -1) res.status(400).json({ message: 'You are not allowed to judge this paper because you are one of its Authors, even though you are Chair!' });
+			
+			paper.status = req.body.decision;
+			//save();
+			res.json({ message: 'Paper decision saved correctly!' });
+		} else res.status(404).json({ message: 'There was a problem looking for the paper. Please, try again!' });
+	});
+});
+
 router.put('/:id/lock', function(req, res) {
 	checkPaperLock(req.params.id, req.jwtPayload.id, (err, isLocked) => {
 		if (err) throw err;
