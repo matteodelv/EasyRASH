@@ -26,7 +26,7 @@ a {
 	height: 100px;
 }
 
-.banner a {
+.banner>*>a {
 	display: inline-block;
 	line-height: 100px;
 	font-size: 50px;
@@ -127,7 +127,7 @@ a.btn-md:active i {
 /* Top navbar */
 
 .topnav {
-	height: 50px;
+	/*height: 50px;*/
 	border: 0;
 }
 
@@ -224,7 +224,7 @@ a.btn-md:active i {
 /* Profile panel */
 
 .profile-panel {
-	margin: 2em;
+	padding: 2em;
 	text-align: center;
 }
 
@@ -506,6 +506,10 @@ section>section>.add-block-annotation-btn{
 .avatar{
 	width: 128px;
 	height: 128px;
+}
+
+.nav.navbar-nav.navbar-right{
+	margin: 0px;
 }
 
 /*.inline-annotation::before {
