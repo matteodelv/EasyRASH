@@ -17,7 +17,6 @@ a {
 	cursor: pointer;
 }
 
-
 /* Banner */
 
 .banner {
@@ -544,3 +543,10 @@ section>section>.add-block-annotation-btn{
 	transition: all 100ms ease-out;
 	border-radius: 5px;
 }*/
+
+/*Fix for modal adding random padding */
+.modal-open {
+    overflow-y: auto;
+}
+
+body { padding-right: 0 !important }
