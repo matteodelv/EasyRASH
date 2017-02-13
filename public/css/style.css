@@ -145,15 +145,16 @@ a.btn-md:active i {
 }
 
 .error-message {
-	color: #f22626;
+	color: #dc1616;
 }
 
-.help-inline.error {
-	margin: 0em 2em;
+.help-inline {
+	margin: 0em 1em;
 }
 
 .label {
 	font-family: 'Lato', sans-serif;
+	line-height: 2;
 }
 
 .webui-popover-inner .close {
@@ -360,8 +361,10 @@ a, a:active, a:focus {
 	padding-bottom: 0.5em;
 }
 
-.comment-header a {
+.comment-header span {
 	margin-right: 0.5em;
+	display:inline-block;
+	color:#337ab7;
 }
 
 .webui-popover .carousel .comment-header {

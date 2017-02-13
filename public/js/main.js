@@ -122,6 +122,8 @@ function loadCurrentPaperContent() {
 		$('.paper-container').empty();
 	}
 
+	updateModeCheckbox(false);
+
 	WebuiPopovers.hideAll();
 
 	if (document.location.pathname.startsWith("/papers/")) {
@@ -294,22 +296,27 @@ function applyStatusLabel(paper, loadingConf) {
 		statusLabel = ' <span class="label label-primary">' + paper.conference + '</span> <span class="label $labelClass">$labelText</span>';
 
 		if (paper.status === "accepted") statusLabel = statusLabel.replace("$labelClass", "label-success");
+		else if (paper.status === 'rejected') statusLabel = statusLabel.replace('$labelClass', 'label-danger');
 		else statusLabel = statusLabel.replace("$labelClass", "label-warning");
 
 		statusLabel = statusLabel.replace("$labelText", paper.status.camelCaseToString());
 	}
 	if (loadingConf) {
-		if (paper.authors.indexOf(sessionStorage.userID) !== -1) statusLabel += ' <span class="fa fa-user"></span>';
-		if (sessionStorage.userRole !== "Chair") {
-			if (paper.reviewers.indexOf(sessionStorage.userID) !== -1) {
-				if (paper.reviewedBy.indexOf(sessionStorage.userID) !== -1) statusLabel += ' <span class="fa fa-certificate"></span>';
-				else statusLabel += ' <span class="fa fa-exclamation-circle"></span>';
+		if (paper.authors.indexOf(sessionStorage.userID) !== -1) statusLabel += ' <span class="fa fa-user" title="I\'m an Author"></span>';
+
+		if (paper.status === "accepted") statusLabel += ' <span class="fa fa-check" title="Paper Approved"></span>';
+		else if (paper.status === 'rejected') statusLabel += ' <span class="fa fa-times" title="Paper Rejected"></span>';
+		else {
+			if (sessionStorage.userRole !== "Chair") {
+				if (paper.reviewers.indexOf(sessionStorage.userID) !== -1) {
+					if (paper.reviewedBy.indexOf(sessionStorage.userID) !== -1) statusLabel += ' <span class="fa fa-sticky-note" title="Review Sent"></span>';
+					else statusLabel += ' <span class="fa fa-exclamation-circle" title="Review To Be Sent"></span>';
+				}
+			} else {
+				if (paper.reviewers.length === paper.reviewedBy.length) statusLabel += ' <span class="fa fa-gavel" title="Waiting Chair Decision"></span>';
+				else statusLabel += ' <span class="fa fa-exclamation-circle" title="Reviews Not Completed"></span>';
 			}
-		} else {
-			if (paper.reviewers.length === paper.reviewedBy.length) statusLabel += ' <span class="fa fa-certificate"></span>';
-			else statusLabel += ' <span class="fa fa-exclamation-circle"></span>';
 		}
-		if (paper.status === "accepted") statusLabel += ' <span class="fa fa-check"></span>';
 	}
 
 	return statusLabel;

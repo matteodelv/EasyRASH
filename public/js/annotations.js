@@ -492,6 +492,17 @@ function openReviewAnnotationsModal(){
 		});
 		$('#annotationsTable>tbody').append(annRow);
 	});
+
+	// Are annotations removed from draftannotation when deleted? O.o
+	if (Object.keys(draftAnnotations).length === 0) {
+		console.log("button disabled");
+		$('#reviewSubmit').prop('disabled', true);
+		$('#reviewAnnotationsModal .help-inline').text('There aren\'t annotations to save!');
+	}
+	else {
+		$('#reviewSubmit').prop('disabled', false);
+		$('#reviewAnnotationsModal .help-inline').text('');
+	}
 }
 
 function sendReview(){
@@ -571,13 +582,14 @@ function loadAnnotations() {
 	reviews = [];
 	//Global variable
 	annotationsById = {};
-	console.log("Loading annotations.");
 	$addedHeadTags.filter('script[type="application/ld+json"]').each(function() {
 		var review = JSON.parse($(this).html());
-		console.log($(this).html);
+		//console.log($(this).html);
 		reviews.push(review);
+		var person = review.find(r => r['@type'] === 'person');
 		review.forEach(function(annotation) {
 			if (annotation.ref) {
+				annotation.name = person.name;
 				var refs = [].concat(annotation.ref);
 				refs.forEach(function(ref) {
 					if (annotationsById[ref]) {
@@ -742,7 +754,7 @@ function getInlineAnnotationHtml(id) {
 	annotations.forEach(function(annotation, index) {
 		$carouselIndicatorsContainer.append($('<li data-target="#' + carouselId + '" data-slide-to="' + index + '" ' + (index === 0 ? 'class="active"' : '') + '></li>'));
 		$carouselInner.append($('<div class="item ' + (index === 0 ? 'active' : '') + '">\
-								<div class="comment-header" style="border-color:' + reviewerColors[annotations[index].author] + '"><a href="' + annotation.author + '">' + annotation.author + '</a><time datetime="' + annotation.date + '" >' + moment(annotation.date).fromNow() + '</time></div>\
+								<div class="comment-header" style="border-color:' + reviewerColors[annotations[index].author] + '"><span>' + annotation.name + '</span><time datetime="' + annotation.date + '" >' + moment(annotation.date).fromNow() + '</time></div>\
 								<p>' + annotation.text + '</p>\
 								</div>'));
 	});

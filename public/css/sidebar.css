@@ -27,13 +27,14 @@
     margin: 0 0 .5em .5em;
     line-height: 1.2em;
     font-weight: 400;
-    color:#999;
+    color:#BBB;
 }
 
 .sidebar-nav li a, .sidebar-nav li a:focus {
     text-decoration: none;
-    color: #999999;
+    color: #BBB;
     background: transparent;
+    padding:10px;
 }
 
 .sidebar-nav li a:hover {
@@ -44,7 +45,7 @@
 
 .sidebar-nav li a:active {
     background: #fff;
-    color: #999999;
+    color: #BBB;
 }
 
 .sidebar-nav > .sidebar-brand {
@@ -73,11 +74,12 @@
     color: #337ab7;
 }
 
-#conferenceSidebar .fa-certificate, #helpModal .fa-certificate {
+#conferenceSidebar .fa-gavel, #helpModal .fa-gavel {
     color: #f1af08;
 }
 
-#conferenceSidebar .fa-exclamation-circle, #helpModal .fa-exclamation-circle {
+#conferenceSidebar .fa-exclamation-circle, #conferenceSidebar .fa-sticky-note,
+#helpModal .fa-exclamation-circle, #helpModal .fa-sticky-note {
     color: #f1885c;
 }
 
@@ -175,4 +177,5 @@
     border-style: solid;
     border-radius: 0px 0px 4px 4px;
     background-color: transparent;
+    padding:10px;
 }
