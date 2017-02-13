@@ -42,37 +42,61 @@ router.get('/', function(req, res) {
 });
 
 router.get('/:id/role', function(req, res) {
-	var filePath = path.resolve('storage/events.json');
-	if (fs.existsSync(filePath)) {
-		fs.readFile(filePath, (err, data) => {
-			var events = JSON.parse(data);
-			var paper;
-			var result = {
-				alreadyReviewed: false,
-				role: ""
-			};
-			for (i = 0; i < events.length; i++) {
-				paper = events[i].submissions.find(p => p.url === req.params.id);
-				if (paper) {
-					if (events[i].chairs.indexOf(req.jwtPayload.id) !== -1) result.role = "Chair";
-					break;
-				}
-			}
-			if (paper) {
-				if (result.role === "") {
-					if (paper.reviewers.indexOf(req.jwtPayload.id) !== -1) {
-						result.role = "Reviewer";
-						if (paper.reviewedBy.indexOf(req.jwtPayload.id) !== -1) result.alreadyReviewed = true;
-					} else if (paper.authors.indexOf(req.jwtPayload.id) !== -1) result.role = "Author";
-					else result.role = "Reader";
-				}
-			} else result.role = "Reader";
+	utils.loadDataFile('storage/events.json', (error, events) => {
+		if (error) res.status(error.status).json(error);
 
-			console.log(`User ${req.jwtPayload.id}'s role for paper ${paper.url} is ${result.role}`);
-
-			res.json(result); // Gestire situazione d'errore
+		var paper;
+		events.some(event => {
+			paper = event.submissions.find(p => p.url === decodeURI(req.params.id));
+			if (paper) return true;
 		});
-	} else res.json(404).send('404 Data not found');
+
+		if (paper) {
+			var result = {
+				isReviewer: false,
+				alreadyReviewed: false
+			};
+
+			if (paper.reviewers.indexOf(req.jwtPayload.id) !== -1) {
+				result.isReviewer = true;
+				if (paper.reviewedBy.indexOf(req.jwtPayload.id) !== -1) result.alreadyReviewed = true;
+			}
+
+			res.json(result);
+		} else res.status(404).json({ message: 'Current paper not found. Unable to verify reviewer rights!' });
+	});
+
+	// var filePath = path.resolve('storage/events.json');
+	// if (fs.existsSync(filePath)) {
+	// 	fs.readFile(filePath, (err, data) => {
+	// 		var events = JSON.parse(data);
+	// 		var paper;
+	// 		var result = {
+	// 			alreadyReviewed: false,
+	// 			isReviewer: false
+	// 		};
+	// 		for (i = 0; i < events.length; i++) {
+	// 			paper = events[i].submissions.find(p => p.url === req.params.id);
+	// 			if (paper) {
+	// 				if (events[i].chairs.indexOf(req.jwtPayload.id) !== -1) result.role = "Chair";
+	// 				break;
+	// 			}
+	// 		}
+	// 		if (paper) {
+	// 			if (result.role === "") {
+	// 				if (paper.reviewers.indexOf(req.jwtPayload.id) !== -1) {
+	// 					result.role = "Reviewer";
+	// 					if (paper.reviewedBy.indexOf(req.jwtPayload.id) !== -1) result.alreadyReviewed = true;
+	// 				} else if (paper.authors.indexOf(req.jwtPayload.id) !== -1) result.role = "Author";
+	// 				else result.role = "Reader";
+	// 			}
+	// 		} else result.role = "Reader";
+
+	// 		console.log(`User ${req.jwtPayload.id}'s role for paper ${paper.url} is ${result.role}`);
+
+	// 		res.json(result); // Gestire situazione d'errore
+	// 	});
+	// } else res.json(404).send('404 Data not found');
 });
 
 router.get('/:conf/:paper/reviewsInfo', function(req, res) {

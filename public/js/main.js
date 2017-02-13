@@ -146,7 +146,7 @@ function loadCurrentPaperContent() {
 
 		$('title').remove();
 
-		delete sessionStorage.paperRole;
+		delete sessionStorage.revForPaper;
 		delete sessionStorage.alreadyReviewed;
 
 		$.ajax({
@@ -170,12 +170,14 @@ function loadCurrentPaperContent() {
 					url: encodeURI('/api/papers/' + paperID + '/role'),
 					method: 'GET',
 					success: function(result) {
-						sessionStorage.paperRole = result.role;
+						sessionStorage.revForPaper = result.isReviewer;
 						sessionStorage.alreadyReviewed = result.alreadyReviewed;
+						checkCurrentRole();
 					},
 					error: function(error) {
-						sessionStorage.paperRole = "Reader";
+						sessionStorage.revForPaper = false;
 						sessionStorage.alreadyReviewed = false;
+						checkCurrentRole();
 
 						$.notify({
 							message: JSON.parse(err.responseText).message,

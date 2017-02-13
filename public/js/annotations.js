@@ -49,12 +49,22 @@ $(document).ready(function() {
 			});
 		}
 		else {
-			if (sessionStorage.paperRole) {
+			var userIsRev = JSON.parse(sessionStorage.revForPaper);
+			console.log("userIsRev = " + userIsRev);
+			console.log("userRole = " + sessionStorage.userRole);
+			//if (userIsRev) {
+				console.log("is user a reviewer for this paper? " + sessionStorage.revForPaper);
+				console.log("userRole = " + sessionStorage.userRole);
 				var alreadyReviewed = JSON.parse(sessionStorage.alreadyReviewed);
-				if (sessionStorage.paperRole !== "Reviewer") {
+				
+				if (!userIsRev || sessionStorage.userRole === "Chair") {
 					event.preventDefault();
+					var message;
+					if (sessionStorage.userRole === 'Chair')
+						message = 'You are not allowed to enter Annotator Mode since you are Chair of the selected conference!';
+					else message = 'You are not allowed to enter Annotator Mode because you haven\'t Reviewer rights on this paper!';
 					$.notify({
-						message: "You are not allowed to review this paper because you are " + sessionStorage.paperRole + "!",
+						message: message,
 						icon: "fa fa-exclamation-triangle"
 					}, {
 						type: "danger",
@@ -115,7 +125,7 @@ $(document).ready(function() {
 							});
 						}
 					}
-				}
+				//}
 			}
 		}
 	});
