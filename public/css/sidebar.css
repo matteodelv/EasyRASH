@@ -66,24 +66,24 @@
     background: none;
 }
 
-#conferenceSidebar .fa-check, #helpModal .fa-check {
+td>.fa-check, #conferenceSidebar .fa-check, #helpModal .fa-check {
     color: #009874;
 }
 
-#conferenceSidebar .fa-user, #helpModal .fa-user {
+td>.fa-user, #conferenceSidebar .fa-user, #helpModal .fa-user {
     color: #337ab7;
 }
 
-#conferenceSidebar .fa-gavel, #helpModal .fa-gavel {
+td>.fa-gavel, #conferenceSidebar .fa-gavel, #helpModal .fa-gavel {
     color: #f1af08;
 }
 
-#conferenceSidebar .fa-exclamation-circle, #conferenceSidebar .fa-sticky-note,
+td>.fa-exclamation-circle, td>.fa-sticky-note, #conferenceSidebar .fa-exclamation-circle, #conferenceSidebar .fa-sticky-note,
 #helpModal .fa-exclamation-circle, #helpModal .fa-sticky-note {
     color: #f1885c;
 }
 
-#conferenceSidebar .fa-times, #helpModal .fa-times {
+td>.fa-times, #conferenceSidebar .fa-times, #helpModal .fa-times {
     color:#e64040;
 }
 

@@ -9,9 +9,9 @@ exports.checkAcronymUsage = function(acronym, callback) {
 	var check = false;
 	var eventsPath = path.resolve('storage/events.json');
 	if (fs.existsSync(eventsPath)) {
-		var data = fs.readFileSync(eventsPath);		// richiesta sincrona necessaria
+		var data = fs.readFileSync(eventsPath); // richiesta sincrona necessaria
 		var confs = JSON.parse(data);
-		check = confs.every(function (aConf) {
+		check = confs.every(function(aConf) {
 			console.log(aConf.acronym !== acronym);
 			if (aConf.acronym !== acronym) return true;
 			else return false;
@@ -30,7 +30,9 @@ exports.sortUsersAlphabetically = function(usersArray) {
 };
 
 exports.loadDataFile = function(file, callback) {
+	
 	var filePath = path.resolve(file);
+	
 	if (fs.existsSync(filePath)) {
 		var data = fs.readFileSync(filePath);
 		if (!data) {
@@ -38,7 +40,23 @@ exports.loadDataFile = function(file, callback) {
 			return callback(error, null);
 		} else {
 			var parsed = JSON.parse(data);
-			return callback(null, parsed);
+			var save = function(){
+				fs.writeFileSync(filePath, JSON.stringify(parsed, null, "\t"));
+			}
+			return callback(null, parsed, save);
 		}
 	} else return callback({ status: 404, message: 'Requested data file not found. Please, try again!' }, null);
 }
+
+exports.findSubmission = function(events, submissionUrl) {
+	var submission;
+    events.some(event => {
+        submission = event.submissions.find(s => s.url === submissionUrl); //search for the submission in the current event, and store it in a variable
+        return submission; //returns truthy value if submission is found and exits some
+    });
+    return submission;
+};
+
+exports.findUser = function(users, userId) {
+	return users.find(u => u.id === userId);
+};

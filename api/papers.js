@@ -99,35 +99,55 @@ router.get('/:id/role', function(req, res) {
 	// } else res.json(404).send('404 Data not found');
 });
 
-router.get('/:conf/:paper/reviewsInfo', function(req, res) {
-	console.log("JUDGEMENTS");
+router.get('/:id/reviews', function(req, res) {
 	utils.loadDataFile('storage/events.json', (err, events) => {
 		if (err) res.status(err.status).json(err);
 
-		console.log("LOADDATAFILE");
+		var paper = utils.findSubmission(events, req.params.id);
+		var reviews = [];
 
-		var conf = events.find(e => e.acronym === decodeURI(req.params.conf));
-		if (conf) {
-			var paper = conf.submissions.find(p => p.url === decodeURI(req.params.paper));
-			if (paper) {
-				var revsInfo = [];
+		utils.loadDataFile('storage/users.json', (err, users) => {
+			console.log("Loaded data file");
 
-				console.log("IF PAPER");
-
-				utils.loadDataFile('storage/users.json', (error, users) => {
-					users.forEach(u => {
-						if (paper.reviewedBy.indexOf(u.id) !== -1) {
-							delete u.pass;
-							delete u.sex;
-
-							revsInfo.push(u);
+			var filePath = path.resolve('storage/papers/' + req.params.id + '.html');
+			var reviewsJsonLd = [];
+			if (fs.existsSync(filePath)) {
+				fs.readFile(filePath, "utf-8", function(err, data) {
+					//Get review info from RASH file
+					//This helps a lot: http://regexr.com/3f9fr
+					console.log("Searching for annotations");
+					var annotationsRegex = new RegExp(/(?:<script)(?:[^.]*)(?:type="application\/ld\+json")(?:>)((\s|\S)*?)(?:<\/script>)/igm);
+					var match;
+					while(match = annotationsRegex.exec(data.toString())){
+						var rb = JSON.parse(match[1]);
+						reviewsJsonLd.push(rb); //Get first matching group
+					};
+					//Create record for reviewers
+					paper.reviewers.forEach(reviewerId => {
+						var review = {};
+						var reviewer = utils.findUser(users, reviewerId);
+						review['reviewer'] = {
+							id: reviewer.id,
+							fullName: reviewer.given_name + ' ' + reviewer.family_name,
+							email: reviewer.email
+						};
+						if (!paper.reviewedBy.find(r => r === reviewer.id)){ //Reviewer hasn't reviewed the paper
+							review['decision'] = 'pending';
+						} else {
+							reviewsJsonLd.forEach(reviewBlock => {
+								if (reviewBlock.some(elem => elem["@type"] === 'person' && elem["@id"] === reviewerId)){ //This block belongs to the matching reviewer
+									var reviewInfo = reviewBlock.find(elem => elem["@type"] === 'review');
+									var status = reviewInfo["article"]["eval"]["status"];
+									review['decision'] = status === 'pso:accepted-for-publication' ? 'accepted' : 'rejected';
+								}
+							});
 						}
+						reviews.push(review);
 					});
-
-					res.json({ reviewersCount: paper.reviewers.length, reviewersInfo: revsInfo });
+					res.json({ reviews: reviews });
 				});
-			}
-		}
+			} else res.status(404).send('404 sorry not found');
+		});
 	});
 });
 
@@ -187,8 +207,9 @@ function checkPaperLock(paperId, userId, callback){
 function lockPaper(paperId, userId, callback){
 	var err = {};
 	eventsFilePath = 'storage/events.json';
-	utils.loadDataFile(eventsFilePath, (error, events) => {
+	utils.loadDataFile(eventsFilePath, (error, events, save) => {
 		err = error;
+		if (err) return callback(err);
 		var submission;
 		events.forEach(event => {
 			if (!submission) {
@@ -206,7 +227,8 @@ function lockPaper(paperId, userId, callback){
 				submission.lockedBy = userId;
 				submission.lockedAt = (new Date).getTime();
 			}
-			fs.writeFileSync(eventsFilePath, JSON.stringify(events, null, "\t"));
+			save();
+			//fs.writeFileSync(eventsFilePath, JSON.stringify(events, null, "\t"));
 		} else err = { message: 'Unable to find paper info!' };
 	});
 
@@ -305,7 +327,7 @@ router.get('/:id', function(req, res) {
 							var emptyLineRegex = new RegExp(/^\s*\n/gm);
 							if (!canSeeAnnotations) {
 								//Remove all annotations
-								var annotationsRegex = new RegExp(/(?:<script)(?:.*)(?:type="application\/ld\+json")(?:>)((\s|\S)*?)(?:<\/script>)/igm);
+								var annotationsRegex = new RegExp(/(?:<script)(?:[^.]*)(?:type="application\/ld\+json")(?:>)((\s|\S)*?)(?:<\/script>)/igm);
 								var xmlCommentsRegex = new RegExp(/(<!--)((\s|\S)*?)(-->)/igm);
 								var clean = data.replace(annotationsRegex, '').replace(xmlCommentsRegex, '').replace(emptyLineRegex, '');
 								res.send(clean);
@@ -406,9 +428,10 @@ router.post('/:id/review', function(req, res) {
 							var review = {};
 							review["@context"] = CONTEXT;
 							review["@type"] = "review";
-							var annotationsRegex = /(?:<script)(?:.*)(?:type="application\/ld\+json")(?:>)((\s|\S)*?)(?:<\/script>)/igm;
-							var match = annotationsRegex.exec(html.toString());
-							var reviewId = "#review" + (match != null ? match.length + 1 : 1);
+							var annotationsRegex = new RegExp(/(?:<script)(?:[^.]*)(?:type="application\/ld\+json")(?:>)((\s|\S)*?)(?:<\/script>)/igm);
+							var matches = html.toString().match(annotationsRegex);
+							var matchCount = matches ? matches.length : 0;
+							var reviewId = "#review" + (matchCount + 1);
 							review["@id"] = reviewId;
 							var article = {};
 							review["article"] = article;

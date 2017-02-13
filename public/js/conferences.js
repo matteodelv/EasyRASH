@@ -90,7 +90,7 @@ function createNewConference() {
 	});
 
 	$.ajax({
-		url: '/api/events/create',
+		url: '/api/events/',
 		method: 'POST',
 		data: data,
 		success: function(result) {
@@ -323,7 +323,7 @@ function buildConfAdminPanel(confData) {
 		e.preventDefault();
 
 		$.ajax({
-			url: encodeURI('/api/events/close/' + confData.acronym),
+			url: encodeURI('/api/events/' + confData.acronym + '/close'),
 			method: 'PUT',
 			success: function(result) {
 				$(this).prop('disabled', true);
@@ -373,7 +373,7 @@ function buildConfAdminPanel(confData) {
 		$.ajax({
 			method:'PUT',
 			data: data,
-			url: encodeURI('/api/events/update/' + confData.acronym),
+			url: encodeURI('/api/events/' + confData.acronym),
 			success: function(res) {
 				$(form).prepend('<div class="alert alert-success fade in" role="alert"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>' + res.message + '</div>');
 
@@ -429,7 +429,7 @@ function showAssignReviewersModal() {
 		});
 		var paperID = document.location.pathname.split('papers/').pop().replace('/','');
 		$.ajax({
-			url: encodeURI('/api/events/' + sessionStorage.currentAcronym + '/reviewers/' + paperID),
+			url: encodeURI('/api/events/' + sessionStorage.currentAcronym + '/' + paperID + '/reviewers'),
 			method: 'GET',
 			success: function(result) {
 				var dataSource = [];
@@ -459,7 +459,7 @@ function assignReviewersToPaper() {
 	};
 	$.ajax({
 		method: 'POST',
-		url: encodeURI('/api/events/' + sessionStorage.currentAcronym + '/reviewers/' + paperID),
+		url: encodeURI('/api/events/' + sessionStorage.currentAcronym + '/' + paperID + '/reviewers'),
 		data: data,
 		success: function(result) {
 			$('#assignReviewersModal').modal('hide');
@@ -495,13 +495,20 @@ function showPaperDecisionModal() {
 		
 		$.ajax({
 			method: 'GET',
-			url: encodeURI('/api/papers/' + sessionStorage.currentAcronym + '/' + paperID + '/reviewsInfo'),
+			url: encodeURI('/api/papers/' + paperID + '/reviews'),
 			success: function(result) {
 				console.log(result);
-				if (result.reviewersCount !== result.reviewersInfo.length) {
+				if (result.reviews.some(r => r.decision === 'pending')) {
 					$('#adminPaperDecision .btn-primary').prop('disabled', true);
 					$('#adminPaperDecision .help-inline').text('Reviews for this paper have not been completed!');
 				}
+
+				$('#judgementsTable>tbody').empty();
+				result.reviews.forEach(review => {
+					var decisionTD = review.decision === 'accepted' ? '<i class="fa fa-check"></i> Accepted' : (review.decision === 'pending' ? '<i class="fa fa-exclamation-circle"></i> Pending' : '<i class="fa fa-times"></i> Rejected')
+					var revRow = $('<tr><td><a href="mailto:' + review.reviewer.email + '">' + review.reviewer.fullName + '</a></td><td>' + decisionTD + '</tr></td>');
+					$('#judgementsTable>tbody').append(revRow);
+				});
 
 				// Getting reviews judgements
 				var scripts = $('script[type="application/ld+json"]');
@@ -525,18 +532,23 @@ function showPaperDecisionModal() {
 }
 
 function sendPaperDecision() {
-	var selected = $('#adminPaperDecision input[name="decisionradio"]').val();
-	var paperID = document.location.pathname.split('papers/').pop().replace('/','');
+	var decision = $("input[name=decisionradiochair]:checked").val();
+	var paperId = document.location.pathname.split('/papers/')[1].replace(/\/?$/, '/');
 	var data = {
-		decision: selected
+		decision: decision
 	};
+
+	//TODO: ajax call
+	
 	console.log(selected);
 }
 
 // TODO: Ricontrollare i controlli per i pulsanti e la modalità annotator ://
 function checkCurrentRole() {
 	if (sessionStorage.userRole && sessionStorage.userRole === 'Chair') {
-		if (activeMode === 'reviewer') {
+
+		/*if (activeMode === 'reviewer') {
+			
 			updateModeCheckbox(false);
 
 			$('.admin-conference-btn').addClass('hidden');
@@ -548,9 +560,9 @@ function checkCurrentRole() {
 		}
 		else {
 			var userIsRev = JSON.parse(sessionStorage.revForPaper);
-			if (!userIsRev) {
+			if (!userIsRev) {*/
 				if ($('.admin-conference-btn').hasClass('hidden')) $('.admin-conference-btn').removeClass('hidden').animateCss('fadeIn');
-				if ($('.admin-reviewers-btn').hasClass('hidden')) $('.admin-reviewers-btn').removeClass('hidden').animateCss('fadeIn');
+				if ($('.min-reviewers-btn').hasClass('hidden')) $('.admin-reviewers-btn').removeClass('hidden').animateCss('fadeIn');
 				if ($('.admin-paper-decision').hasClass('hidden')) $('.admin-paper-decision').removeClass('hidden').animateCss('fadeIn');
 
 				$('.admin-conference-btn').on("click", function() {
@@ -562,8 +574,8 @@ function checkCurrentRole() {
 				$('.admin-paper-decision').on('click', function() {
 					showPaperDecisionModal();
 				});
-			}
-		}
+			/*}
+		}*/
 	}
 	else {
 		$('.admin-conference-btn').addClass('hidden');

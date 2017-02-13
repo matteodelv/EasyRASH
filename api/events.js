@@ -35,7 +35,7 @@ router.get('/:id', function(req, res) {
 	} else res.status(400).json({ success: false, message: 'Unable to list conferences... Try again' });
 });
 
-router.post('/create', function(req, res) {
+router.post('/', function(req, res) {
 	utils.checkAcronymUsage(req.body.acronym, result => {
 		if (result) {
 			var eventsPath = path.resolve('storage/events.json');
@@ -65,7 +65,7 @@ router.post('/create', function(req, res) {
 });
 
 // Close Conference identified by :id
-router.put('/close/:id', function(req, res) {
+router.put('/:id/close', function(req, res) {
 	var eventsPath = path.resolve('storage/events.json');
 	if (fs.existsSync(eventsPath)) {
 		fs.readFile(eventsPath, (error, data) => {
@@ -88,7 +88,7 @@ router.put('/close/:id', function(req, res) {
 });
 
 // Update Conference :id with data as argument
-router.put('/update/:id', function(req, res) {
+router.put('/:id', function(req, res) {
 	var eventsPath = path.resolve('storage/events.json');
 	if (fs.existsSync(eventsPath)) {
 		fs.readFile(eventsPath, (error, data) => {
@@ -156,7 +156,7 @@ router.get('/:id/papers', function(req, res) {
 	} else res.status(404).send("404 Conference Non Found");
 });
 
-router.get('/:id/reviewers/:paper', function(req, res) {
+router.get('/:id/:paper/reviewers', function(req, res) {
 	var eventsPath = path.resolve('storage/events.json');
 	if (fs.existsSync(eventsPath)) {
 		fs.readFile(eventsPath, (err, data) => {
@@ -197,7 +197,7 @@ router.get('/:id/reviewers/:paper', function(req, res) {
 	} else res.status(404).send("Conferences data not found");
 });
 
-router.post('/:id/reviewers/:paper', function(req, res) {
+router.post('/:id/:paper/reviewers', function(req, res) {
 	var eventsPath = path.resolve('storage/events.json');
 	if (fs.existsSync(eventsPath)) {
 		var data = fs.readFileSync(eventsPath);

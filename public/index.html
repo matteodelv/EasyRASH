@@ -238,7 +238,7 @@
 				</div>
 			</div>
 		</div>
-      <!-- Paper Modal -->
+      <!-- Chair Decision Modal -->
       <div class="modal fade" id="adminPaperDecision" role="dialog" tabindex="-1">
          <div class="modal-dialog">
             <div class="modal-content">
@@ -246,10 +246,10 @@
                   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                   <h4 class="modal-title">Paper Decision</h4>
                </div>
-               <form id="reviewerJudgements" class="form ws-validate" action="javascript:sendPaperDecision()">
+               <form id="reviewJudgementsForm" class="form ws-validate" action="javascript:sendPaperDecision()">
                   <div class="modal-body">
                      <div class="table-responsive">
-                        <table class="table table-hover" id="judgementsTable">
+                        <table class="table" id="judgementsTable">
                            <thead>
                               <tr>
                                  <th>Reviewer</th>
@@ -262,11 +262,11 @@
                      </div>
                      <div class="funkyradio">
                         <div class="funkyradio-success">
-                           <input type="radio" name="decisionradiochair" id="acceptedradiochair" value="accepted" />
+                           <input type="radio" name="decisionradiochair" id="acceptedradiochair" value="accepted" checked="checked" />
                            <label for="acceptedradiochair">Paper Accepted</label>
                         </div>
                         <div class="funkyradio-danger">
-                           <input type="radio" name="decisionradiochair" id="rejectedradiochair" value="rejected" checked="checked" />
+                           <input type="radio" name="decisionradiochair" id="rejectedradiochair" value="rejected" />
                            <label for="rejectedradiochair">Paper Rejected</label>
                         </div>
                      </div>
