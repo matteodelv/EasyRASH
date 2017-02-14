@@ -469,38 +469,21 @@ function sendPaperDecision() {
 	});
 }
 
-// TODO: Ricontrollare i controlli per i pulsanti e la modalità annotator ://
 function checkCurrentRole() {
 	if (sessionStorage.userRole && sessionStorage.userRole === 'Chair') {
-		/*if (activeMode === 'reviewer') {
-			
-			updateModeCheckbox(false);
+		if ($('.admin-conference-btn').hasClass('hidden')) $('.admin-conference-btn').removeClass('hidden').animateCss('fadeIn');
+		if ($('.admin-reviewers-btn').hasClass('hidden')) $('.admin-reviewers-btn').removeClass('hidden').animateCss('fadeIn');
+		if ($('.admin-paper-decision').hasClass('hidden')) $('.admin-paper-decision').removeClass('hidden').animateCss('fadeIn');
 
-			$('.admin-conference-btn').addClass('hidden');
-			$('.admin-conference-btn').off('click');
-			$('.admin-reviewers-btn').addClass('hidden');
-			$('.admin-reviewers-btn').off('click');
-			$('.admin-paper-decision').addClass('hidden');
-			$('.admin-paper-decision').off('click');
-		}
-		else {
-			var userIsRev = JSON.parse(sessionStorage.revForPaper);
-			if (!userIsRev) {*/
-				if ($('.admin-conference-btn').hasClass('hidden')) $('.admin-conference-btn').removeClass('hidden').animateCss('fadeIn');
-				if ($('.admin-reviewers-btn').hasClass('hidden')) $('.admin-reviewers-btn').removeClass('hidden').animateCss('fadeIn');
-				if ($('.admin-paper-decision').hasClass('hidden')) $('.admin-paper-decision').removeClass('hidden').animateCss('fadeIn');
-
-				$('.admin-conference-btn').off('click').on("click", function() {
-					showConferenceAdminPanel(sessionStorage.currentAcronym);
-				});
-				$('.admin-reviewers-btn').off('click').on("click", function() {
-					showAssignReviewersModal();
-				});
-				$('.admin-paper-decision').off('click').on('click', function() {
-					showPaperDecisionModal();
-				});
-			/*}
-		}*/
+		$('.admin-conference-btn').off('click').on("click", function() {
+			showConferenceAdminPanel(sessionStorage.currentAcronym);
+		});
+		$('.admin-reviewers-btn').off('click').on("click", function() {
+			showAssignReviewersModal();
+		});
+		$('.admin-paper-decision').off('click').on('click', function() {
+			showPaperDecisionModal();
+		});
 	}
 	else {
 		$('.admin-conference-btn').addClass('hidden');

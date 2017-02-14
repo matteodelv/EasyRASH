@@ -10,9 +10,19 @@ var inlineAnnotationElements = ['span', 'em', 'code', 'a', 'time', 'cite', 'h1',
 
 // Release lock on current paper if there are no draft annotations
 window.onbeforeunload = function(event) {
+	console.log("onbeforeunload");
+	automaticLockReleaseForReviewers();
+
+	return undefined;	// Must be undefined for avoiding the default pop up to show
+};
+
+function automaticLockReleaseForReviewers() {
+	console.log("automaticLockReleaseForReviewers");
+	console.log("activeMode = " + activeMode);
 	if (activeMode === 'reviewer' && $('#paper-container').children().length !== 0) {
+		console.log("automaticLockReleaseForReviewers IF");
 		var paperID = document.location.pathname.split('papers/').pop().replace('/','');
-		var draftAnnotations = JSON.parse(localStorage.getItem(paperID + 'draftAnnotations'));
+		var draftAnnotations = JSON.parse(localStorage.getItem(paperID + '/draftAnnotations'));
 		if (!draftAnnotations){ //Release lock if there are no unsaved annotations
 			$.ajax({
 				method: 'DELETE',
@@ -26,9 +36,7 @@ window.onbeforeunload = function(event) {
 			});
 		}
 	}
-
-	return undefined;	// Must be undefined for avoiding the default pop up to show
-};
+}
 
 $(document).ready(function() {
 	var colorIndex = Math.floor(Math.random() * distinctColors.length);

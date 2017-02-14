@@ -100,6 +100,7 @@ $(document).ready(function() {
 
 //When the user agent's url changes load the new paper
 window.onstatechange = function(event) {
+	automaticLockReleaseForReviewers();
 	loadCurrentPaperContent();
 };
 
@@ -126,6 +127,9 @@ function loadCurrentPaperContent() {
 
 	WebuiPopovers.hideAll();
 
+	sessionStorage.revForPaper = false;
+	sessionStorage.alreadyReviewed = false;
+
 	if (document.location.pathname.startsWith("/papers/")) {
 		/*TODO: do we need this part?*/
 		if (sessionStorage.papers) {
@@ -147,9 +151,6 @@ function loadCurrentPaperContent() {
 		}
 
 		$('title').remove();
-
-		delete sessionStorage.revForPaper;
-		delete sessionStorage.alreadyReviewed;
 
 		$.ajax({
 			url: '/api' + document.location.pathname,
@@ -375,8 +376,6 @@ function fetchAndBuildSidebarMenu(result, loadingConf, callback) {
 									$("#sidebar-wrapper .profile-panel .userRole").text("Role: " + result.userRole);
 									sessionStorage.userRole = result.userRole;
 									sessionStorage.currentAcronym = result.acronym;
-
-									checkCurrentRole();
 
 									$('#placeholder p').text('Selected Conference: ' + sessionStorage.currentAcronym);
 

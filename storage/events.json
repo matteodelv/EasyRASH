@@ -66,9 +66,7 @@
 					"arabella.strange",
 					"john.constantine"
 				],
-				"reviewedBy": [],
-				"lockedBy": "arabella.strange",
-				"lockedAt": 1487085192621
+				"reviewedBy": []
 			},
 			{
 				"title": "RASH: Research Articles in Simplified HTML -- Documentation - Version 0.5, February 15, 2016",
@@ -99,20 +97,20 @@
 			"lyra.belacqua",
 			"alice.liddell",
 			"arthur.dent",
-			"arabella.strange",
-			"john.constantine"
+			"fabio.vitali"
 		],
 		"submissions": [
 			{
 				"title": "Increasing the Productivity of Scholarship: The Case for Knowledge Graphs -- SAVE-SD 2015 Keynote Talk",
-				"status": "rejected",
+				"status": "pending",
 				"authors": [
 					"p.groth"
 				],
 				"url": "groth-savesd2015",
 				"reviewers": [
 					"vanessa.ives",
-					"lyra.belacqua"
+					"lyra.belacqua",
+					"fabio.vitali"
 				],
 				"reviewedBy": [
 					"vanessa.ives",
@@ -121,7 +119,7 @@
 			},
 			{
 				"title": "Exploring bibliographies for research-related tasks",
-				"status": "toBeAmended",
+				"status": "pending",
 				"authors": [
 					"angelo.diiorio",
 					"raffaele.giannella",
@@ -130,18 +128,15 @@
 				],
 				"url": "diiorio-savesd2015",
 				"reviewers": [
-					"arthur.dent",
-					"arabella.strange",
-					"john.constantine"
+					"arthur.dent"
 				],
 				"reviewedBy": [
-					"arthur.dent",
-					"arabella.strange"
+					"arthur.dent"
 				]
 			},
 			{
 				"title": "Example paper for comments",
-				"status": "accepted",
+				"status": "pending",
 				"authors": [
 					"angelo.diiorio",
 					"raffaele.giannella",
@@ -151,9 +146,7 @@
 				],
 				"url": "example-annotations",
 				"reviewers": [
-					"arthur.dent",
-					"arabella.strange",
-					"john.constantine"
+					"arthur.dent"
 				],
 				"reviewedBy": [
 					"arthur.dent"
@@ -161,7 +154,7 @@
 			},
 			{
 				"title": "The RASH Framework: enabling HTML+RDF submissions in scholarly venues",
-				"status": "toBeAmended",
+				"status": "pending",
 				"authors": [
 					"angelo.diiorio",
 					"andrea.nuzzolese",
@@ -174,8 +167,7 @@
 				],
 				"url": "diiorio-iswc2015",
 				"reviewers": [
-					"vanessa.ives",
-					"john.constantine"
+					"vanessa.ives"
 				],
 				"reviewedBy": [
 					"vanessa.ives"
@@ -183,7 +175,7 @@
 			},
 			{
 				"title": "Evaluating citation functions in CiTO: cognitive issues -- Preprint of http://dx.doi.org/10.1007/978-3-319-07443-6_39",
-				"status": "accepted",
+				"status": "pending",
 				"authors": [
 					"paolo.ciancarini",
 					"angelo.diiorio",
@@ -193,8 +185,7 @@
 				],
 				"url": "ciancarini-eswc2014",
 				"reviewers": [
-					"jessica.jones",
-					"john.constantine"
+					"jessica.jones"
 				],
 				"reviewedBy": [
 					"jessica.jones"
@@ -210,7 +201,7 @@
 				"url": "bardi-savesd2015",
 				"reviewers": [
 					"vanessa.ives",
-					"arabella.strange"
+					"fabio.vitali"
 				],
 				"reviewedBy": [
 					"vanessa.ives"
@@ -256,8 +247,7 @@
 		],
 		"pc_members": [
 			"paolo.ciancarini",
-			"andrea.nuzzolese",
-			"fabio.vitali"
+			"andrea.nuzzolese"
 		],
 		"submissions": []
 	}
