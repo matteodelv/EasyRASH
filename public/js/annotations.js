@@ -558,28 +558,30 @@ function loadAnnotations() {
 	$addedHeadTags.filter('script[type="application/ld+json"]').each(function() {
 		var review = JSON.parse($(this).html());
 		//console.log($(this).html);
-		reviews.push(review);
-		var person = review.find(function(r) { return r['@type'] === 'person' });
-		review.forEach(function(annotation) {
-			//Fill up the annotations and styles info 
-			if (annotation.ref) {
-				annotation.name = person.name;
-				annotation.email = person['foaf:mbox'] ? person['foaf:mbox']['@id'] : null;
-				var refs = [].concat(annotation.ref);
-				refs.forEach(function(ref) {
-					if (annotationsById[ref]) {
-						annotationsById[ref].push(annotation);
-					} else {
-						annotationsById[ref] = [annotation];
+		if (review.constructor === Array){
+			reviews.push(review);
+			var person = review.find(function(r) { return r['@type'] === 'person' });
+			review.forEach(function(annotation) {
+				//Fill up the annotations and styles info 
+				if (annotation.ref) {
+					annotation.name = person.name;
+					annotation.email = person['foaf:mbox'] ? person['foaf:mbox']['@id'] : null;
+					var refs = [].concat(annotation.ref);
+					refs.forEach(function(ref) {
+						if (annotationsById[ref]) {
+							annotationsById[ref].push(annotation);
+						} else {
+							annotationsById[ref] = [annotation];
+						}
+					});
+					if (!reviewerColors[annotation.author]) {
+						var colorIndex = Math.floor(Math.random() * distinctColors.length);
+						reviewerColors[annotation.author] = distinctColors[colorIndex];
+						distinctColors.splice(colorIndex, 1);
 					}
-				});
-				if (!reviewerColors[annotation.author]) {
-					var colorIndex = Math.floor(Math.random() * distinctColors.length);
-					reviewerColors[annotation.author] = distinctColors[colorIndex];
-					distinctColors.splice(colorIndex, 1);
 				}
-			}
-		});
+			});
+		}
 	});
 	Object.keys(annotationsById).forEach(function(id) {
 		annotationsById[id].sort(function(a, b) {
@@ -602,24 +604,33 @@ function loadAnnotations() {
 		//INLINE ANNOTATIONS appear as highlighted text and popover (plus h1, h2, h3)
 		if (inlineAnnotationElements.indexOf($('#'+id.replace('#', '')).prop('tagName').toLowerCase()) >= 0) {
 			var $elem = $('#'+id.replace('#', ''));
-			var authorClass = annotationsById[id].find(function(annotation) { return annotation.author;}).author.replace('mailto:', '').replace(/(@.*)/g, '').replace(/\s+/g, '-').replace(/[^a-zA-Z-]/g, '').toLowerCase();
-			var statement = ".inline-annotation." + authorClass; 
-			var style = {};
-			style[statement] = {'background' : rgbaColor};
-			$.injectCSS(style);
+			
 			$elem.addClass('inline-annotation');
-			annotationsById[id].forEach(function(reviewer) {
-				$elem.addClass(authorClass);
+
+			var statement = statement = ".inline-annotation";
+			annotationsById[id].forEach(function(annotation) {
+				if (annotation.author){
+					var annotationClass = annotation.author.replace('mailto:', '').replace(/(@.*)/g, '').replace(/\s+/g, '-').replace(/[^a-zA-Z-]/g, '').toLowerCase();
+					$elem.addClass(annotationClass);
+					statement = statement + '.' + annotationClass;
+				}
 			});
+			statement = statement + ":not(.filteredOut)";
+			
+			var style = {};
+			
 			if (annotationsById[id].length > 1) {
 				gradients.forEach(function(gradient) {
-					var style = {};
 					style[statement] = {'background' : gradient};
 					$.injectCSS(style);
 				});
+			} else {
+				style[statement] = {'background' : rgbaColor};
+				$.injectCSS(style);
+				
 			}
 
-			var $popover = $elem.webuiPopover({
+			$elem.webuiPopover({
 				placement: 'top',
 				trigger: 'click',
 				type: 'html',
@@ -630,11 +641,11 @@ function loadAnnotations() {
 			});
 
 			$elem.click(function(e) {
-				// $popover.webuiPopover('show');
+				//$popover.webuiPopover('show');
 				e.stopPropagation();
 			});
 
-			$popover.on("shown.webui.popover", function(e) {
+			$elem.on("shown.webui.popover", function(e) {
 				carouselNormalization('#carousel-' + id.replace('#', '') + ' .item');
 			});
 
