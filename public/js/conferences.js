@@ -164,7 +164,7 @@ function buildConfAdminPanel(confData) {
 		url: "/api/users/",
 		method: "GET",
 		success: function(res) {
-			res.forEach(user => {
+			res.forEach(function(user) {
 				if (user) {
 					var u = {
 						value: user.id,
@@ -292,7 +292,7 @@ function buildConfAdminPanel(confData) {
 	closeConfBtn.append('Close Conference');
 
 	if (confData.status === "open") {
-		if (confData.submissions.length === 0 || !confData.submissions.every(element => { return element.status !== "pending"; }))
+		if (confData.submissions.length === 0 || !confData.submissions.every(function(element) { return element.status !== "pending"; }))
 			closeConfBtn.prop('disabled', true);
 	}
 	else closeConfBtn.prop('disabled', true);
@@ -388,7 +388,7 @@ function showAssignReviewersModal() {
 			method: 'GET',
 			success: function(result) {
 				var dataSource = [];
-				result.forEach(rev => {
+				result.forEach(function(rev) {
 					if (rev) dataSource.push({
 						value: rev.id,
 						label: rev.family_name + ' ' + rev.given_name + ' <' + rev.email + '>',
@@ -441,14 +441,14 @@ function showPaperDecisionModal() {
 				// 	$('#adminPaperDecision .btn-primary').prop('disabled', true);
 				// 	showErrorAlert('#reviewJudgementsForm .modal-body', 'You are not allowed to judge this paper because you are one of its Authors, even though you are Chair!', false);
 				// }
-				var pendingRevs = result.reviews.some(r => r.decision === 'pending');
+				var pendingRevs = result.reviews.some(function(r) { return r.decision === 'pending' });
 				$('#adminPaperDecision .btn-primary').prop('disabled', pendingRevs);
 				if (pendingRevs)
 					showErrorAlert('#reviewJudgementsForm .modal-body', 'Reviews for this paper have not been completed!', false);
 				else $('#adminPaperDecision .modal-body .alert').addClass('hidden');
 
 				$('#judgementsTable>tbody').empty();
-				result.reviews.forEach(review => {
+				result.reviews.forEach(function(review) {
 					var decisionTD = review.decision === 'accepted' ? '<i class="fa fa-check"></i> Accepted' : (review.decision === 'pending' ? '<i class="fa fa-exclamation-circle"></i> Pending' : '<i class="fa fa-times"></i> Rejected')
 					var revRow = $('<tr><td><a href="mailto:' + review.reviewer.email + '">' + review.reviewer.fullName + '</a></td><td>' + decisionTD + '</tr></td>');
 					$('#judgementsTable>tbody').append(revRow);

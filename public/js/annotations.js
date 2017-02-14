@@ -541,7 +541,7 @@ function loadAnnotations() {
 		var review = JSON.parse($(this).html());
 		//console.log($(this).html);
 		reviews.push(review);
-		var person = review.find(r => r['@type'] === 'person');
+		var person = review.find(function(r) { return r['@type'] === 'person' });
 		review.forEach(function(annotation) {
 			if (annotation.ref) {
 				annotation.name = person.name;
