@@ -1,21 +1,5 @@
 var $pageContentWrapper;
 
-function showErrorAlert(selector, message, timed) {
-	var alertSelector = selector + ' .alert';
-	if (!timed) $(alertSelector).addClass('hidden');
-	
-	$(alertSelector).text(message);
-	$(alertSelector).removeClass('hidden');
-
-	if (timed) {
-		window.setTimeout(function() {
-			$(alertSelector).fadeIn(PANEL_TRANSITION_TIME, function() {
-				$(this).addClass('hidden');
-			});
-		}, 3000);
-	}
-}
-
 $(document).ready(function() {
 	sessionStorage.userRole = 'Reader';
 	checkCurrentRole();
@@ -235,7 +219,7 @@ function buildConfAdminPanel(confData) {
 				}
 			});
 
-			showErrorAlert('#conf-admin-panel form', JSON.parse(err.responseText).message, true);
+			showNotify(JSON.parse(err.responseText).message, true);
 		}
 	});
 
@@ -354,7 +338,7 @@ function buildConfAdminPanel(confData) {
 				});
 			},
 			error: function(err) {
-				showErrorAlert('#conf-admin-panel form', JSON.parse(err.responseText).message, true);
+				showNotify(JSON.parse(err.responseText).message, true);
 			}
 		});
 	});
@@ -437,10 +421,6 @@ function showPaperDecisionModal() {
 			method: 'GET',
 			url: encodeURI('/api/papers/' + paperID + '/reviews'),
 			success: function(result) {
-				// if (result.isAuthor) {
-				// 	$('#adminPaperDecision .btn-primary').prop('disabled', true);
-				// 	showErrorAlert('#reviewJudgementsForm .modal-body', 'You are not allowed to judge this paper because you are one of its Authors, even though you are Chair!', false);
-				// }
 				var pendingRevs = result.reviews.some(function(r) { return r.decision === 'pending' });
 				$('#adminPaperDecision .btn-primary').prop('disabled', pendingRevs);
 				if (pendingRevs)

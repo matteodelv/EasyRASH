@@ -466,13 +466,12 @@ function openReviewAnnotationsModal(){
 
 	// Are annotations removed from draftannotation when deleted? O.o
 	if (Object.keys(draftAnnotations).length === 0) {
-		console.log("button disabled");
 		$('#reviewSubmit').prop('disabled', true);
-		$('#reviewAnnotationsModal .help-inline').text('There aren\'t annotations to save!');
+		showErrorAlert('#reviewAnnotationsModal .modal-body', 'There aren\'t annotations to save!', false);
 	}
 	else {
 		$('#reviewSubmit').prop('disabled', false);
-		$('#reviewAnnotationsModal .help-inline').text('');
+		$('#reviewAnnotationsModal .modal-body .alert').addClass('hidden');
 	}
 }
 

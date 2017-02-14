@@ -6,35 +6,24 @@ const PANEL_TRANSITION_TIME = 200;
 
 function showErrorAlert(selector, message, timed) {
 	var alertSelector = selector + ' .alert';
-	if (!timed) $(alertSelector).addClass('hidden');
 
+	if ($(alertSelector).hasClass('hidden')) {
+		$(alertSelector).removeClass('hidden');
+	}
+
+	$(alertSelector).contents().filter(function() { return this.nodeType === 3 }).remove();
 	$(alertSelector).append(message);
-	$(alertSelector).removeClass('hidden');
 
+	$(alertSelector).show();
+	
 	if (timed) {
 		window.setTimeout(function() {
-			$(alertSelector).fadeTo(PANEL_TRANSITION_TIME, 0).slideUp(500, function() {
+			$(alertSelector).fadeIn(PANEL_TRANSITION_TIME).slideUp(500, function() {
 				$(this).addClass('hidden'); 
 			});
 		}, 3000);
 	}
 }
-
-/* Versione Commit Filippo
-function showErrorAlert(selector, message, timed) {
-	var alertSelector = selector + ' .alert';
-	if (!timed) $(alertSelector).addClass('hidden');
-	
-	$(alertSelector).text(message);
-	$(alertSelector).removeClass('hidden');
-	if (timed) {
-		window.setTimeout(function() {
-			$(alertSelector).fadeIn(PANEL_TRANSITION_TIME, function() {
-				$(this).addClass('hidden');
-			});
-		}, 3000);
-	}
-}*/
 
 function showNotify(message, isError) {
 	var type = (isError) ? 'danger' : 'success';

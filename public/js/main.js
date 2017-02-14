@@ -151,6 +151,8 @@ function loadCurrentPaperContent() {
 		delete sessionStorage.revForPaper;
 		delete sessionStorage.alreadyReviewed;
 
+		updateStatusLabel(document.location.pathname, "");
+
 		$.ajax({
 			url: '/api' + document.location.pathname,
 			method: 'GET',
@@ -268,6 +270,16 @@ function getUserPapers() {
 String.prototype.camelCaseToString = function() {
 	var splitted = this.replace(/([A-Z]([a-z]+))/g, ' $1').trim();
 	return splitted.charAt(0).toUpperCase() + splitted.slice(1);
+}
+
+function updateStatusLabel(paperUrl, updateType) {
+	console.log("paperUrl = " + paperUrl);
+	var paperLink = $('#conferenceSidebar a[href="' + paperUrl + '"]');
+	console.log(paperLink);
+	var spans = $('#conferenceSidebar a[href="' + paperUrl + '"] span');
+	console.log(spans);
+	console.log("hasClass? " + $(spans).hasClass('fa'));
+	$(spans).removeClass('fa-sticky-note').addClass('fa-gavel');
 }
 
 function applyStatusLabel(paper, loadingConf) {
@@ -439,8 +451,9 @@ function signUp() {
 				z_index: 1051
 			});
 		},
-		error: function(result) {
-			$('#signupbutton').animateCss('shake').prev('.help-inline').animateCss('bounceIn').text(JSON.parse(result.responseText).message);
+		error: function(error) {
+			$('#signupbutton').animateCss('shake');
+			showErrorAlert('#login-modal .modal-body', JSON.parse(error.responseText).message, true);
 		}
 	});
 }
@@ -631,7 +644,7 @@ function buildUserPanel(userInfo) {
 				userReady(result.fullname, false);
 			},
 			error: function(error) {
-				showErrorAlert('#formInfo', JSON.parse(error.responseText).message, true);
+				showNotify(JSON.parse(error.responseText).message, true);
 			}
 		});
 	});
@@ -660,7 +673,7 @@ function buildUserPanel(userInfo) {
 				});
 			},
 			error: function(error) {
-				showErrorAlert('#formPass', JSON.parse(error.responseText).message, true);
+				showNotify(JSON.parse(error.responseText).message, true);
 			}
 		});
 	});

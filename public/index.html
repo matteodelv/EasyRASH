@@ -151,9 +151,7 @@
 					</div>
 					<form id="newConfForm" class="form ws-validate" action="javascript:createNewConference()">
 						<div class="modal-body">
-                     <div class="alert alert-danger fade in hidden" role="alert">
-                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                     </div>
+                     <div class="alert alert-danger fade in hidden" role="alert"></div>
 							<div class="form-group">
 								<label for="newConfTitle">Conference Title</label>
 								<input type="text" id="newConfTitle" class="form-control" name="title" value="" placeholder="Title" required="required">
@@ -164,7 +162,6 @@
 							</div>
 						</div>
 						<div class="modal-footer">
-							<span class="pull-left help-inline error-message"></span>
                      <div class="pull-right">
 							    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 							    <button type="submit" id="newConfSubmit" class="btn btn-primary" name="create">Create</button>
@@ -185,9 +182,7 @@
 					</div>
 					<form id="assignRevForm" class="form-horizontal ws-validate" action="javascript:assignReviewersToPaper()">
 						<div class="modal-body">
-                     <div class="alert alert-danger fade in hidden" role="alert">
-                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                     </div>
+                     <div class="alert alert-danger fade in hidden" role="alert"></div>
 							<div class="form-group">
 								<label class="control-label col-sm-3" for="reviewersSelector">Reviewers:</label>
 								<div class="col-sm-7">
@@ -196,7 +191,6 @@
 							</div>
 						</div>
 						<div class="modal-footer">
-							<span class="pull-left help-inline error-message"></span>
                      <div class="pull-right">
 							    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 							    <button type="submit" id="assignRevSubmit" class="btn btn-primary" name="assign">Assign Reviewers</button>
@@ -217,9 +211,7 @@
 					</div>
 					<form id="reviewAnnotationsForm" class="form ws-validate" action="javascript:sendReview()">
 						<div class="modal-body">
-                     <div class="alert alert-danger fade in hidden" role="alert">
-                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                     </div>
+                     <div class="alert alert-danger fade in hidden" role="alert"></div>
 							<div class="table-responsive">
 								<table class="table table-hover" id="annotationsTable">
 									<thead>
@@ -244,7 +236,6 @@
 							</div>
 						</div>
 						<div class="modal-footer">
-							<span class="pull-left help-inline error-message"></span>
                      <div class="pull-right">
 							    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
 							    <button type="submit" id="reviewSubmit" class="btn btn-primary" name="create">Submit Review</button>
@@ -264,9 +255,7 @@
                </div>
                <form id="reviewJudgementsForm" class="form ws-validate" action="javascript:sendPaperDecision()">
                   <div class="modal-body">
-                     <div class="alert alert-danger fade in hidden" role="alert">
-                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                     </div>
+                     <div class="alert alert-danger fade in hidden" role="alert"></div>
                      <div class="table-responsive">
                         <table class="table" id="judgementsTable">
                            <thead>
@@ -291,7 +280,6 @@
                      </div>
                   </div>
                   <div class="modal-footer">
-                     <span class="pull-left help-inline error-message"></span>
                      <div class="pull-right">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                         <button type="submit" id="decisionSubmit" class="btn btn-primary" name="create">Submit Decision</button>
@@ -311,9 +299,7 @@
 					</div>
 					<!-- Modal Body -->
 					<div id="loginpanel" class="modal-body tab-content">
-                     <div class="alert alert-danger fade in hidden" role="alert">
-                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                     </div>
+                     <div class="alert alert-danger fade in hidden" role="alert"></div>
 						<ul class="nav nav-tabs">
 							<li class="active"><a data-toggle="tab" href="#login">Log in</a></li>
 							<li><a data-toggle="tab" href="#signup">Sign up</a></li>
@@ -328,7 +314,6 @@
 								<input type="password" id="loginpassword" class="form-control" name="password" value="" placeholder="Password" required="required" />
 							</div>
 							<div class="modal-footer">
-								<span class="help-inline error-message"></span>
 								<button type="submit" id="loginbutton" class="btn btn-primary" name="login">Login</button>
 							</div>
 						</form>
@@ -366,7 +351,6 @@
 								<input type="password" id="signuppassword" class="form-control" name="password" value="" placeholder="Password" required="required" />
 							</div>
 							<div class="modal-footer">
-								<span class="pull-left help-inline error-message"></span>
                         <div class="pull-right">
 								    <button type="submit" id="signupbutton" class="btn btn-primary" name="signup">Sign up</button>
                         </div>
