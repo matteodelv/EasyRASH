@@ -54,7 +54,7 @@ $(document).ready(function() {
 					var message;
 					if (sessionStorage.userRole === 'Chair')
 						message = 'You are not allowed to enter Annotator Mode since you are Chair of the selected conference!';
-					else message = 'You are not allowed to enter Annotator Mode because you haven\'t Reviewer rights on this paper!';
+					else message = "You are not allowed to enter Annotator Mode because you don't have Reviewer rights on this paper!";
 					showNotify(message, true);
 				}
 				else if (alreadyReviewed) {
@@ -209,6 +209,7 @@ $(window).load(function() {
 		$('.send-review-btn').off('click').click(function(e){
 			openReviewAnnotationsModal();
 		});
+		//Handle click on inline annotation button
 		$addAnnotationPopup.off('click').click(function(e) {
 			if (activeMode !== 'reviewer') {
 				return;
@@ -219,6 +220,8 @@ $(window).load(function() {
 			annotation.text = currentSelection.text();
 
 			annotation.content = '';
+			annotation.type = 'inline';
+			annotation.author = sessionStorage.userID.replace('mailto:', '').replace(/(@.*)/g, '').replace(/\s+/g, '-').replace(/[^a-zA-Z-]/g, '').toLowerCase();
 			if (!currentSelection.isBackwards()){
 				annotation.startXPath = getXPath(currentSelection.anchorNode);
 				annotation.startOffset = currentSelection.anchorOffset;
@@ -231,6 +234,22 @@ $(window).load(function() {
 				annotation.endOffset = currentSelection.anchorOffset;
 			}
 			
+			loadDraftAnnotation(annotation);
+		});
+		//Handle click on block annotation button
+		$addBlockAnnotationPopup.off('click').click(function(e) {
+			if (activeMode !== 'reviewer') {
+				return;
+			}
+			var currentNode;
+			var annotation = {};
+			
+			annotation.text = $addBlockAnnotationPopup.parent().text();
+			annotation.content = '';
+			annotation.type = 'block';
+			annotation.author = sessionStorage.userID.replace('mailto:', '').replace(/(@.*)/g, '').replace(/\s+/g, '-').replace(/[^a-zA-Z-]/g, '').toLowerCase();
+			annotation.startXPath = getXPath($addBlockAnnotationPopup.parent()[0]);
+
 			loadDraftAnnotation(annotation);
 		});
 	});
@@ -312,43 +331,48 @@ function getElementByXpath(path) {
 
 /* Loads an annotation in draft mode, i.e. editing mode */
 function loadDraftAnnotation(annotation) {
-	//Restore selection
-	var section = annotation.sectionId ? $('#' + annotation.sectionId)[0] : $('.paper-container')[0].childNodes[annotation.sectionIndex];
-	var range = rangy.createRange();
-	var startNode = getElementByXpath(annotation.startXPath);
-	if (!startNode) return;
-	range.setStart(startNode, Math.min(annotation.startOffset, startNode.length));
-	var endNode = getElementByXpath(annotation.endXPath);
-	if (!endNode) return;
-	range.setEnd(endNode, Math.min(annotation.endOffset, endNode.length));
-	var limitRange = rangy.createRange();
-	limitRange.selectNode(range.endContainer);
-	range = limitRange.intersection(range);
+	var $wrapper;
 
-	//Wrap selection
-	var $wrapper = $('<span></span>)');
-	range.surroundContents($wrapper[0]);
-	$wrapper[0].parentNode.normalize();
-	var isNewWrapper = $wrapper[0].nextSibling && $wrapper[0].nextSibling.nodeType === 3 || $wrapper[0].previousSibling && $wrapper[0].previousSibling.nodeType === 3;
-	if (!isNewWrapper) { //Find out if text is already wrapped by parent, if so, unwrap and change the actual wrapper
-		var p = $wrapper.parent();
-		$wrapper.contents().unwrap();
-		$wrapper[0].normalize();
-		$wrapper = p;
+	if (annotation.type === 'inline'){
+		//Restore selection
+		var range = rangy.createRange();
+		var startNode = getElementByXpath(annotation.startXPath);
+		if (!startNode) return;
+		range.setStart(startNode, Math.min(annotation.startOffset, startNode.length));
+		var endNode = getElementByXpath(annotation.endXPath);
+		if (!endNode) return;
+		range.setEnd(endNode, Math.min(annotation.endOffset, endNode.length));
+		var limitRange = rangy.createRange();
+		limitRange.selectNode(range.endContainer);
+		range = limitRange.intersection(range);
+		//Wrap selection
+		$wrapper = $('<span></span>)');
+		range.surroundContents($wrapper[0]);
+		$wrapper[0].parentNode.normalize();
+		var isNewWrapper = $wrapper[0].nextSibling && $wrapper[0].nextSibling.nodeType === 3 || $wrapper[0].previousSibling && $wrapper[0].previousSibling.nodeType === 3;
+		if (!isNewWrapper) { //Find out if text is already wrapped by parent, if so, unwrap and change the actual wrapper
+			var p = $wrapper.parent();
+			$wrapper.contents().unwrap();
+			$wrapper[0].normalize();
+			$wrapper = p;
+		}
+		//Store info about whether the wrapper is newly generated, to be known in the eventuality of removal
+		$wrapper.data('isNewWrapper', isNewWrapper); 
+		
 	}
-	//Store info about whether the wrapper is newly generated, to be known in the eventuality of removal
-	$wrapper.data('isNewWrapper', isNewWrapper); 
-
+	
+	
 	//Find a proper id if none is found
 	if (!$wrapper[0].id) {
-		annotation.id = getUniqueInlineAnnotationId();
+		annotation.id = getUniqueAnnotationId();
 		$wrapper.attr('id', annotation.id);
 	} else {
 		annotation.id = $wrapper[0].id;
 	}
+	
 	$wrapper.addClass('inline-annotation');
-	$wrapper.addClass($wrapper.attr('id'));
-	var statement = ".inline-annotation." + $wrapper.attr('id');
+	$wrapper.addClass(annotation.author);
+	var statement = ".inline-annotation." + annotation.author;
 	$.injectCSS({
 		[statement]: {
 			'background': reviewerColor
@@ -484,9 +508,9 @@ function sendReview(){
 	});
 }
 
-function getUniqueInlineAnnotationId() {
+function getUniqueAnnotationId() {
 	var max = 0;
-	$('.inline-annotation').each(function() {
+	$('.inline-annotation, .block-annotation').each(function() {
 		if (!$(this).attr('id')) {
 			console.log($(this));
 		}
@@ -563,7 +587,7 @@ function loadAnnotations() {
 			//Highlight color default to first reviewer's color
 		var rgbColor = reviewerColors[annotationsById[id][0].author];
 		var rgbaColor = hexToRgbA(rgbColor, 0.4);
-		//Inline annotations appear as highlighted text and popover (plus h1, h2, h3)
+		//INLINE ANNOTATIONS appear as highlighted text and popover (plus h1, h2, h3)
 		if (inlineAnnotationElements.indexOf($('#'+id.replace('#', '')).prop('tagName').toLowerCase()) >= 0) {
 			var $elem = $('#'+id.replace('#', ''));
 			var authorClass = annotationsById[id].find(annotation => annotation.author).author.replace('mailto:', '').replace(/(@.*)/g, '').replace(/\s+/g, '-').replace(/[^a-zA-Z-]/g, '').toLowerCase();
@@ -607,7 +631,7 @@ function loadAnnotations() {
 			});
 
 			$('#carousel-' + id).carousel();
-			//Block annotations appear on the side with a hover effect
+		//BLOCK ANNOTATIONS appear on the side with a hover effect
 		} else if (blockAnnotationElements.indexOf($(id).prop('tagName').toLowerCase()) >= 0) {
 			var $anchor = $('<div class="comment-anchor cgen hidden-print"></div>');
 			var $elem = $(id);
@@ -621,7 +645,7 @@ function loadAnnotations() {
 			$anchor.addClass(id.replace('#', ''));
 
 			var inner = ['section', 'footer', 'header'].indexOf($(id).prop('tagName').toLowerCase()) < 0;
-			if (inner) {
+			if (inner) { //is section, footer or header
 				//Do not set cgen to prevent from hiding
 				var $wrapper = $('<div class=""></div>');
 				$elem.replaceWith($wrapper);

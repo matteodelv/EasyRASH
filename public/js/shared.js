@@ -20,22 +20,6 @@ function showErrorAlert(selector, message, timed) {
 	}
 }
 
-/* Versione Commit Filippo
-function showErrorAlert(selector, message, timed) {
-	var alertSelector = selector + ' .alert';
-	if (!timed) $(alertSelector).addClass('hidden');
-	
-	$(alertSelector).text(message);
-	$(alertSelector).removeClass('hidden');
-	if (timed) {
-		window.setTimeout(function() {
-			$(alertSelector).fadeIn(PANEL_TRANSITION_TIME, function() {
-				$(this).addClass('hidden');
-			});
-		}, 3000);
-	}
-}*/
-
 function showNotify(message, isError) {
 	var type = (isError) ? 'danger' : 'success';
 	var icon = (isError) ? 'fa fa-exclamation-triangle' : 'fa fa-check';

@@ -1,21 +1,5 @@
 var $pageContentWrapper;
 
-function showErrorAlert(selector, message, timed) {
-	var alertSelector = selector + ' .alert';
-	if (!timed) $(alertSelector).addClass('hidden');
-	
-	$(alertSelector).text(message);
-	$(alertSelector).removeClass('hidden');
-
-	if (timed) {
-		window.setTimeout(function() {
-			$(alertSelector).fadeIn(PANEL_TRANSITION_TIME, function() {
-				$(this).addClass('hidden');
-			});
-		}, 3000);
-	}
-}
-
 $(document).ready(function() {
 	sessionStorage.userRole = 'Reader';
 	checkCurrentRole();
