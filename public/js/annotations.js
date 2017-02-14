@@ -237,6 +237,7 @@ $(window).load(function() {
 			loadDraftAnnotation(annotation);
 		});
 		//Handle click on block annotation button
+		/*
 		$addBlockAnnotationPopup.off('click').click(function(e) {
 			if (activeMode !== 'reviewer') {
 				return;
@@ -251,7 +252,7 @@ $(window).load(function() {
 			annotation.startXPath = getXPath($addBlockAnnotationPopup.parent()[0]);
 
 			loadDraftAnnotation(annotation);
-		});
+		});*/
 	});
 	// Repositions the button to add an annotation
 	var repositionAddAnnotationButton = function() {
@@ -311,6 +312,7 @@ function loadDraftAnnotations() {
 			loadDraftAnnotation(draftAnnotations[annotationKey]);
 		});
 	}
+	/*
 	var $blocks = $('.paper-container>*').not('.cgen').find(blockAnnotationElements.join(', ')).not('.cgen').add($('.paper-container>*').not('.cgen'));
 	$blocks.mouseover(function(e) {
 		e.stopPropagation();
@@ -321,7 +323,7 @@ function loadDraftAnnotations() {
 	$blocks.mouseleave(function(e){
 		e.stopPropagation();
 		$addBlockAnnotationPopup.detach();
-	});
+	});*/
 }
 
 /* Returns the first element from its given xpath */
@@ -358,9 +360,10 @@ function loadDraftAnnotation(annotation) {
 		}
 		//Store info about whether the wrapper is newly generated, to be known in the eventuality of removal
 		$wrapper.data('isNewWrapper', isNewWrapper); 
-		
+	} else {
+		$wrapper = $(getElementByXpath(annotation.startXPath));
+		$wrapper.data('isNewWrapper', false); 
 	}
-	
 	
 	//Find a proper id if none is found
 	if (!$wrapper[0].id) {
@@ -370,9 +373,10 @@ function loadDraftAnnotation(annotation) {
 		annotation.id = $wrapper[0].id;
 	}
 	
-	$wrapper.addClass('inline-annotation');
+	$wrapper.addClass(annotation.type === 'inline' ? 'inline-annotation' : 'block-annotation');
 	$wrapper.addClass(annotation.author);
-	var statement = ".inline-annotation." + annotation.author;
+	var statement = (annotation.type === 'inline' ? '.inline-annotation.' : '.block-annotation.') + annotation.author;
+	console.log(statement);
 	$.injectCSS({
 		[statement]: {
 			'background': reviewerColor
@@ -386,7 +390,7 @@ function loadDraftAnnotation(annotation) {
 		type: 'html',
 		animation: 'pop',
 		closeable: true,
-		content: getInlineAnnotationEditor($wrapper.attr('id'), annotation.content),
+		content: getInlineAnnotationEditor($wrapper.attr('id'), annotation.content), //TODO: Check this out
 		delay: { "show": 0, "hide": 300 }
 	});
 
@@ -426,6 +430,7 @@ function loadDraftAnnotation(annotation) {
 				$wrapper.webuiPopover('destroy');
 				$wrapper.off('click');
 				$wrapper.removeClass('inline-annotation');
+				$wrapper.removeClass('block-annotation');
 			}
 		}
 		//Save annotation locally

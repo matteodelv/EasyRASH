@@ -505,8 +505,10 @@ router.post('/:id/review', function(req, res) {
 							//Update event submission
 							submission.reviewedBy.push(req.jwtPayload.id);
 							fs.writeFileSync(eventsFilePath, JSON.stringify(events, null, "\t"));
-
-							res.send('Paper reviewed successfully.')
+							releasePaperLock(req.params.id, req.jwtPayload.id, (err) => {
+								if (err) res.send(err); 
+								else res.send('Paper reviewed successfully.');
+							});
 						});
 					}
 				}
