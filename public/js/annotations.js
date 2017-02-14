@@ -8,7 +8,7 @@ var activeMode = 'reader';
 var blockAnnotationElements = ['p', 'div', 'section', 'figure', 'footer', 'header'];
 var inlineAnnotationElements = ['span', 'em', 'code', 'a', 'time', 'cite', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'];
 
-// release lock on current paper, if opened 
+// Release lock on current paper if there are no draft annotations
 window.onbeforeunload = function(event) {
 	if (activeMode === 'reviewer' && $('#paper-container').children().length !== 0) {
 		var paperID = document.location.pathname.split('papers/').pop().replace('/','');
@@ -98,6 +98,7 @@ $(document).ready(function() {
 	});
 });
 
+/* Handles the click of the annotator/reader checkbox */
 function updateModeCheckbox(checked) {
 	$('#mode-checkbox').prop('checked', checked);
 
@@ -109,6 +110,7 @@ function updateModeCheckbox(checked) {
 	refreshMode();
 }
 
+/* Deals with refreshing the current mode (annotator or reader) */
 function refreshMode() {
 	if (activeMode === 'reviewer') {
 		//Reviewer mode
@@ -126,6 +128,7 @@ function refreshMode() {
 	$(document).trigger('modechanged');
 }
 
+/* Returns the xpath query for a given node. It attempts to get the closest parent id to the node and sets it as the first predicate */
 function getXPath(node) {
     var comp, comps = [];
     var parent = null;
@@ -205,7 +208,6 @@ $(window).load(function() {
 
 		$('.send-review-btn').off('click').click(function(e){
 			openReviewAnnotationsModal();
-			//sendReview();
 		});
 		$addAnnotationPopup.off('click').click(function(e) {
 			if (activeMode !== 'reviewer') {
@@ -213,36 +215,7 @@ $(window).load(function() {
 			}
 			var currentNode;
 			var annotation = {};
-
-			/* Build path strings 
-			currentNode = currentSelection.anchorNode;
-			while (!currentNode.tagName || currentNode.tagName.toLowerCase() !== 'section' && $('.paper-container').has($(currentNode))) {
-				currentNode = currentNode.parentNode;
-			}
-			if (currentNode.tagName.toLowerCase() === 'section') {
-				annotation.sectionId = currentNode.id;
-				annotation.sectionIndex = getNodeIndex(currentNode);
-				annotation.characterRanges = currentSelection.saveCharacterRanges(currentNode);
-				// annotation.sectionStart = bounds.characterRange.start;
-				// annotation.sectionEnd = bounds.characterRange.end;
-			}
-			currentNode = currentSelection.anchorNode;
-			annotation.start = '^' + currentSelection.anchorOffset;
-			while (!currentNode.id) {
-				annotation.start = '/' + getNodeIndex(currentNode) + annotation.start;
-				currentNode = currentNode.parentNode;
-			}
-			annotation.start = currentNode.id + annotation.start;
-
-			currentNode = currentSelection.focusNode;
-			annotation.end = '^' + currentSelection.focusOffset;
-			while (!currentNode.id) {
-				annotation.end = '/' + getNodeIndex(currentNode) + annotation.end;
-				currentNode = currentNode.parentNode;
-			}
-			annotation.end = '#' + currentNode.id + annotation.end;
 			
-			/* END Build path strings */
 			annotation.text = currentSelection.text();
 
 			annotation.content = '';
@@ -261,7 +234,7 @@ $(window).load(function() {
 			loadDraftAnnotation(annotation);
 		});
 	});
-
+	// Repositions the button to add an annotation
 	var repositionAddAnnotationButton = function() {
 		var anchor = currentSelection.anchorNode;
 		if (!anchor) return;
@@ -286,7 +259,7 @@ $(window).load(function() {
 			return;
 		}
 
-		/* Cases in which the button should be hidden*/
+		// Cases in which the button should be hidden
 		if (currentSelection.anchorNode.parentNode !== currentSelection.focusNode.parentNode //Different parent
 			|| !$('.paper-container').has(currentSelection.anchorNode).length || !$('.paper-container').has(currentSelection.focusNode).length //Out of bounds
 			|| $('.cgen').has($(currentSelection.anchorNode)).length || $('.cgen').has($(currentSelection.focusNode)).length || currentSelection.anchorNode === currentSelection.focusNode && currentSelection.anchorOffset === currentSelection.focusOffset // Nothing selected
@@ -295,7 +268,6 @@ $(window).load(function() {
 			return;
 		}
 
-		/* Repositioning add annotation popup */
 		//Get selection position relative to its parent
 		repositionAddAnnotationButton();
 
@@ -311,6 +283,7 @@ $(window).load(function() {
 	});
 });
 
+/* Loads all draft (editing) annotations with their relative popups */
 function loadDraftAnnotations() {
 	var paperId = document.location.pathname.split('/papers/')[1].replace(/\/?$/, '/');
 	if (localStorage.getItem(paperId + 'draftAnnotations')) {
@@ -332,16 +305,16 @@ function loadDraftAnnotations() {
 	});
 }
 
+/* Returns the first element from its given xpath */
 function getElementByXpath(path) {
   return document.evaluate(path, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
 }
 
+/* Loads an annotation in draft mode, i.e. editing mode */
 function loadDraftAnnotation(annotation) {
-
-	//Restoring selection
+	//Restore selection
 	var section = annotation.sectionId ? $('#' + annotation.sectionId)[0] : $('.paper-container')[0].childNodes[annotation.sectionIndex];
 	var range = rangy.createRange();
-	//range.selectCharacters(section, annotation.characterRanges[0].characterRange.start, annotation.characterRanges[0].characterRange.end);
 	var startNode = getElementByXpath(annotation.startXPath);
 	if (!startNode) return;
 	range.setStart(startNode, Math.min(annotation.startOffset, startNode.length));
@@ -351,24 +324,27 @@ function loadDraftAnnotation(annotation) {
 	var limitRange = rangy.createRange();
 	limitRange.selectNode(range.endContainer);
 	range = limitRange.intersection(range);
-	/*characterOptions: {
-      ignoreCharacters: '\u200B'
-    }*/
 
+	//Wrap selection
 	var $wrapper = $('<span></span>)');
 	range.surroundContents($wrapper[0]);
 	$wrapper[0].parentNode.normalize();
 	var isNewWrapper = $wrapper[0].nextSibling && $wrapper[0].nextSibling.nodeType === 3 || $wrapper[0].previousSibling && $wrapper[0].previousSibling.nodeType === 3;
-	if (!isNewWrapper) {
+	if (!isNewWrapper) { //Find out if text is already wrapped by parent, if so, unwrap and change the actual wrapper
 		var p = $wrapper.parent();
 		$wrapper.contents().unwrap();
 		$wrapper[0].normalize();
 		$wrapper = p;
 	}
-	annotation.id = $wrapper[0].id;
+	//Store info about whether the wrapper is newly generated, to be known in the eventuality of removal
+	$wrapper.data('isNewWrapper', isNewWrapper); 
+
+	//Find a proper id if none is found
 	if (!$wrapper[0].id) {
 		annotation.id = getUniqueInlineAnnotationId();
 		$wrapper.attr('id', annotation.id);
+	} else {
+		annotation.id = $wrapper[0].id;
 	}
 	$wrapper.addClass('inline-annotation');
 	$wrapper.addClass($wrapper.attr('id'));
@@ -379,6 +355,7 @@ function loadDraftAnnotation(annotation) {
 		}
 	});
 
+	//Get popover for annotation editor
 	var $popover = $wrapper.webuiPopover({
 		placement: 'top',
 		trigger: 'click',
@@ -396,9 +373,11 @@ function loadDraftAnnotation(annotation) {
 		}, 1);
 	}
 
+	//Hide all other popovers when one is opened
 	$popover.on("shown.webui.popover", function(e) {
 		$('#' + $wrapper.attr('id') + '-editor button.remove-annotation').click(function() {
-			$('#' + $wrapper.attr('id') + '-editor textarea').val(''); //Empty text on popup and close
+			//Empty text on popup and close
+			$('#' + $wrapper.attr('id') + '-editor textarea').val(''); 
 			WebuiPopovers.hideAll();
 		});
 		$('#' + $wrapper.attr('id') + '-editor button.confirm-annotation').click(function() {
@@ -406,31 +385,34 @@ function loadDraftAnnotation(annotation) {
 		});
 	});
 
+	//Manage popup closing (remove annotation if empty, store it in localStorage etc.)
 	$popover.on("hidden.webui.popover", function(e) {
-		//Text is empty on popup close
-		if (!$('#' + $wrapper.attr('id') + '-editor textarea').val().length) {
-			var isNewWrapper = $wrapper[0].nextSibling && $wrapper[0].nextSibling.nodeType === 3 || $wrapper[0].previousSibling && $wrapper[0].previousSibling.nodeType === 3;
+		
+		annotation.content = $('#' + $wrapper.attr('id') + '-editor textarea').val();
+		if (!annotation.content) {
+			//Text is empty on popup close
+			var isNewWrapper = $wrapper.data('isNewWrapper');
 			if (isNewWrapper) {
 				var p = $wrapper.parent();
 				$wrapper.contents().unwrap();
-				p[0].normalize();
 				$wrapper.remove();
 				$('#' + $wrapper.attr('id') + '-editor textarea').parent().remove();
+				p[0].normalize();
 			} else {
 				$wrapper.webuiPopover('destroy');
 				$wrapper.off('click');
 				$wrapper.removeClass('inline-annotation');
 			}
 		}
-		//Saving annotation locally
-		annotation.content = $('#' + $wrapper.attr('id') + '-editor textarea').val();
+		//Save annotation locally
 		var paperId = document.location.pathname.split('/papers/')[1].replace(/\/?$/, '/'); //Add trailing slash
 		if (!localStorage.getItem(paperId + 'draftAnnotations')) {
 			localStorage.setItem(paperId + 'draftAnnotations', JSON.stringify({}));
 		}
 		var annotations = JSON.parse(localStorage.getItem(paperId + 'draftAnnotations'));
 		annotations[annotation.id] = annotation;
-		//Remove annotation if empty
+
+		//Remove annotation from localStorage if empty
 		if (!annotation.content) {
 			delete annotations[annotation.id];
 		}
@@ -532,17 +514,18 @@ function getRelativePosition(parentPos, childPos) {
 	return relativePos;
 }
 
+/* Loads all annotations to be properly viewed */
 function loadAnnotations() {
-	//Comments and reviews
-	reviews = [];
-	//Global variable
-	annotationsById = {};
+	reviews = []; //Comments and reviews
+	annotationsById = {}; //Global variable
+	//Find the json+ld contents
 	$addedHeadTags.filter('script[type="application/ld+json"]').each(function() {
 		var review = JSON.parse($(this).html());
 		//console.log($(this).html);
 		reviews.push(review);
 		var person = review.find(function(r) { return r['@type'] === 'person' });
 		review.forEach(function(annotation) {
+			//Fill up the annotations and styles info 
 			if (annotation.ref) {
 				annotation.name = person.name;
 				annotation.email = person['foaf:mbox'] ? person['foaf:mbox']['@id'] : null;
@@ -566,6 +549,7 @@ function loadAnnotations() {
 		annotationsById[id].sort(function(a, b) {
 			return b.text.length - a.text.length
 		});
+		//Deal with coloring the annotation background based on reviewer
 		var colors = annotationsById[id].map(function(annotation) {
 			return hexToRgbA(reviewerColors[annotation.author], 0.5);
 		});
@@ -582,9 +566,8 @@ function loadAnnotations() {
 		//Inline annotations appear as highlighted text and popover (plus h1, h2, h3)
 		if (inlineAnnotationElements.indexOf($('#'+id.replace('#', '')).prop('tagName').toLowerCase()) >= 0) {
 			var $elem = $('#'+id.replace('#', ''));
-
-			//TODO: Should be replaced with author(s) with formatted string
-			var statement = ".inline-annotation." + id.replace('#', '');
+			var authorClass = annotationsById[id].find(annotation => annotation.author).author.replace('mailto:', '').replace(/(@.*)/g, '').replace(/\s+/g, '-').replace(/[^a-zA-Z-]/g, '').toLowerCase();
+			var statement = ".inline-annotation." + authorClass; 
 			$.injectCSS({
 				[statement]: {
 					'background': rgbaColor
@@ -592,7 +575,7 @@ function loadAnnotations() {
 			});
 			$elem.addClass('inline-annotation');
 			annotationsById[id].forEach(function(reviewer) {
-				$elem.addClass(id.replace('#', ''));
+				$elem.addClass(authorClass);
 			});
 			if (annotationsById[id].length > 1) {
 				gradients.forEach(function(gradient) {
@@ -679,10 +662,6 @@ function loadAnnotations() {
 				onHide: animateOut
 			});
 
-			/*$anchor.mouseenter(function() {
-				$popover.webuiPopover('show');
-			});*/
-
 			$popover.on("shown.webui.popover", function(e) {
 				carouselNormalization('#carousel-' + id.replace('#', '') + ' .item');
 			});
@@ -691,7 +670,7 @@ function loadAnnotations() {
 	});
 }
 
-//Returns the content of a popup annotation
+/* Returns the content of a popup annotation */
 function getInlineAnnotationHtml(id) {
 	var annotations = annotationsById[id];
 	var carouselId = 'carousel-' + id.replace('#', '');
@@ -725,6 +704,7 @@ function getInlineAnnotationHtml(id) {
 	return $carouselContainer[0].outerHTML;
 }
 
+/* Returns the jquery element for an annotation editor for inline annotations */
 function getInlineAnnotationEditor(id, content) {
 	var $container = $('<div id="' + id + '-editor' + '"></div>');
 	var $textarea = $('<textarea class="inline-annotation-editor" type="text" ' + (activeMode === 'reader' ? 'disabled="disabled"' : '') + '>' + content + '</textarea>');
@@ -747,7 +727,7 @@ function getInlineAnnotationEditor(id, content) {
 	return $container;
 }
 
-//Causes all carousel slides to be the height of the tallest one
+/* Causes all carousel slides to be the height of the tallest one */
 function carouselNormalization(selector) {
 	var items = $(selector), //grab all slides
 		heights = [], //create empty array to store height values
@@ -782,6 +762,7 @@ function carouselNormalization(selector) {
 	}
 }
 
+/* Converts hex code to rgbA with the set opacity */
 function hexToRgbA(hex, opacity) {
 	var c;
 	if (/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)) {
@@ -795,6 +776,7 @@ function hexToRgbA(hex, opacity) {
 	throw new Error('Bad Hex: ' + hex);
 }
 
+/* Converts hex code to rgbA blended with the set opacity */
 function hexToAlphaBlended(hex, bgHex, opacity) {
 	var sourceRGB = hexToRgb(hex);
 	var bgRGB = hexToRgb(bgHex);
@@ -804,6 +786,7 @@ function hexToAlphaBlended(hex, bgHex, opacity) {
 	return rgbToHex(targetR, targetG, targetB);
 }
 
+/* Converts hex code to rgb */
 function hexToRgb(hex) {
 	var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
 	return result ? {
@@ -813,12 +796,13 @@ function hexToRgb(hex) {
 	} : null;
 }
 
+/* Converts rgb digit to hex digit */
 function componentToHex(c) {
 	var hex = c.toString(16);
 	return hex.length == 1 ? "0" + hex : hex;
 }
 
-
+/* Converts rgb code to hex */
 function rgbToHex(r, g, b) {
 	return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
 }
