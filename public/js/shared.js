@@ -3,6 +3,9 @@
 */
 
 const PANEL_TRANSITION_TIME = 200;
+const UPDATE_ICON_PAPER_ACCEPTED = "PaperDecisionAccepted";
+const UPDATE_ICON_PAPER_REJECTED = "PaperDecisionRejected";
+const UPDATE_ICON_REVIEW_SENT = "ReviewSent";
 
 function showErrorAlert(selector, message, timed) {
 	var alertSelector = selector + ' .alert';

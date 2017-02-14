@@ -274,12 +274,23 @@ String.prototype.camelCaseToString = function() {
 
 function updateStatusLabel(paperUrl, updateType) {
 	console.log("paperUrl = " + paperUrl);
-	var paperLink = $('#conferenceSidebar a[href="' + paperUrl + '"]');
-	console.log(paperLink);
-	var spans = $('#conferenceSidebar a[href="' + paperUrl + '"] span');
-	console.log(spans);
-	console.log("hasClass? " + $(spans).hasClass('fa'));
-	$(spans).removeClass('fa-sticky-note').addClass('fa-gavel');
+	console.log("updateType = " + updateType);
+
+	if (updateType === UPDATE_ICON_PAPER_ACCEPTED){
+		var span = $('#conferenceSidebar a[href^="' + paperUrl + '"] span.fa-gavel');
+		console.log(span);
+		span.addClass('fa-check').removeClass('fa-gavel');
+	}
+	else if (updateType === UPDATE_ICON_PAPER_REJECTED){
+		var span = $('#conferenceSidebar a[href^="' + paperUrl + '"] span.fa-gavel');
+		console.log(span);
+		span.addClass('fa-times').removeClass('fa-gavel');
+	}
+	else if (updateType === UPDATE_ICON_REVIEW_SENT){
+		var span = $('#conferenceSidebar a[href^="' + paperUrl + '"] span.fa-exclamation-circle');
+		console.log(span);
+		span.addClass('fa-sticky-note').removeClass('fa-exclamation-circle');
+	}
 }
 
 function applyStatusLabel(paper, loadingConf) {
@@ -346,6 +357,7 @@ function fetchAndBuildSidebarMenu(result, loadingConf, callback) {
 
 			if (result[type].length > 0) {
 				result[type].forEach(function(paper) {
+					if (paper.url.charAt(paper.url.length - 1) !== '/') paper.url = paper.url + '/';
 					var urlComplete = "/papers/" + paper.url;
 					var liHtml = '<li><a href="' + urlComplete + '">' + paper.title.split(" -- ")[0] + '$label</a></li>\n';
 					liHtml = liHtml.replace("$label", applyStatusLabel(paper, loadingConf));

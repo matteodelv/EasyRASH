@@ -200,6 +200,7 @@ function getXPath(node) {
 
 $(window).load(function() {
 	refreshMode();
+	selectionchange.start();
 	$(document).mouseup(function() {
 		//Make button visible
 		if (activeMode === 'reviewer' && shouldShowPopup) {
@@ -504,6 +505,7 @@ function sendReview(){
 			localStorage.removeItem(paperId + 'draftAnnotations');
 			$('#reviewAnnotationsModal').modal('hide');
 			loadCurrentPaperContent();
+			updateStatusLabel('/papers/' + paperId, UPDATE_ICON_REVIEW_SENT);
 		},
 		error: function(error) {
 			$('.send-review-btn').animateCss('shake');

@@ -460,6 +460,8 @@ function sendPaperDecision() {
 		success: function(result) {
 			$('#adminPaperDecision').modal('hide');
 			showNotify(result.message, false);
+			if (data.decision === 'accepted') updateStatusLabel('/papers/' + paperID, UPDATE_ICON_PAPER_ACCEPTED);
+			else updateStatusLabel('/papers/' + paperID, UPDATE_ICON_PAPER_REJECTED);
 		},
 		error: function(error) {
 			showErrorAlert('#adminPaperDecision .modal-body', JSON.parse(error.responseText).message, true);
