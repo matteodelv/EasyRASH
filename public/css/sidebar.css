@@ -16,6 +16,7 @@
 
 .sidebar {
     background: #4D394B;
+    padding-bottom:20px;
 }
 
 .sidebar-nav {
@@ -64,6 +65,10 @@
 .sidebar-nav > .sidebar-brand a:hover {
     color: #fff;
     background: none;
+}
+
+#sidebar .emptySection {
+    margin:0px 10px;
 }
 
 td>.fa-check, #conferenceSidebar .fa-check, #helpModal .fa-check {

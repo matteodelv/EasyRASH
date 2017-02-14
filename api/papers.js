@@ -286,7 +286,7 @@ router.get("/user", function(req, res) {
 						result.authored_by_me.push(paper);
 					}
 
-					if (paper.reviewers.some(reviewer => reviewer === req.jwtPayload.id && paper.reviewedBy.indexOf(reviewer) === -1 && paper.status !== "accepted") && event.chairs.indexOf(req.jwtPayload.id) === -1) {
+					if (paper.reviewers.some(reviewer => reviewer === req.jwtPayload.id && paper.reviewedBy.indexOf(reviewer) === -1 && paper.status === "pending") && event.chairs.indexOf(req.jwtPayload.id) === -1) {
 						result.pending_reviews.push(paper);
 					}
 				});

@@ -1,5 +1,3 @@
-const PANEL_TRANSITION_TIME = 200;
-
 //JQuery animation of an element
 $.fn.extend({
 	animateCss: function(animationName) {
@@ -359,8 +357,8 @@ function fetchAndBuildSidebarMenu(result, loadingConf, callback) {
 				});
 			}
 			else {
-				var li = $('<li>No Submitted Papers Yet</li>');
-				if (loadingConf) li.insertAfter($(parentObj + ' .sidebar-brand'));
+				if (loadingConf) $('<li>No Submitted Papers Yet</li>').insertAfter($(parentObj + ' .sidebar-brand'));
+				else $('<li class="emptySection">No Papers Available</li>').insertAfter($(parentObj + ' .sidebar-brand.' + type));
 			}
 		}
 	}
@@ -409,9 +407,8 @@ function logIn() {
 			userReady(result.fullname, true);
 		},
 		error: function(error) {
-			$('#loginbutton').animateCss('shake').prev('.help-inline').animateCss('bounceIn').text(JSON.parse(error.responseText).message);
-			$('#submitButtonLogin').animateCss('shake');
-			//showNotify(JSON.parse(error.responseText).message, true);
+			showErrorAlert('#login-modal .modal-body', JSON.parse(error.responseText).message, true);
+			$('#loginbutton').animateCss('shake');
 			$("#emailFieldLogin").val("");
 			$("#passFieldLogin").val("");
 		}

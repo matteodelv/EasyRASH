@@ -138,7 +138,7 @@ function buildConfAdminPanel(confData) {
 	$('#page-content-wrapper #top').append(panel);
 
 	var headTitle = $('<h4>Chair Admin Panel - </h4>').append(confData.conference);
-	var headText = $('<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam feugiat turpis vel leo aliquam, id ultrices ligula sodales. Nam venenatis bibendum ipsum nec aliquam. Praesent ut rutrum lorem. Nulla nec odio dolor. Aenean varius magna ut pretium ornare. Phasellus sit amet gravida lacus. Curabitur lacinia lorem vestibulum velit lacinia venenatis. In finibus erat vitae dui tincidunt, sed vulputate justo commodo. Aliquam gravida vestibulum orci, volutpat maximus justo semper eget. Fusce a purus felis.</p>');
+	var headText = $('<p>As Chair, here you can manage the selected conference. You can update its name and its acronym and it\'s where Co-Chairs and Reviewers can be chosen. It\'s always useful to have Co-Chairs to avoid unwanted conflict of interest situations.</p><p class="text-info">Note: Once chosen, Reviewers can\'t be removed from their role.</p>');
 
 	var ids = ["confTitle", "confAcronym", "confCochairs", "confReviewers"];
 	var texts = ["Title:", "Acronym:", "Co-Chairs:", "Reviewers:", "Update Conference", "Close Admin Panel"];
@@ -299,7 +299,7 @@ function buildConfAdminPanel(confData) {
 
 	$('#closeConfDiv').append(closeConfBtn);
 
-	var closeText = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam feugiat turpis vel leo aliquam, id ultrices ligula sodales. Nam venenatis bibendum ipsum nec aliquam. Praesent ut rutrum lorem. Nulla nec odio dolor. Aenean varius magna ut pretium ornare. Phasellus sit amet gravida lacus.';
+	var closeText = 'A conference can be closed only if all of the following conditions are met: it has to be open, has to contain at least one paper and each paper has to be reviewed by all its Reviewers and judged by one of the Chairs.';
 	$('#closeConfDiv').append('<p class="pull-right"></p>').append(closeText);
 
 	$('#closeConfDiv .btn-danger').on('click', function(e) {
