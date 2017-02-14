@@ -107,7 +107,7 @@ router.get('/:id/reviews', function(req, res) {
 
 					res.json({ reviews: reviews });
 				});
-			} else res.status(404).send({ message: 'Requested RASH file not found on server.' });
+			} else res.status(404).json({ message: 'Requested RASH file not found on server.' });
 		});
 	});
 });
@@ -314,11 +314,11 @@ router.post('/:id/review', function(req, res) {
 		var submission = utils.findSubmission(events, req.params.id);
 		if (!submission.reviewers.some(reviewer => reviewer === req.jwtPayload.id)) {
 			//Not allowed to review
-			res.status(403).send("Error. You are not allowed to review this paper.");
+			res.status(403).json({message: "Error. You are not allowed to review this paper."});
 		} else {
 			if (submission.reviewedBy.some(reviewer => reviewer === req.jwtPayload.id)) {
 				//Already reviewed
-				res.status(403).send("Error. You have already reviewed this paper.");
+				res.status(403).json({message: "Error. You have already reviewed this paper."});
 			} else {
 				//Good to go
 				var filePath = path.resolve('storage/papers/' + req.params.id + '.html');
@@ -452,7 +452,7 @@ router.post('/:id/review', function(req, res) {
 						save();
 						//Release lock 
 						releasePaperLock(req.params.id, req.jwtPayload.id, (err) => {
-							if (err) res.status(409).send(err); 
+							if (err) res.status(409).json({message: err.toString()}); 
 							else res.json({ message: 'Paper reviewed successfully.' });
 						});
 					});
