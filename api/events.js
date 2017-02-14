@@ -198,7 +198,7 @@ router.get('/:id/:paper/reviewers', function(req, res) {
 });
 
 router.post('/:id/:paper/reviewers', function(req, res) {
-	utils.loadDataFile('storage/events.json', (error, events) => {
+	utils.loadJsonFile('storage/events.json', (error, events) => {
 		var selectedConf = events.find(conf => conf.acronym === decodeURI(req.params.id));
 		if (selectedConf) {
 			var paper = selectedConf.submissions.find(p => p.url === decodeURI(req.params.paper));
