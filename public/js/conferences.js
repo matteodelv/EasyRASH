@@ -292,10 +292,10 @@ function buildConfAdminPanel(confData) {
 	closeConfBtn.append('Close Conference');
 
 	if (confData.status === "open") {
-		if (confData.submissions.length === 0 || !confData.submissions.every(element => { return element.status === "accepted"; }))
-			closeConfBtn.addClass('disabled');
+		if (confData.submissions.length === 0 || !confData.submissions.every(element => { return element.status !== "pending"; }))
+			closeConfBtn.prop('disabled', true);
 	}
-	else closeConfBtn.addClass('disabled');
+	else closeConfBtn.prop('disabled', true);
 
 	$('#closeConfDiv').append(closeConfBtn);
 

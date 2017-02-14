@@ -71,8 +71,8 @@ router.put('/:id/close', function(req, res) {
 		fs.readFile(eventsPath, (error, data) => {
 			var confs = JSON.parse(data);
 			var selectedConf = confs.find(elem => elem.acronym === decodeURI(req.params.id));
-			var paperCheck = selectedConf.submissions.every(paper => { return paper.status === "accepted"; });
-			if (selectedConf.status === "open" && paperCheck) {
+			var paperCheck = selectedConf.submissions.some(paper => { return paper.status === "pending"; });
+			if (selectedConf.status === "open" && !paperCheck && selectedConf.submissions.length > 0) {
 				selectedConf.status = "closed";
 
 				if (confs) {
@@ -175,7 +175,7 @@ router.get('/:id/:paper/reviewers', function(req, res) {
 							var users = JSON.parse(usersData);
 							selectedConf.pc_members.forEach(user => {
 								var selUser = users.find(u => u.id === user);
-								if (selUser) {
+								if (selUser && paper.authors.indexOf(selUser.id) === -1) {
 									var alreadyRev = (paper.reviewers.indexOf(selUser.id) !== -1) ? true : false;
 									reviewers.push({
 										id: selUser.id,
