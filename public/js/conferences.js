@@ -34,19 +34,19 @@ function getConferences() {
 							checkCurrentRole();
 
 							if ($('#paper-container').children().length !== 0) {
-								History.pushState({}, '', "/");
-								document.title = 'EasyRASH Web App';
-								$(this).empty();
-								$('#top ul.nav').empty();
-								$('#placeholder p').text('Selected Conference: ' + sessionStorage.currentAcronym);
-								$('#placeholder').removeClass('hidden');
-								$(window).scrollTop(0);
+								if(!result.papers.some(function(paper){ return paper.url === document.location.pathname.split('papers/').pop().replace('/','');})){
+									History.pushState({}, '', "/");
+									document.title = 'EasyRASH Web App';
+									$(this).empty();
+									$('#top ul.nav').empty();
+									$('#placeholder p').text('Selected Conference: ' + sessionStorage.currentAcronym);
+									$('#placeholder').removeClass('hidden');
+									$(window).scrollTop(0);	
+								}
 							}
 							else $('#placeholder p').text('Selected Conference: ' + sessionStorage.currentAcronym);
 
-							fetchAndBuildSidebarMenu(result, true, function() {
-								loadCurrentPaperContent();
-							});
+							fetchAndBuildSidebarMenu(result, true);
 						},
 						error: function(err) {
 							showNotify(JSON.parse(err.responseText).message, true);

@@ -151,8 +151,6 @@ function loadCurrentPaperContent() {
 		delete sessionStorage.revForPaper;
 		delete sessionStorage.alreadyReviewed;
 
-		updateStatusLabel(document.location.pathname, "");
-
 		$.ajax({
 			url: '/api' + document.location.pathname,
 			method: 'GET',
@@ -273,9 +271,6 @@ String.prototype.camelCaseToString = function() {
 }
 
 function updateStatusLabel(paperUrl, updateType) {
-	console.log("paperUrl = " + paperUrl);
-	console.log("updateType = " + updateType);
-
 	if (updateType === UPDATE_ICON_PAPER_ACCEPTED){
 		var span = $('#conferenceSidebar a[href^="' + paperUrl + '"] span.fa-gavel');
 		console.log(span);
@@ -366,7 +361,33 @@ function fetchAndBuildSidebarMenu(result, loadingConf, callback) {
 					if (loadingConf) li.insertAfter($(parentObj + ' .sidebar-brand'));
 					else li.insertAfter($(parentObj + ' .sidebar-brand.' + type));
 
-					li.on('click', function() {
+					li.find('a').on('click', function() {
+						console.log("id sidebar = " + li.parent().prop('id'));
+						if (li.parent().prop('id') === "sidebar") {
+							var $a = $($("#conferenceSelector a").toArray().find(function(elem) {return $(elem).data('acronym') === paper.conference;}));
+							$("#conferenceSelector .btn:first-child *:first-child").text($a.text());
+							$("#conferenceSelector .btn:first-child *:first-child").val($a.text());
+
+							$.ajax({
+								url: encodeURI("/api/events/" + paper.conference + "/papers"),
+								method: "GET",
+								success: function(result) {
+									$("#sidebar-wrapper .profile-panel .userRole").text("Role: " + result.userRole);
+									sessionStorage.userRole = result.userRole;
+									sessionStorage.currentAcronym = result.acronym;
+
+									checkCurrentRole();
+
+									$('#placeholder p').text('Selected Conference: ' + sessionStorage.currentAcronym);
+
+									fetchAndBuildSidebarMenu(result, true);
+								},
+								error: function(err) {
+									showNotify(JSON.parse(err.responseText).message, true);
+								}
+							});
+						}
+
 						redirectToPaper(urlComplete, paper);
 
 						if ($('#conf-admin-panel').length !== 0) {
