@@ -4,6 +4,14 @@ var express = require('express');
 var router = express.Router();
 var jwt = require('jsonwebtoken');
 
+//Ask for no caching
+router.use(function (req, res, next) {
+  res.header('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+  res.header('Expires', '-1');
+  res.header('Pragma', 'no-cache');
+  next();
+});
+
 router.use('/authentication', require('./authentication')); //POST Requests on /api/authenticate
 //JWT Authentication (used for all requests on /api)
 router.use(function(req, res, next) {

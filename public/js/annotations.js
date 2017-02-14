@@ -257,6 +257,7 @@ $(window).load(function() {
 	});
 	// Repositions the button to add an annotation
 	var repositionAddAnnotationButton = function() {
+		if (!currentSelection) return;
 		var anchor = currentSelection.anchorNode;
 		if (!anchor) return;
 		var parent = anchor.parentNode;
@@ -377,12 +378,9 @@ function loadDraftAnnotation(annotation) {
 	$wrapper.addClass(annotation.type === 'inline' ? 'inline-annotation' : 'block-annotation');
 	$wrapper.addClass(annotation.author);
 	var statement = (annotation.type === 'inline' ? '.inline-annotation.' : '.block-annotation.') + annotation.author;
-	console.log(statement);
-	$.injectCSS({
-		[statement]: {
-			'background': reviewerColor
-		}
-	});
+	var style = {};
+	style[statement] = {'background' : reviewerColor};
+	$.injectCSS(style);
 
 	//Get popover for annotation editor
 	var $popover = $wrapper.webuiPopover({
@@ -596,24 +594,20 @@ function loadAnnotations() {
 		//INLINE ANNOTATIONS appear as highlighted text and popover (plus h1, h2, h3)
 		if (inlineAnnotationElements.indexOf($('#'+id.replace('#', '')).prop('tagName').toLowerCase()) >= 0) {
 			var $elem = $('#'+id.replace('#', ''));
-			var authorClass = annotationsById[id].find(annotation => annotation.author).author.replace('mailto:', '').replace(/(@.*)/g, '').replace(/\s+/g, '-').replace(/[^a-zA-Z-]/g, '').toLowerCase();
+			var authorClass = annotationsById[id].find(function(annotation) { return annotation.author;}).author.replace('mailto:', '').replace(/(@.*)/g, '').replace(/\s+/g, '-').replace(/[^a-zA-Z-]/g, '').toLowerCase();
 			var statement = ".inline-annotation." + authorClass; 
-			$.injectCSS({
-				[statement]: {
-					'background': rgbaColor
-				}
-			});
+			var style = {};
+			style[statement] = {'background' : rgbaColor};
+			$.injectCSS(style);
 			$elem.addClass('inline-annotation');
 			annotationsById[id].forEach(function(reviewer) {
 				$elem.addClass(authorClass);
 			});
 			if (annotationsById[id].length > 1) {
 				gradients.forEach(function(gradient) {
-					$.injectCSS({
-						[statement]: {
-							'background': gradient
-						}
-					});
+					var style = {};
+					style[statement] = {'background' : gradient};
+					$.injectCSS(style);
 				});
 			}
 
@@ -643,11 +637,9 @@ function loadAnnotations() {
 			var $elem = $(id);
 
 			var statement = ".comment-anchor." + id.replace('#', '');
-			$.injectCSS({
-				[statement]: {
-					'background': rgbaColor
-				}
-			});
+			var style = {};
+			style[statement] = {'background' : rgbaColor};
+			$.injectCSS(style);
 			$anchor.addClass(id.replace('#', ''));
 
 			var inner = ['section', 'footer', 'header'].indexOf($(id).prop('tagName').toLowerCase()) < 0;
