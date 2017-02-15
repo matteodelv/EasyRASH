@@ -90,14 +90,9 @@ router.get('/:id/reviews', function(req, res) {
 							fullName: reviewer.given_name + ' ' + reviewer.family_name,
 							email: reviewer.email
 						};
-						console.log('vediamo ' + JSON.stringify(reviewer));
-						console.log('reviewed by ' + paper.reviewedBy);
 						if (!paper.reviewedBy.find(r => r === reviewer.id)){ //Reviewer hasn't reviewed the paper
-							console.log('PENDING');
 							review['decision'] = 'pending';
 						} else {
-							console.log('REJ OR ACC? ');
-							console.log(JSON.stringify(reviewsJsonLd));
 							reviewsJsonLd.forEach(reviewBlock => {
 								if (reviewBlock.some(elem => elem["@type"] === 'person' && elem["@id"] === reviewerId)){ //This block belongs to the matching reviewer
 									console.log('blocco di' + reviewerId + ' ' + reviewBlock);

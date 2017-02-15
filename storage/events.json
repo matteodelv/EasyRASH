@@ -29,10 +29,7 @@
 					"silvio.peroni",
 					"angelo.diiorio"
 				],
-				"reviewedBy": [
-					"silvio.peroni",
-					"angelo.diiorio"
-				]
+				"reviewedBy": []
 			},
 			{
 				"title": "Semantic Publishing Challenge: Bootstrapping a Value Chain for Scientific Data ",
@@ -68,13 +65,11 @@
 				],
 				"reviewedBy": [
 					"arabella.strange"
-				],
-				"lockedBy": "",
-				"lockedAt": null
+				]
 			},
 			{
 				"title": "RASH: Research Articles in Simplified HTML -- Documentation - Version 0.5, February 15, 2016",
-				"status": "rejected",
+				"status": "pending",
 				"authors": [
 					"silvio.peroni"
 				],
@@ -116,10 +111,7 @@
 					"lyra.belacqua",
 					"fabio.vitali"
 				],
-				"reviewedBy": [
-					"vanessa.ives",
-					"lyra.belacqua"
-				]
+				"reviewedBy": []
 			},
 			{
 				"title": "Exploring bibliographies for research-related tasks",
@@ -134,27 +126,7 @@
 				"reviewers": [
 					"arthur.dent"
 				],
-				"reviewedBy": [
-					"arthur.dent"
-				]
-			},
-			{
-				"title": "Example paper for comments",
-				"status": "pending",
-				"authors": [
-					"raffaele.giannella",
-					"francesco.poggi5",
-					"fabio.vitali"
-				],
-				"url": "example-annotations",
-				"reviewers": [
-					"silvio.peroni",
-					"angelo.diiorio"
-				],
-				"reviewedBy": [
-					"silvio.peroni",
-					"angelo.diiorio"
-				]
+				"reviewedBy": []
 			},
 			{
 				"title": "The RASH Framework: enabling HTML+RDF submissions in scholarly venues",
@@ -173,9 +145,7 @@
 				"reviewers": [
 					"vanessa.ives"
 				],
-				"reviewedBy": [
-					"vanessa.ives"
-				]
+				"reviewedBy": []
 			},
 			{
 				"title": "Evaluating citation functions in CiTO: cognitive issues -- Preprint of http://dx.doi.org/10.1007/978-3-319-07443-6_39",
@@ -191,9 +161,7 @@
 				"reviewers": [
 					"jessica.jones"
 				],
-				"reviewedBy": [
-					"jessica.jones"
-				]
+				"reviewedBy": []
 			},
 			{
 				"title": "Enhanced Publication Management Systems -- A systemic approach towards modern scientific communication",
@@ -207,52 +175,8 @@
 					"vanessa.ives",
 					"fabio.vitali"
 				],
-				"reviewedBy": [
-					"vanessa.ives"
-				]
+				"reviewedBy": []
 			}
 		]
-	},
-	{
-		"conference": "Conference Title 12343",
-		"acronym": "CA161234",
-		"status": "open",
-		"chairs": [
-			"arthur.dent",
-			"angelo.diiorio"
-		],
-		"pc_members": [
-			"alessia.bardi",
-			"lyra.belacqua",
-			"paolo.ciancarini",
-			"john.constantine"
-		],
-		"submissions": []
-	},
-	{
-		"conference": "International Conference on Software Engineering",
-		"acronym": "ICSE16",
-		"status": "open",
-		"chairs": "angelo.diiorio",
-		"pc_members": [
-			"paolo.ciancarini",
-			"andrea.nuzzolese",
-			"fabio.vitali"
-		],
-		"submissions": []
-	},
-	{
-		"conference": "International Conference on Bla Bla Bla",
-		"acronym": "ICBB16",
-		"status": "closed",
-		"chairs": [
-			"fabio.vitali",
-			"angelo.diiorio"
-		],
-		"pc_members": [
-			"paolo.ciancarini",
-			"andrea.nuzzolese"
-		],
-		"submissions": []
 	}
 ]

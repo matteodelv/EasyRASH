@@ -523,11 +523,11 @@ section>section>.add-block-annotation-btn{
 	margin: 0px;
 }
 
-.webui-popover table {
+#popoverContent table {
 	margin-bottom:0;
 }
 
-.webui-popover th, .modal th {
+#popoverContent th, .modal th {
 	border-left:none;
 	border-right:none;
 }
