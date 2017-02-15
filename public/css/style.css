@@ -184,6 +184,7 @@ a.btn-md:active i {
 
 .paper-container {
 	min-height: 100vh;
+	padding: 0em 2.5em 2em 2.5em;
 }
 
 .page-content{
