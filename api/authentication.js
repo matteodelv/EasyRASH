@@ -23,8 +23,8 @@ var transporter = nodemailer.createTransport({
 });
 
 //Verify that email transporter works
+console.log('Checking email service...');
 transporter.verify(function(error, success){
-	console.log('Checking email service...');
 	if (error){
 		console.log('Email service isn\'t working properly: ', error);
 		console.log('...continuing without email service');
