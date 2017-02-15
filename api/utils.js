@@ -29,10 +29,10 @@ exports.sortUsersAlphabetically = function(usersArray) {
 	return usersArray;
 };
 
-exports.loadDataFile = function(file, callback) {
-	
+exports.loadJsonFile = function(file, callback) {
+
 	var filePath = path.resolve(file);
-	
+
 	if (fs.existsSync(filePath)) {
 		var data = fs.readFileSync(filePath);
 		if (!data) {
@@ -40,7 +40,7 @@ exports.loadDataFile = function(file, callback) {
 			return callback(error, null);
 		} else {
 			var parsed = JSON.parse(data);
-			var save = function(){
+			var save = function() {
 				fs.writeFileSync(filePath, JSON.stringify(parsed, null, "\t"));
 			}
 			return callback(null, parsed, save);
@@ -50,11 +50,11 @@ exports.loadDataFile = function(file, callback) {
 
 exports.findSubmission = function(events, submissionUrl) {
 	var submission;
-    events.some(event => {
-        submission = event.submissions.find(s => s.url === submissionUrl); //search for the submission in the current event, and store it in a variable
-        return submission; //returns truthy value if submission is found and exits some
-    });
-    return submission;
+	events.some(event => {
+		submission = event.submissions.find(s => s.url === submissionUrl); //search for the submission in the current event, and store it in a variable
+		return submission; //returns truthy value if submission is found and exits some
+	});
+	return submission;
 };
 
 exports.findUser = function(users, userId) {

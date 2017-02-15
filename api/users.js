@@ -46,7 +46,7 @@ router.get('/profile', function(req, res) {
 });
 
 router.put('/profile', function(req, res) {
-	utils.loadDataFile('storage/users.json', (error, users) => {
+	utils.loadJsonFile('storage/users.json', (error, users) => {
 		if (error) res.status(error.status).json(error);
 
 		var loggedUser = users.find(u => u.id === req.jwtPayload.id);
@@ -74,7 +74,7 @@ router.put('/profile', function(req, res) {
 });
 
 router.put('/profile/password', function(req, res) {
-	utils.loadDataFile('storage/users.json', (error, users) => {
+	utils.loadJsonFile('storage/users.json', (error, users) => {
 		if (error) res.status(error.status).json(error);
 		
 		if (!req.body['newPassword'] || !req.body['newPasswordVerify']) 
