@@ -8,7 +8,7 @@ var jwt = require('jsonwebtoken');
 
 // Returns the entire list of users with their info
 router.get('/', function(req, res) {
-	utils.loadJsonFile(app.get('usersFilePath'), (error, users, save) => {
+	utils.loadJsonFile(req.app.get('usersFilePath'), (error, users, save) => {
 		if (error) res.status(error.status).json(error);
 
 		var result = [];
@@ -27,7 +27,7 @@ router.get('/', function(req, res) {
 
 // Returns all info about the logged in user
 router.get('/profile', function(req, res) {
-	utils.loadJsonFile(app.get('usersFilePath'), (error, users, save) => {
+	utils.loadJsonFile(req.app.get('usersFilePath'), (error, users, save) => {
 		if (error) res.status(error.status).json(error);
 
 		var loggedUser = users.find(u => u.id === req.jwtPayload.id);
@@ -41,7 +41,7 @@ router.get('/profile', function(req, res) {
 
 // Updates profile info of the logged in user
 router.put('/profile', function(req, res) {
-	utils.loadJsonFile(app.get('usersFilePath'), (error, users, save) => {
+	utils.loadJsonFile(req.app.get('usersFilePath'), (error, users, save) => {
 		if (error) res.status(error.status).json(error);
 
 		var loggedUser = users.find(u => u.id === req.jwtPayload.id);
@@ -50,10 +50,10 @@ router.put('/profile', function(req, res) {
 			if (req.body['given_name']) loggedUser.given_name = req.body['given_name'];
 			if (req.body['sex']) loggedUser.sex = req.body['sex'];
 
-			fs.writeFile(path.resolve(app.get('usersFilePath')), JSON.stringify(users, null, '\t'), error => {
+			fs.writeFile(path.resolve(req.app.get('usersFilePath')), JSON.stringify(users, null, '\t'), error => {
 				if (error) res.status(400).json({ message: 'An error occurred while saving profile info. Please, try again!' });
 				
-				var accessToken = jwt.sign(loggedUser, req.app.get('secret'), {
+				var accessToken = jwt.sign(loggedUser, req.req.app.get('secret'), {
 					expiresIn: 86400
 				});
 				res.json({
@@ -71,7 +71,7 @@ router.put('/profile', function(req, res) {
 
 // Updates password of the logged in user
 router.put('/profile/password', function(req, res) {
-	utils.loadJsonFile(app.get('usersFilePath'), (error, users, save) => {
+	utils.loadJsonFile(req.app.get('usersFilePath'), (error, users, save) => {
 		if (error) res.status(error.status).json(error);
 		
 		if (!req.body['newPassword'] || !req.body['newPasswordVerify']) 
@@ -83,7 +83,7 @@ router.put('/profile/password', function(req, res) {
 			if (loggedUser) {
 				loggedUser.pass = req.body['newPassword'];
 
-				fs.writeFile(path.resolve(app.get('usersFilePath')), JSON.stringify(users, null, '\t'), error => {
+				fs.writeFile(path.resolve(req.app.get('usersFilePath')), JSON.stringify(users, null, '\t'), error => {
 					if (error) res.status(400).json({ message: 'An error occurred while saving the updated password. Please, try again! '});
 					
 					res.json({ message: "Password correctly updated!" });
@@ -96,7 +96,7 @@ router.put('/profile/password', function(req, res) {
 // Returns email of the specified user
 router.get('/:id', function(req, res){
 	if (req.accepts(['application/json'])){
-		utils.loadJsonFile(app.get('usersFilePath'), (error, users, save) => {
+		utils.loadJsonFile(req.app.get('usersFilePath'), (error, users, save) => {
 			if (error) res.status(error.status).json(error);
 
 			var user = users.find(x => x.id === req.params.id);
