@@ -117,7 +117,7 @@ var $addedHeadTags; //Contains head tags belonging to a single paper, to be remo
 var reviews; //Contains RASH review
 //Loads the content of the current paper in the appropriate div
 function loadCurrentPaperContent() {
-	//TODO: Set to reader mode
+
 	if (document.location.pathname === "/") {
 		$addedHeadTags && $addedHeadTags.remove();
 		$('.paper-container').empty();
@@ -129,9 +129,7 @@ function loadCurrentPaperContent() {
 
 	sessionStorage.revForPaper = false;
 	sessionStorage.alreadyReviewed = false;
-
 	if (document.location.pathname.startsWith("/papers/")) {
-		/*TODO: do we need this part?*/
 		if (sessionStorage.papers) {
 			var parsed = JSON.parse(sessionStorage.papers);
 			//var papers = parsed.submitted.concat(parsed.reviewable);
@@ -234,6 +232,7 @@ function loadCurrentPaperContent() {
 				//END: Scroll Spy Sections
 				loadAnnotations();
 				loadDraftAnnotations();
+				createFilterPopoverContent($content);
 			},
 			error: function(error) {
 				if (error.responseJSON && error.responseJSON.error.name === "TokenExpiredError") {

@@ -213,6 +213,9 @@ a.btn-md:active i {
 	margin-left: -20px;
 	border-radius: 5px;
 	overflow: visible;
+}
+
+.comment-anchor:not(.filteredOut){
 	cursor: pointer;
 }
 

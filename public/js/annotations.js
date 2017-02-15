@@ -105,18 +105,18 @@ $(document).ready(function() {
 		}
 	});
 	
-	var $content = $('<div id="popoverContent"></div>');
+	$content = $('<div id="popoverContent"></div>');
 	$('#filterButton').popover({
 		html: true,
-		trigger: 'focus',
+		trigger: 'click',
 		content: $content
 	})
 	.on('shown.bs.popover', function(){
 		$('#filterButton').find('i').tooltip('hide');
 	})
-	.on('mouseover', function() { 
+	/*.on('mouseover', function() { 
 		createFilterPopoverContent($content);
-	});
+	});*/
 });
 
 function createFilterPopoverContent($content) {
@@ -147,7 +147,8 @@ function createFilterPopoverContent($content) {
 							$content.find('tbody').append($row);
 							$checkbox.change(function(){
 								//Add/remove class filteredOut on click
-								$('.inline-annotation.' + userIdToClass($(this).val())).toggleClass('filteredOut', !$(this).is(":checked"));
+								var userClass = userIdToClass($(this).val());
+								$('.inline-annotation.' + userClass + ',.comment-anchor.' + userClass).toggleClass('filteredOut', !$(this).is(":checked"));
 							});
 						}
 					});
@@ -660,14 +661,14 @@ function loadAnnotations() {
 			]
 			//Highlight color default to first reviewer's color
 		var rgbColor = reviewerColors[annotationsById[id][0].author];
-		var rgbaColor = hexToRgbA(rgbColor, 0.4);
+		var rgbaColor = hexToRgbA(rgbColor, 0.35);
 		//INLINE ANNOTATIONS appear as highlighted text and popover (plus h1, h2, h3)
 		if (inlineAnnotationElements.indexOf($('#'+id.replace('#', '')).prop('tagName').toLowerCase()) >= 0) {
 			var $elem = $('#'+id.replace('#', ''));
 			
 			$elem.addClass('inline-annotation');
 
-			var statement = statement = ".inline-annotation";
+			var statement = ".inline-annotation";
 			annotationsById[id].forEach(function(annotation) {
 				if (annotation.author){
 					var annotationClass = userIdToClass(annotation.author);
@@ -715,11 +716,27 @@ function loadAnnotations() {
 			var $anchor = $('<div class="comment-anchor cgen hidden-print"></div>');
 			var $elem = $(id);
 
-			var statement = ".comment-anchor." + id.replace('#', '');
+			var statement = ".comment-anchor";
+			annotationsById[id].forEach(function(annotation) {
+				if (annotation.author){
+					var annotationClass = userIdToClass(annotation.author);
+					$anchor.addClass(annotationClass);
+					statement = statement + '.' + annotationClass;
+				}
+			});
+			statement = statement + ":not(.filteredOut)";
 			var style = {};
-			style[statement] = {'background' : rgbaColor};
-			$.injectCSS(style);
-			$anchor.addClass(id.replace('#', ''));
+
+			if (annotationsById[id].length > 1) {
+				gradients.forEach(function(gradient) {
+					style[statement] = {'background' : gradient};
+					$.injectCSS(style);
+				});
+			} else {
+				style[statement] = {'background' : rgbaColor};
+				$.injectCSS(style);
+				
+			}
 
 			var inner = ['section', 'footer', 'header'].indexOf($(id).prop('tagName').toLowerCase()) < 0;
 			if (inner) { //is section, footer or header
