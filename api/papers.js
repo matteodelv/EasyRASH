@@ -11,12 +11,9 @@ var dom = xmldom.DOMParser;
 var serializer = new xmldom.XMLSerializer();
 var utils = require('./utils.js');
 
-const CONTEXT = "http://vitali.web.cs.unibo.it/twiki/pub/TechWeb16/context.json";
-const LOCK_EXPIRE_TIME_MS = 3600000;
-
 //Responds with all the paper associated with a particular user
 router.get('/', function(req, res) {
-	utils.loadJsonFile(app.get('eventsFilePath'), (error, events) => {
+	utils.loadJsonFile(req.app.get('eventsFilePath'), (error, events) => {
 		if (error) res.status(error.status).json(error);
 		var submittedArticles = [];
 		var reviewableArticles = [];
@@ -39,7 +36,7 @@ router.get('/', function(req, res) {
 
 //Finds the user's role in relation to the paper
 router.get('/:id/role', function(req, res) {
-	utils.loadJsonFile(app.get('eventsFilePath'), (error, events) => {
+	utils.loadJsonFile(req.app.get('eventsFilePath'), (error, events) => {
 		console.log(req.params.id);
 		if (error) res.status(error.status).json(error);
 
@@ -63,13 +60,13 @@ router.get('/:id/role', function(req, res) {
 
 //Responds with a list of reviewer/review status tuples for the specified paper
 router.get('/:id/reviews', function(req, res) {
-	utils.loadJsonFile(app.get('eventsFilePath'), (err, events) => {
+	utils.loadJsonFile(req.app.get('eventsFilePath'), (err, events) => {
 		if (err) res.status(err.status).json(err);
 
 		var paper = utils.findSubmission(events, req.params.id);
 		var reviews = [];
 
-		utils.loadJsonFile(app.get('usersFilePath'), (err, users) => {
+		utils.loadJsonFile(req.app.get('usersFilePath'), (err, users) => {
 			if (err) res.status(err.status).json(err);
 
 			var filePath = path.resolve('storage/papers/' + req.params.id + '.html');
@@ -116,7 +113,7 @@ router.get('/:id/reviews', function(req, res) {
 
 //Expresses a final decision about the specified paper
 router.post('/:id/judge', (req, res) => {
-	utils.loadJsonFile(app.get('eventsFilePath'), (error, events, save) => {
+	utils.loadJsonFile(req.app.get('eventsFilePath'), (error, events, save) => {
 		if (error) res.status(error.status).json(error);
 
 		var paper = utils.findSubmission(events, req.params.id);
@@ -132,14 +129,14 @@ router.post('/:id/judge', (req, res) => {
 
 //Requests to lock a paper to prevent other users from editing
 router.put('/:id/lock', function(req, res) {
-	checkPaperLock(req.params.id, req.jwtPayload.id, (err, isLocked) => {
+	checkPaperLock(req.app, req.params.id, req.jwtPayload.id, (err, isLocked) => {
 		if (err) throw err;
 
 		if (isLocked) {
 			res.status(409).json({ lockAcquired: false, message: 'Another reviewer is currently reviewing this paper. Please, try again later! ' });
 		}
 		else {
-			lockPaper(req.params.id, req.jwtPayload.id, (err) => {
+			lockPaper(req.app, req.params.id, req.jwtPayload.id, (err) => {
 				if (err) {
 					res.status(409).json({lockAcquired: false,  message: 'Unable to acquire lock on the paper for reviewing it. Please, try again later! ' });
 				} else {
@@ -152,17 +149,16 @@ router.put('/:id/lock', function(req, res) {
 
 //Releases the lock from a paper
 router.delete('/:id/lock', function(req, res) {
-	releasePaperLock(req.params.id, req.jwtPayload.id, (err) => {
+	releasePaperLock(req.app, req.params.id, req.jwtPayload.id, (err) => {
 		res.status(200).send();
 	});
 });
 
 //Checks whether a paper is locked
-function checkPaperLock(paperId, userId, callback){
+function checkPaperLock(app, paperId, userId, callback){
 	var isLocked = false;
 	var err = {};
-	eventsFilePath = app.get('eventsFilePath');
-	utils.loadJsonFile(eventsFilePath, (error, events) => {
+	utils.loadJsonFile(app.get('eventsFilePath'), (error, events) => {
 		err = error;
 		var submission;
 		events.forEach(event => {
@@ -172,7 +168,7 @@ function checkPaperLock(paperId, userId, callback){
 		});
 		if (submission){
 			var lockedBySomeoneElse = submission.lockedBy && submission.lockedBy !== userId;
-			var isLockExpired = (new Date).getTime() - submission.lockedAt > LOCK_EXPIRE_TIME_MS;
+			var isLockExpired = (new Date).getTime() - submission.lockedAt > app.get('lockExpireTimeMs');
 			if (lockedBySomeoneElse && !isLockExpired){
 				isLocked = true;
 			}
@@ -183,7 +179,7 @@ function checkPaperLock(paperId, userId, callback){
 }
 
 //Locks a paper to prevent other users from editing
-function lockPaper(paperId, userId, callback){
+function lockPaper(app, paperId, userId, callback){
 	var err = {};
 	utils.loadJsonFile(app.get('eventsFilePath'), (error, events, save) => {
 		err = error;
@@ -191,7 +187,7 @@ function lockPaper(paperId, userId, callback){
 		var submission = utils.findSubmission(events, paperId);
 		if (submission){
 			var lockedBySomeoneElse = submission.lockedBy && submission.lockedBy !== userId;
-			var isLockExpired = (new Date).getTime() - submission.lockedAt > LOCK_EXPIRE_TIME_MS;
+			var isLockExpired = (new Date).getTime() - submission.lockedAt > app.get('lockExpireTimeMs');
 			console.log('Locked by someone else: ' + lockedBySomeoneElse + ', lock expired: ' + isLockExpired);
 			if (lockedBySomeoneElse && !isLockExpired){
 				err = { message: 'Cannot lock paper. Paper is already locked by .' + submission.lockedBy}
@@ -208,7 +204,7 @@ function lockPaper(paperId, userId, callback){
 }
 
 //Releases the lock from a paper
-function releasePaperLock(paperId, userId, callback){
+function releasePaperLock(app, paperId, userId, callback){
 	var err = {};
 	utils.loadJsonFile(app.get('eventsFilePath'), (error, events, save) => {
 		err = error;
@@ -226,7 +222,7 @@ function releasePaperLock(paperId, userId, callback){
 
 //Responds with a list of papers associated with the user
 router.get("/user", function(req, res) {
-	utils.loadJsonFile(app.get('eventsFilePath'), (error, events) => {
+	utils.loadJsonFile(req.app.get('eventsFilePath'), (error, events) => {
 		if (error) res.status(error.status).json(error);
 		var result = {
 			authored_by_me: [], //Contains papers the user is author of
@@ -253,7 +249,7 @@ router.get("/user", function(req, res) {
 router.get('/:id', function(req, res) {
 	//Filter out comments by permissions: /(<script type="application\/ld\+json">)((.|\n)*?)<\/script>/igm
 	if (req.accepts(['application/xhtml+xml', 'text/html'])) {
-		utils.loadJsonFile(app.get('eventsFilePath'), (error, events) => {
+		utils.loadJsonFile(req.app.get('eventsFilePath'), (error, events) => {
 		if (error) res.status(error.status).json(error);
 			//User can get paper if it's one of its authors, one of its reviewers or one of its chairs, or if the submission has been accepted
 			var eligible = events.some(event =>
@@ -311,7 +307,7 @@ router.get('/:id', function(req, res) {
  * And writes JSON+lD info in the scripts section (inside of the head) of the RASH file
 */
 router.post('/:id/review', function(req, res) {
-	utils.loadJsonFile(app.get('eventsFilePath'), (error, events, save) => {
+	utils.loadJsonFile(req.app.get('eventsFilePath'), (error, events, save) => {
 		if (error) res.status(error.status).json(error);
 		var submission = utils.findSubmission(events, req.params.id);
 		if (!submission.reviewers.some(reviewer => reviewer === req.jwtPayload.id)) {
@@ -385,7 +381,7 @@ router.post('/:id/review', function(req, res) {
 						var reviewBlock = [];
 						//The part about the whole review
 						var review = {};
-						review["@context"] = CONTEXT;
+						review["@context"] = req.app.get('jsonLDcontext');
 						review["@type"] = "review";
 						var annotationsRegex = new RegExp(/(?:<script)(?:[^.]*)(?:type="application\/ld\+json")(?:>)((\s|\S)*?)(?:<\/script>)/igm);
 						var matches = html.toString().match(annotationsRegex);
@@ -409,7 +405,7 @@ router.post('/:id/review', function(req, res) {
 						var i = 0;
 						Object.keys(req.body.annotations).forEach(a => {
 							var annotation = {};
-							annotation["@context"] = CONTEXT;
+							annotation["@context"] = req.app.get('jsonLDcontext');
 							annotation["@type"] = "comment";
 							var id = reviewId + '-c' + ++i;
 							annotation["@id"] = id;
@@ -425,7 +421,7 @@ router.post('/:id/review', function(req, res) {
 
 						//The part about the reviewer
 						var person = {};
-						person["@content"] = CONTEXT;
+						person["@content"] = req.app.get('jsonLDcontext');
 						person["@type"] = "person";
 						person["@id"] = req.jwtPayload.id;
 						person["name"] = req.jwtPayload.given_name + " " + req.jwtPayload.family_name;
@@ -453,7 +449,7 @@ router.post('/:id/review', function(req, res) {
 						submission.reviewedBy.push(req.jwtPayload.id);
 						save();
 						//Release lock 
-						releasePaperLock(req.params.id, req.jwtPayload.id, (err) => {
+						releasePaperLock(req.app, req.params.id, req.jwtPayload.id, (err) => {
 							if (err) res.status(409).json({message: err.toString()}); 
 							else res.json({ message: 'Paper reviewed successfully.' });
 						});

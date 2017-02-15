@@ -6,7 +6,7 @@ var fs = require('fs');
 var utils = require('./utils.js');
 
 router.get('/', function(req, res) {
-	var filePath = path.resolve(app.get('eventsFilePath'));
+	var filePath = path.resolve(req.app.get('eventsFilePath'));
 	if (fs.existsSync(filePath)) {
 		fs.readFile(filePath, (err, data) => {
 			var events = JSON.parse(data);
@@ -25,7 +25,7 @@ router.get('/', function(req, res) {
 });
 
 router.get('/:id', function(req, res) {
-	var eventsPath = path.resolve(app.get('eventsFilePath'));
+	var eventsPath = path.resolve(req.app.get('eventsFilePath'));
 	if (fs.existsSync(eventsPath)) {
 		var data = fs.readFileSync(eventsPath);
 		if (!data) return res.status(400).json({ success: false, message: 'Unable to load conference info...' });
@@ -40,7 +40,7 @@ router.get('/:id', function(req, res) {
 router.post('/', function(req, res) {
 	utils.checkAcronymUsage(req.body.acronym, result => {
 		if (result) {
-			var eventsPath = path.resolve(app.get('eventsFilePath'));
+			var eventsPath = path.resolve(req.app.get('eventsFilePath'));
 			var events;
 			if (fs.existsSync(eventsPath)) {
 				fs.readFile(eventsPath, (error, data) => {
@@ -68,7 +68,7 @@ router.post('/', function(req, res) {
 
 // Close Conference identified by :id
 router.put('/:id/close', function(req, res) {
-	var eventsPath = path.resolve(app.get('eventsFilePath'));
+	var eventsPath = path.resolve(req.app.get('eventsFilePath'));
 	if (fs.existsSync(eventsPath)) {
 		fs.readFile(eventsPath, (error, data) => {
 			var confs = JSON.parse(data);
@@ -91,7 +91,7 @@ router.put('/:id/close', function(req, res) {
 
 // Update Conference :id with data as argument
 router.put('/:id', function(req, res) {
-	var eventsPath = path.resolve(app.get('eventsFilePath'));
+	var eventsPath = path.resolve(req.app.get('eventsFilePath'));
 	if (fs.existsSync(eventsPath)) {
 		fs.readFile(eventsPath, (error, data) => {
 			var confs = JSON.parse(data);
@@ -159,7 +159,7 @@ router.get('/:id/papers', function(req, res) {
 });
 
 router.get('/:id/:paper/reviewers', function(req, res) {
-	var eventsPath = path.resolve(app.get('eventsFilePath'));
+	var eventsPath = path.resolve(req.app.get('eventsFilePath'));
 	if (fs.existsSync(eventsPath)) {
 		fs.readFile(eventsPath, (err, data) => {
 			var confs = JSON.parse(data);
@@ -171,7 +171,7 @@ router.get('/:id/:paper/reviewers', function(req, res) {
 					if (paper) {
 						var reviewers = [];
 						// getting reviewers info
-						var usersPath = path.resolve(app.get('usersFilePath'));
+						var usersPath = path.resolve(req.app.get('usersFilePath'));
 						if (fs.existsSync(usersPath)) {
 							var usersData = fs.readFileSync(usersPath);
 							var users = JSON.parse(usersData);
@@ -200,7 +200,7 @@ router.get('/:id/:paper/reviewers', function(req, res) {
 });
 
 router.post('/:id/:paper/reviewers', function(req, res) {
-	utils.loadJsonFile(app.get('eventsFilePath'), (error, events) => {
+	utils.loadJsonFile(req.app.get('eventsFilePath'), (error, events) => {
 		var selectedConf = events.find(conf => conf.acronym === req.params.id);
 		if (selectedConf) {
 			var paper = selectedConf.submissions.find(p => p.url === req.params.paper);
