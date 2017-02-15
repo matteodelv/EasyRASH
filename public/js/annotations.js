@@ -104,7 +104,61 @@ $(document).ready(function() {
 			}
 		}
 	});
+	
+	$('#filterButton').webuiPopover({
+		placement: 'bottom',
+		width: 220,
+		trigger: 'click',
+		type: 'html',
+		animation: 'pop',
+		closeable: true,
+		delay: { "show": 0, "hide": 300 },
+		content: '<div id="popoverContent"></div>',
+		title: 'Filter Shown Annotations',
+		cache: false,
+		offsetTop: 10,
+		onShow: function() {
+			console.log("onShow");
+			createFilterPopoverContent();
+		}
+	});
 });
+
+function createFilterPopoverContent() {
+	if ($('#paper-container').children().length === 0) $('#popoverContent').empty().text("Please, select a paper to be able to filter annotations!");
+	else {
+		var paperID = document.location.pathname.split('papers/').pop().replace('/','');
+		$.ajax({
+			url: encodeURI('/api/papers/' + paperID + '/reviews'),
+			method: 'GET',
+			success: function(result) {
+				console.log("Success");
+
+				$('#popoverContent').empty().append('<table class="table table-hover"><thead><tr><th>Show</th><th>Reviewer</th></tr></thead><tbody></tbody></table>');
+
+				result.reviews.forEach(function(rev) {
+					if (rev.reviewer) {
+						var $row = $('<tr></tr>');
+						var $td = $('<td></td>');
+						$td.css('text-align', 'center');
+						var $checkbox = $('<input type="checkbox" name="reviewersFiltered[]" />');
+						$checkbox.attr('value', rev.reviewer.id);
+						$checkbox.prop('checked', true);
+						$checkbox.appendTo($td);
+						$row.append($td);
+						$td = $td.clone();
+						$td.empty().text(rev.reviewer.fullName);
+						$row.append($td);
+						$('#popoverContent tbody').append($row);
+					}
+				});
+			},
+			error: function(error) {
+				$('#popoverContent').text(JSON.parse(error.responseText).message);
+			}
+		});
+	}
+}
 
 /* Handles the click of the annotator/reader checkbox */
 function updateModeCheckbox(checked) {

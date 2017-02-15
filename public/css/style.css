@@ -516,6 +516,15 @@ section>section>.add-block-annotation-btn{
 	margin: 0px;
 }
 
+.webui-popover table {
+	margin-bottom:0;
+}
+
+.webui-popover th, .modal th {
+	border-left:none;
+	border-right:none;
+}
+
 /*.inline-annotation::before {
   content: "";
   position: absolute;
