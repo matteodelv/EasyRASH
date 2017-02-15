@@ -95,6 +95,8 @@ router.put('/profile/password', function(req, res) {
 router.get('/:id', function(req, res){
 	if (req.accepts(['application/json'])){
 		utils.loadJsonFile(utils.USERS_FILE_PATH, (error, users, save) => {
+			if (error) res.status(error.status).json(error);
+
 			var user = users.find(x => x.id === req.params.id);
 			if (user) res.json(user.email);
 			else res.status(404).json({ message: 'Unable to find specified user!' });
