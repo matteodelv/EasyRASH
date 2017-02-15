@@ -26,7 +26,7 @@ function automaticLockReleaseForReviewers() {
 		if (!draftAnnotations){ //Release lock if there are no unsaved annotations
 			$.ajax({
 				method: 'DELETE',
-				url: '/api/papers/' + paperID + '/lock',
+				url: encodeURI('/api/papers/' + paperID + '/lock'),
 				success: function(result) {
 					updateModeCheckbox(result.lockAcquired);
 				},
@@ -75,12 +75,12 @@ $(document).ready(function() {
 					if (isEnteringAnnotator){
 						$.ajax({
 							method: 'PUT',
-							url: '/api/papers/' + paperID + '/lock',
+							url: encodeURI('/api/papers/' + paperID + '/lock'),
 							success: function(result) {
 								updateModeCheckbox(result.lockAcquired);
 							},
 							error: function(error) {
-								showNotify(JSON.parse(error.responseText).message, true);
+								showNotify(error.responseJSON.message, true);
 								updateModeCheckbox(false);	
 							}
 						});
@@ -90,7 +90,7 @@ $(document).ready(function() {
 						if (!draftAnnotations){ //Release lock if there are no unsaved annotations
 							$.ajax({
 								method: 'DELETE',
-								url: '/api/papers/' + paperID + '/lock',
+								url: encodeURI('/api/papers/' + paperID + '/lock'),
 								success: function(result) {
 									updateModeCheckbox(result.lockAcquired);
 								},
@@ -124,10 +124,9 @@ function createFilterPopoverContent($content) {
 	else {
 		var paperID = document.location.pathname.split('papers/').pop().replace('/','');
 		$.ajax({
-			url: '/api/papers/' + paperID + '/reviews',
+			url: encodeURI('/api/papers/' + paperID + '/reviews'),
 			method: 'GET',
 			success: function(result) {
-				console.log("Success");
 				if (result.reviews.some(function(review){return review.decision && review.decision !=='pending';})){
 					var table = '<table class="table table-hover"><thead><tr><th>Show</th><th>Reviewer</th></tr></thead><tbody></tbody></table>';
 					$content.empty().append(table);
@@ -157,7 +156,7 @@ function createFilterPopoverContent($content) {
 				}
 			},
 			error: function(error) {
-				$content.text(JSON.parse(error.responseText).message);
+				$content.text(error.responseJSON.message);
 			}
 		});
 	}
@@ -564,7 +563,7 @@ function sendReview(){
 	}
 	console.log(review);
 	$.ajax({
-		url: '/api/papers/' + paperId + 'review',
+		url: encodeURI('/api/papers/' + paperId + 'review'),
 		method: 'POST',
 		data: review,
 		success: function(result) {
@@ -576,7 +575,7 @@ function sendReview(){
 		},
 		error: function(error) {
 			$('.send-review-btn').animateCss('shake');
-			showNotify(JSON.parse(error.responseText).message, true);		// Controllare formato errore ritornato
+			showNotify(error.responseJSON.message, true);		// Controllare formato errore ritornato
 		}
 	});
 }

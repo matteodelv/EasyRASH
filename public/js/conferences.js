@@ -7,7 +7,7 @@ $(document).ready(function() {
 
 function getConferences() {
 	$.ajax({
-		url: "/api/events",
+		url: encodeURI('/api/events'),
 		method: "GET",
 		success: function(res) {
 			var conferencesUl = $("#conferenceSelector .dropdown-menu");
@@ -24,7 +24,7 @@ function getConferences() {
 					$("#conferenceSelector .btn:first-child *:first-child").val($(this).text());
 
 					$.ajax({
-						url: "/api/events/" + a.data('acronym') + "/papers",
+						url: encodeURI('/api/events/' + a.data('acronym') + '/papers'),
 						method: "GET",
 						success: function(result) {
 							$("#sidebar-wrapper .profile-panel .userRole").text("Role: " + result.userRole);
@@ -48,8 +48,8 @@ function getConferences() {
 
 							fetchAndBuildSidebarMenu(result, true);
 						},
-						error: function(err) {
-							showNotify(JSON.parse(err.responseText).message, true);
+						error: function(error) {
+							showNotify(error.responseJSON.message, true);
 						}
 					});
 				});
@@ -76,7 +76,7 @@ function createNewConference() {
 	});
 
 	$.ajax({
-		url: '/api/events/',
+		url: encodeURI('/api/events/'),
 		method: 'POST',
 		data: data,
 		success: function(result) {
@@ -92,7 +92,7 @@ function createNewConference() {
 			showConferenceAdminPanel(data.acronym);
 		},
 		error: function(error) {
-			showErrorAlert('#newConfForm .modal-body', JSON.parse(error.responseText).message, true);
+			showErrorAlert('#newConfForm .modal-body', error.responseJSON.message, true);
 		}
 	});
 }
@@ -101,7 +101,7 @@ function showConferenceAdminPanel(acronym) {
 	if ($('#conf-admin-panel').length === 0) {
 		$.ajax({
 			method: 'GET',
-			url: '/api/events/' + acronym,
+			url: encodeURI('/api/events/' + acronym),
 			success: function(res) {
 				$pageContentWrapper = $('#page-content-wrapper #top').html();
 			
@@ -110,8 +110,8 @@ function showConferenceAdminPanel(acronym) {
 					buildConfAdminPanel(res.conference);
 				});
 			},
-			error: function(err) {
-				showNotify(JSON.parse(err.responseText).message, true);
+			error: function(error) {
+				showNotify(error.responseJSON.message, true);
 			}
 		});
 	}
@@ -145,7 +145,7 @@ function buildConfAdminPanel(confData) {
 	var dataSourceR = [];
 
 	$.ajax({
-		url: "/api/users/",
+		url: encodeURI('/api/users/'),
 		method: "GET",
 		success: function(res) {
 			res.forEach(function(user) {
@@ -199,7 +199,7 @@ function buildConfAdminPanel(confData) {
 				$(rSelect).multiselect('disable');
 			}
 		},
-		error: function(err) {
+		error: function(error) {
 			ccSelect.add(rSelect).multiselect({
 				disableIfEmpty: true,
 				maxHeight: 180,
@@ -219,7 +219,7 @@ function buildConfAdminPanel(confData) {
 				}
 			});
 
-			showNotify(JSON.parse(err.responseText).message, true);
+			showNotify(error.responseJSON.message, true);
 		}
 	});
 
@@ -290,7 +290,7 @@ function buildConfAdminPanel(confData) {
 		e.preventDefault();
 
 		$.ajax({
-			url: '/api/events/' + confData.acronym + '/close',
+			url: encodeURI('/api/events/' + confData.acronym + '/close'),
 			method: 'PUT',
 			success: function(result) {
 				$(this).prop('disabled', true);
@@ -301,7 +301,7 @@ function buildConfAdminPanel(confData) {
 				});
 			},
 			error: function(error) {
-				showNotify(JSON.parse(error.responseText).message, true);
+				showNotify(error.responseJSON.message, true);
 			}
 		});
 	});
@@ -326,7 +326,7 @@ function buildConfAdminPanel(confData) {
 		$.ajax({
 			method:'PUT',
 			data: data,
-			url: '/api/events/' + confData.acronym,
+			url: encodeURI('/api/events/' + confData.acronym),
 			success: function(res) {
 				showNotify(res.message, false);
 
@@ -337,8 +337,8 @@ function buildConfAdminPanel(confData) {
 					$('#page-content-wrapper #top').html($pageContentWrapper);
 				});
 			},
-			error: function(err) {
-				showNotify(JSON.parse(err.responseText).message, true);
+			error: function(error) {
+				showNotify(error.responseJSON.message, true);
 			}
 		});
 	});
@@ -368,7 +368,7 @@ function showAssignReviewersModal() {
 		});
 		var paperID = document.location.pathname.split('papers/').pop().replace('/','');
 		$.ajax({
-			url: '/api/events/' + sessionStorage.currentAcronym + '/' + paperID + '/reviewers',
+			url: encodeURI('/api/events/' + sessionStorage.currentAcronym + '/' + paperID + '/reviewers'),
 			method: 'GET',
 			success: function(result) {
 				var dataSource = [];
@@ -383,7 +383,7 @@ function showAssignReviewersModal() {
 				$('#reviewersSelector').multiselect('dataprovider', dataSource);
 			},
 			error: function(error) {
-				console.log("Error reviewers");
+				showErrorAlert('#assignReviewersModal .modal-body', error.responseJSON.message, true);
 			}
 		});
 		$('#assignReviewersModal').modal('show');
@@ -398,7 +398,7 @@ function assignReviewersToPaper() {
 	};
 	$.ajax({
 		method: 'POST',
-		url: '/api/events/' + sessionStorage.currentAcronym + '/' + paperID + '/reviewers',
+		url: encodeURI('/api/events/' + sessionStorage.currentAcronym + '/' + paperID + '/reviewers'),
 		data: data,
 		success: function(result) {
 			$('#assignReviewersModal').modal('hide');
@@ -406,7 +406,7 @@ function assignReviewersToPaper() {
 		},
 		error: function(error) {
 			$('#assignRevSubmit').animateCss('shake');
-			showErrorAlert('#assignRevForm .modal-body', JSON.parse(error.responseText).message, true);
+			showErrorAlert('#assignRevForm .modal-body', error.responseJSON.message, true);
 		}
 	});
 }
@@ -419,7 +419,7 @@ function showPaperDecisionModal() {
 		
 		$.ajax({
 			method: 'GET',
-			url: '/api/papers/' + paperID + '/reviews',
+			url: encodeURI('/api/papers/' + paperID + '/reviews'),
 			success: function(result) {
 				var pendingRevs = result.reviews.some(function(r) { return r.decision === 'pending' });
 				$('#adminPaperDecision .btn-primary').prop('disabled', pendingRevs);
@@ -435,7 +435,7 @@ function showPaperDecisionModal() {
 				});
 			},
 			error: function(error) {
-				showNotify(JSON.parse(error.responseText).message, true);
+				showNotify(error.responseJSON.message, true);
 			}
 		});
 
@@ -455,7 +455,7 @@ function sendPaperDecision() {
 	//TODO: ajax call
 	$.ajax({
 		method: 'POST',
-		url: '/api/papers/' + paperID + '/judge',
+		url: encodeURI('/api/papers/' + paperID + '/judge'),
 		data: data,
 		success: function(result) {
 			$('#adminPaperDecision').modal('hide');
@@ -464,7 +464,7 @@ function sendPaperDecision() {
 			else updateStatusLabel('/papers/' + paperID, UPDATE_ICON_PAPER_REJECTED);
 		},
 		error: function(error) {
-			showErrorAlert('#adminPaperDecision .modal-body', JSON.parse(error.responseText).message, true);
+			showErrorAlert('#adminPaperDecision .modal-body', error.responseJSON.message, true);
 		}
 	});
 }

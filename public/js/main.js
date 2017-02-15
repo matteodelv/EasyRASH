@@ -39,7 +39,7 @@ var reviewerColors = {};
 window.onload = function() {
 	if (localStorage.accessToken) {
 		$.ajax({
-			url: '/api/verify',
+			url: encodeURI('/api/verify'),
 			type: 'POST',
 			success: function(result) {
 				sessionStorage.userID = result.id;
@@ -153,7 +153,7 @@ function loadCurrentPaperContent() {
 		$('title').remove();
 
 		$.ajax({
-			url: '/api' + document.location.pathname,
+			url: encodeURI('/api' + document.location.pathname),
 			method: 'GET',
 			success: function(result) {
 				try {
@@ -165,7 +165,7 @@ function loadCurrentPaperContent() {
 
 				var paperID = document.location.pathname.split('papers/').pop().replace('/','');
 				$.ajax({
-					url: '/api/papers/' + paperID + '/role',
+					url: encodeURI('/api/papers/' + paperID + '/role'),
 					method: 'GET',
 					success: function(result) {
 						sessionStorage.revForPaper = result.isReviewer;
@@ -177,7 +177,7 @@ function loadCurrentPaperContent() {
 						sessionStorage.alreadyReviewed = false;
 						checkCurrentRole();
 
-						showNotify(JSON.parse(error.responseText).message, true);
+						showNotify(error.responseJSON.message, true);
 					}
 				});
 
@@ -235,16 +235,11 @@ function loadCurrentPaperContent() {
 				loadAnnotations();
 				loadDraftAnnotations();
 			},
-			error: function(result) {
-				if (result.responseJSON && result.responseJSON.error.name === "TokenExpiredError") {
+			error: function(error) {
+				if (error.responseJSON && error.responseJSON.error.name === "TokenExpiredError") {
 					$('#login-modal').modal('show');
 				}
-				$.notify({
-					message: result.responseJSON ? 'Error: ' + result.responseJSON.message + '-' + result.responseJSON.error.message : 'Error: ' + result.responseText
-				}, {
-					type: 'danger',
-					delay: 2000
-				});
+				showNotify(error.responseJSON.message, true);
 			}
 		});
 	}
@@ -252,15 +247,15 @@ function loadCurrentPaperContent() {
 
 function getUserPapers() {
 	$.ajax({
-		url: "/api/papers/user",
+		url: encodeURI('/api/papers/user'),
 		method: "GET",
 		success: function(res) {
 			fetchAndBuildSidebarMenu(res, false, function() {
 				loadCurrentPaperContent();
 			});
 		},
-		error: function(err) {
-			showNotify(JSON.parse(err.responseText).message, true);
+		error: function(error) {
+			showNotify(error.responseJSON.message, true);
 		}
 	});
 }
@@ -370,7 +365,7 @@ function fetchAndBuildSidebarMenu(result, loadingConf, callback) {
 							$("#conferenceSelector .btn:first-child *:first-child").val($a.text());
 
 							$.ajax({
-								url: '/api/events/' + paper.conference + '/papers',
+								url: encodeURI('/api/events/' + paper.conference + '/papers'),
 								method: "GET",
 								success: function(result) {
 									$("#sidebar-wrapper .profile-panel .userRole").text("Role: " + result.userRole);
@@ -381,8 +376,8 @@ function fetchAndBuildSidebarMenu(result, loadingConf, callback) {
 
 									fetchAndBuildSidebarMenu(result, true);
 								},
-								error: function(err) {
-									showNotify(JSON.parse(err.responseText).message, true);
+								error: function(error) {
+									showNotify(error.responseJSON.message, true);
 								}
 							});
 						}
@@ -440,7 +435,7 @@ function logIn() {
 		data[$(this).attr('name')] = $(this).val();
 	});
 	$.ajax({
-		url: '/api/authentication/signin',
+		url: encodeURI('/api/authentication/signin'),
 		method: 'POST',
 		data: data,
 		success: function(result) {
@@ -451,7 +446,7 @@ function logIn() {
 			userReady(result.fullname, true);
 		},
 		error: function(error) {
-			showErrorAlert('#login-modal .modal-body', JSON.parse(error.responseText).message, true);
+			showErrorAlert('#login-modal .modal-body', error.responseJSON.message, true);
 			$('#loginbutton').animateCss('shake');
 			$("#emailFieldLogin").val("");
 			$("#passFieldLogin").val("");
@@ -465,7 +460,7 @@ function signUp() {
 		data[$(this).attr('name')] = $(this).val();
 	});
 	$.ajax({
-		url: '/api/authentication/signup',
+		url: encodeURI('/api/authentication/signup'),
 		method: 'POST',
 		data: data,
 		success: function(result) {
@@ -485,7 +480,7 @@ function signUp() {
 		},
 		error: function(error) {
 			$('#signupbutton').animateCss('shake');
-			showErrorAlert('#login-modal .modal-body', JSON.parse(error.responseText).message, true);
+			showErrorAlert('#login-modal .modal-body', error.responseJSON.message, true);
 		}
 	});
 }
@@ -499,7 +494,7 @@ function logOut() {
 function showUserPanel() {
 	if ($('#user-profile-panel').length === 0) {
 		$.ajax({
-			url: '/api/users/profile',
+			url: encodeURI('/api/users/profile'),
 			method: 'GET',
 			success: function(result) {
 				$pageContentWrapper = $('#page-content-wrapper #top').html();
@@ -510,7 +505,7 @@ function showUserPanel() {
 				});
 			},
 			error: function(error) {
-				console.log(error);
+				showNotify(error.responseJSON.message, true);
 			}
 		});
 	}
@@ -660,23 +655,15 @@ function buildUserPanel(userInfo) {
 		$.ajax({
 			method: 'PUT',
 			data: data,
-			url: '/api/users/profile',
+			url: encodeURI('/api/users/profile'),
 			success: function(result) {
 				localStorage.accessToken = result.accessToken;
-				$.notify({ //http://bootstrap-notify.remabledesigns.com/
-					message: result.message,
-					icon: "fa fa-check"
-				}, {
-					type: 'success',
-					delay: 3000,
-					mouse_over: "pause",
-					z_index: 1051
-				});
+				showNotify(result.message, false);
 				sessionStorage.userID = result.id;
 				userReady(result.fullname, false);
 			},
 			error: function(error) {
-				showNotify(JSON.parse(error.responseText).message, true);
+				showNotify(error.responseJSON.message, true);
 			}
 		});
 	});
@@ -691,21 +678,13 @@ function buildUserPanel(userInfo) {
 
 		$.ajax({
 			method: 'PUT',
-			url: '/api/users/profile/password',
+			url: encodeURI('/api/users/profile/password'),
 			data: data,
 			success: function(result) {
-				$.notify({ //http://bootstrap-notify.remabledesigns.com/
-					message: result.message,
-					icon: "fa fa-check"
-				}, {
-					type: 'success',
-					delay: 3000,
-					mouse_over: "pause",
-					z_index: 1051
-				});
+				showNotify(result.message, false);
 			},
 			error: function(error) {
-				showNotify(JSON.parse(error.responseText).message, true);
+				showNotify(error.responseJSON.message, true);
 			}
 		});
 	});
