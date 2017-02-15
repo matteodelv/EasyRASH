@@ -142,18 +142,18 @@
 				"title": "Example paper for comments",
 				"status": "pending",
 				"authors": [
-					"angelo.diiorio",
 					"raffaele.giannella",
 					"francesco.poggi5",
-					"fabio.vitali",
-					"silvio.peroni"
+					"fabio.vitali"
 				],
 				"url": "example-annotations",
 				"reviewers": [
-					"arthur.dent"
+					"silvio.peroni",
+					"angelo.diiorio"
 				],
 				"reviewedBy": [
-					"arthur.dent"
+					"silvio.peroni",
+					"angelo.diiorio"
 				]
 			},
 			{
