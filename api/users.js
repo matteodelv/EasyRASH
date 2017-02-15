@@ -6,7 +6,7 @@ var fs = require('fs');
 var utils = require('./utils.js');
 var jwt = require('jsonwebtoken');
 
-// Returns the entire list of users with their info
+/* Returns the entire list of users with their info */
 router.get('/', function(req, res) {
 	utils.loadJsonFile(req.app.get('usersFilePath'), (error, users, save) => {
 		if (error) res.status(error.status).json(error);
@@ -25,7 +25,7 @@ router.get('/', function(req, res) {
 	});
 });
 
-// Returns all info about the logged in user
+/* Returns all info about the logged in user */
 router.get('/profile', function(req, res) {
 	utils.loadJsonFile(req.app.get('usersFilePath'), (error, users, save) => {
 		if (error) res.status(error.status).json(error);
@@ -39,7 +39,7 @@ router.get('/profile', function(req, res) {
 	});
 });
 
-// Updates profile info of the logged in user
+/* Updates profile info of the logged in user */
 router.put('/profile', function(req, res) {
 	utils.loadJsonFile(req.app.get('usersFilePath'), (error, users, save) => {
 		if (error) res.status(error.status).json(error);
@@ -69,7 +69,7 @@ router.put('/profile', function(req, res) {
 	});
 });
 
-// Updates password of the logged in user
+/* Updates password of the logged in user */
 router.put('/profile/password', function(req, res) {
 	utils.loadJsonFile(req.app.get('usersFilePath'), (error, users, save) => {
 		if (error) res.status(error.status).json(error);
@@ -93,7 +93,7 @@ router.put('/profile/password', function(req, res) {
 	});
 });
 
-// Returns email of the specified user
+/* Returns email of the specified user */
 router.get('/:id', function(req, res){
 	if (req.accepts(['application/json'])){
 		utils.loadJsonFile(req.app.get('usersFilePath'), (error, users, save) => {

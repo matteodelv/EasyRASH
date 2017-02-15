@@ -11,7 +11,7 @@ var dom = xmldom.DOMParser;
 var serializer = new xmldom.XMLSerializer();
 var utils = require('./utils.js');
 
-//Responds with all the paper associated with a particular user
+/* Responds with all the paper associated with a particular user */
 router.get('/', function(req, res) {
 	utils.loadJsonFile(req.app.get('eventsFilePath'), (error, events) => {
 		if (error) res.status(error.status).json(error);
@@ -34,7 +34,7 @@ router.get('/', function(req, res) {
 	});		
 });
 
-//Finds the user's role in relation to the paper
+/* Finds the user's role in relation to the paper */
 router.get('/:id/role', function(req, res) {
 	utils.loadJsonFile(req.app.get('eventsFilePath'), (error, events) => {
 		console.log(req.params.id);
@@ -58,7 +58,7 @@ router.get('/:id/role', function(req, res) {
 	});
 });
 
-//Responds with a list of reviewer/review status tuples for the specified paper
+/* Responds with a list of reviewer/review status tuples for the specified paper */
 router.get('/:id/reviews', function(req, res) {
 	utils.loadJsonFile(req.app.get('eventsFilePath'), (err, events) => {
 		if (err) res.status(err.status).json(err);
@@ -111,7 +111,7 @@ router.get('/:id/reviews', function(req, res) {
 	});
 });
 
-//Expresses a final decision about the specified paper
+/* Expresses a final decision about the specified paper */
 router.post('/:id/judge', (req, res) => {
 	utils.loadJsonFile(req.app.get('eventsFilePath'), (error, events, save) => {
 		if (error) res.status(error.status).json(error);
@@ -127,7 +127,7 @@ router.post('/:id/judge', (req, res) => {
 	});
 });
 
-//Requests to lock a paper to prevent other users from editing
+/* Requests to lock a paper to prevent other users from editing */
 router.put('/:id/lock', function(req, res) {
 	checkPaperLock(req.app, req.params.id, req.jwtPayload.id, (err, isLocked) => {
 		if (err) throw err;
@@ -147,14 +147,14 @@ router.put('/:id/lock', function(req, res) {
 	});
 });
 
-//Releases the lock from a paper
+/* Releases the lock from a paper */
 router.delete('/:id/lock', function(req, res) {
 	releasePaperLock(req.app, req.params.id, req.jwtPayload.id, (err) => {
 		res.status(200).send();
 	});
 });
 
-//Checks whether a paper is locked
+/* Checks whether a paper is locked */
 function checkPaperLock(app, paperId, userId, callback){
 	var isLocked = false;
 	var err = {};
@@ -178,7 +178,7 @@ function checkPaperLock(app, paperId, userId, callback){
 	return callback(err, isLocked);
 }
 
-//Locks a paper to prevent other users from editing
+/* Locks a paper to prevent other users from editing */
 function lockPaper(app, paperId, userId, callback){
 	var err = {};
 	utils.loadJsonFile(app.get('eventsFilePath'), (error, events, save) => {
@@ -203,7 +203,7 @@ function lockPaper(app, paperId, userId, callback){
 	return callback(err);
 }
 
-//Releases the lock from a paper
+/* Releases the lock from a paper */
 function releasePaperLock(app, paperId, userId, callback){
 	var err = {};
 	utils.loadJsonFile(app.get('eventsFilePath'), (error, events, save) => {
@@ -220,7 +220,7 @@ function releasePaperLock(app, paperId, userId, callback){
 	return callback(err);
 }
 
-//Responds with a list of papers associated with the user
+/* Responds with a list of papers associated with the user */
 router.get("/user", function(req, res) {
 	utils.loadJsonFile(req.app.get('eventsFilePath'), (error, events) => {
 		if (error) res.status(error.status).json(error);
@@ -245,9 +245,9 @@ router.get("/user", function(req, res) {
 	});
 });
 
-//Responds with a paper given the id
+/* Responds with a paper given the id */
 router.get('/:id', function(req, res) {
-	//Filter out comments by permissions: /(<script type="application\/ld\+json">)((.|\n)*?)<\/script>/igm
+	//Filter out comments by permissions
 	if (req.accepts(['application/xhtml+xml', 'text/html'])) {
 		utils.loadJsonFile(req.app.get('eventsFilePath'), (error, events) => {
 		if (error) res.status(error.status).json(error);
@@ -460,7 +460,7 @@ router.post('/:id/review', function(req, res) {
 	});
 });
 
-//Used to standardize how papers are formatted
+/* Used to standardize how papers are formatted */
 function normalizePapers() {
 	return null;
 	console.log("Normalizing all papers");

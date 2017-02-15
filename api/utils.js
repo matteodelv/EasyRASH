@@ -6,6 +6,7 @@
 var path = require('path');
 var fs = require('fs');
 
+/* Sorts a list of users alphabetically */
 exports.sortUsersAlphabetically = function(usersArray) {
 	usersArray.sort((a, b) => {
 		a = a.family_name.toLowerCase();
@@ -15,6 +16,7 @@ exports.sortUsersAlphabetically = function(usersArray) {
 	return usersArray;
 };
 
+/* Loads and parses a json file, provides a quick way to save the changes back to it in a formatted way, returns errors in an object within the callback */
 exports.loadJsonFile = function(file, callback) {
 
 	var filePath = path.resolve(file);
@@ -34,6 +36,7 @@ exports.loadJsonFile = function(file, callback) {
 	} else return callback({ status: 404, message: 'Requested data file not found. Please, try again!' }, null);
 }
 
+/* Finds a submission by its id in a list of events */
 exports.findSubmission = function(events, submissionUrl) {
 	var submission;
 	events.some(event => {
@@ -43,6 +46,7 @@ exports.findSubmission = function(events, submissionUrl) {
 	return submission;
 };
 
+/* Finds an user in a list of users */
 exports.findUser = function(users, userId) {
 	return users.find(u => u.id === userId);
 };

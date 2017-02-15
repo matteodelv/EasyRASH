@@ -7,6 +7,7 @@ var jwt = require('jsonwebtoken');
 var crypto = require('crypto');
 var nodemailer = require('nodemailer');
 
+//Object that handles the email service
 var transporter = nodemailer.createTransport({
 	host: 'mail.matteodv.me',
 	port: 25,
@@ -20,6 +21,18 @@ var transporter = nodemailer.createTransport({
 	}
 });
 
+//Verify that email transporter works
+transporter.verify(function(error, success){
+	console.log('Checking email service...');
+	if (error){
+		console.log('Email service isn\'t working properly: ', error);
+		console.log('...continuing without email service');
+	} else {
+		console.log('Email service working properly');
+	}
+});
+
+/* Checks whether the user credentials match ones the ones of a specific users, in that case creates a JWT and returns it */
 router.post('/signin', function(req, res) {
 	fs.readFile('./storage/users.json', 'utf8', (err, data) => {
 		if (err) throw err;
@@ -48,14 +61,8 @@ router.post('/signin', function(req, res) {
 	});
 });
 
+/* Creates a new entry for an unverified user, generates an url to verify it, and sends an email with the verification url */
 router.post('/signup', function(req, res) {
-	transporter.verify(function(error, success){
-		if (error){
-			console.log(error);
-		} else {
-			console.log("Il servizio email funziona correttamente");
-		}
-	});
 	fs.readFile('./storage/users.json', 'utf8', (err, data) => {
 		if (err) throw err;
 		var users = JSON.parse(data);
@@ -98,11 +105,11 @@ router.post('/signup', function(req, res) {
 						var verifyLink = req.get('host') ? req.protocol + '://' + req.get('host') + '/api/authentication/verify/' + token : req.protocol + '://' + server.address().address + ':' + server.address().port + '/api/authentication/verify/' + token;
 						// setup e-mail data with unicode symbols
 						var mailOptions = {
-								from: '"EasyRASH" <easyrashservice@matteodv.me>',
-								to: req.body.email,
-								subject: 'Easy RASH account verification ✔',
-								html: '<p><b>It looks like you created a new account at Easy Rash.</b></p><p>In order to verify your account and be able to log in, please click on the following link: <a href="' + verifyLink + '">' + verifyLink + '</a></p>'
-							}
+							from: '"EasyRASH" <easyrashservice@matteodv.me>',
+							to: req.body.email,
+							subject: 'Easy RASH account verification ✔',
+							html: '<p><b>It looks like you created a new account at Easy Rash.</b></p><p>In order to verify your account and be able to log in, please click on the following link: <a href="' + verifyLink + '">' + verifyLink + '</a></p>'
+						}
 							// send mail with defined transport object
 						transporter.sendMail(mailOptions, function(error, info) {
 							if (error) {
@@ -121,6 +128,8 @@ router.post('/signup', function(req, res) {
 		}
 	});
 });
+
+/* Verifies the unverified user and saves it in the users list */
 router.get('/verify/:token', function(req, res) {
 	fs.readFile('./storage/usersUnverified.json', 'utf8', (err, data) => {
 		if (err) throw err;
