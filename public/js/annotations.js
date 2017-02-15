@@ -134,14 +134,13 @@ function createFilterPopoverContent($content) {
 					result.reviews.forEach(function(rev) {
 						if (rev.reviewer && rev.decision && rev.decision != 'pending') {
 							var $row = $('<tr></tr>');
-							var $td = $('<td></td>');
-							$td.css('text-align', 'center');
+							var $td = $('<td class="text-center"></td>');
 							var $checkbox = $('<input type="checkbox" name="reviewersFiltered[]" />');
 							$checkbox.attr('value', rev.reviewer.id);
 							$checkbox.prop('checked', true);
 							$checkbox.appendTo($td);
 							$row.append($td);
-							$td = $td.clone();
+							$td = $('<td class="text-nowrap"></td>');
 							$td.empty().text(rev.reviewer.fullName);
 							$row.append($td);
 							$content.find('tbody').append($row);

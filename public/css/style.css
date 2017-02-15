@@ -17,7 +17,7 @@ a {
 	cursor: pointer;
 }
 
-h4{
+h4, h5{
 	font-weight: bold;
 }
 
@@ -568,3 +568,8 @@ section>section>.add-block-annotation-btn{
 }
 
 body { padding-right: 0 !important }
+
+#helpModal em {
+	background: #eff8ff;
+	border-radius: 0.2em;
+}

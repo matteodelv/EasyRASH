@@ -241,7 +241,7 @@ function loadCurrentPaperContent() {
 				showNotify(error.responseJSON.message, true);
 			}
 		});
-	}
+	} else { createFilterPopoverContent($content); }
 }
 
 function getUserPapers() {

@@ -376,8 +376,8 @@
 					<div class="modal-body">
 						<div class="row">
 							<div class="col-md-12">
-								<p>EasyRASH is a simple web application that let you easily manage conferences and academic events by focusing on the Peer Review process for articles written in RASH. Click on the Help button <i class="fa fa-question-circle"></i> on top to discover all the features of EasyRASH, its usage and icon meanings.</p>
-								<p>Made with <i class="fa fa-heart"></i> and (lots of) <i class="fa fa-coffee"></i> by:</p>
+								<p>EasyRASH is a simple web application that lets you easily manage conferences and academic events by focusing on the Peer Review process for articles written in RASH. Click on the Help button <i class="fa fa-question-circle text-info"></i> on top to discover all the features of EasyRASH, its usage and icon meanings.</p>
+								<p>Made with <i class="fa fa-heart text-danger"></i> and (lots of) <i class="fa fa-coffee text-warning"></i> by:</p>
 							</div>
 						</div>
 						<div class="row">
@@ -456,15 +456,27 @@
 						</div>
 						<h4>Interface</h4>
 						<h5>Navigation Bar</h5>
-						<p>Located on top just below the title, contains key elements to interact with events and papers. On the left side, there is the <strong>"Mode Toggle"</strong>, which let every reviewer to enter in <strong>"Annotator Mode"</strong> to add annotations to a paper as a review. Furthermore, there are two hidden buttons to let every chair manage an event: in fact, they will only appear when the logged in user is one of the chairs of the currently selected conference. The first button show the <strong>Management Panel</strong> for a conference, where every chair can edit its info, and add co-chairs or reviewers; the second button, instead, is used by every chair to assign reviewers to the currently open paper.</p>
-						<p>On the right side, there are an Help button and an Info button.</p>
+						<p>Located on top just below the banner, it contains key elements to interact with events and papers. On the left side, a <em>Mode Toggle</em> button lets every reviewer to enter in <em>Annotator Mode</em> for adding annotations to a paper as a review. Furthermore, there are two hidden buttons to let every chair manage an event: in fact, they will only appear when the logged in user is one of the chairs of the currently selected conference. The first button shows the <em>Management Panel</em> for a conference, where every chair can edit its info, and add co-chairs or reviewers; the second button, instead, is used by every chair to assign reviewers to the currently open paper. The last button will let the chair make a final decision about the shown paper.</p>
+						<p>On the right side, there are an Help button (which opens this modal) and an Info button that lets you see our pretty faces.</p>
 						<h5>Main Area</h5>
-						<p>It is the biggest part of the interface and it is used to show papers, for both reading and review. In some specific conditions, based on paper status and user's role, annotations will also be displayed. In addition, papers can be shown in <em>RASH</em> or <em>Springer LNCS</em> layout. A sidebar affixed on the right will help you scroll through the different sections and keep track of where you're at.</p>
+						<p>It is the biggest part of the interface and it is used to show papers, for both reading and review, and panels to edit various kind of information. In some specific conditions, based on paper status and user's role, annotations will also be displayed. In addition, papers can be displayed both in <em>RASH</em> and <em>Springer LNCS</em> layout. A sidebar affixed on the right will help you scroll through the different sections and keep track of where you're at.</p>
 						<h5>Sidebar</h5>
-						<p>Located on the left, the sidebar is the main way to navigate between papers and conferences. On top, it shows info about the currently logged in user. Below there is the <strong>Conferences Selector</strong>, where users can select specific events and get papers from that event, or they can create new conferences. The last section, divided in <strong>"Authored By Me"</strong> and <strong>"Pending Reviews"</strong>, shows a list of all the articles where the logged in user is author and all the papers that haven't been reviewed yet, since the user is reviewer for them.</p>
+						<p>Located on the left, the sidebar is the main way to navigate between papers and conferences. On the top, some info about the currently logged in user are displayed, a <em>Edit Profile</em> button and a <em>Log Out</em> button. Below there can be found a <em>Conferences Selector</em>, where users can select specific events and get papers from that event, or they can create new conferences. The last section, divided in <em>Authored By Me</em> and <em>Pending Reviews</em>, shows a list of all the articles the logged in user is author of and all the papers that the user has yet to review.</p>
 						<p class="text-info">Note: This last section can be considered as a summary of the work related to the user, no matter which conference is or is not selected.</p>
 						<h4>Frequently Asked Questions</h4>
-						<p class="text-danger">Aggiungere domande, soprattutto riguardo le assunzione fatte</p>
+						<h5>How can I create a new conference?</h5>
+						<p>You can find a <em>New Conference</em> entry in the drop down button on the sidebar on the left. Clicking on that button will open a modal that lets you create a new conference.</p>
+						<h5>How do I review a paper?</h5>
+						<p>First of, enter the <em>Annotator Mode</em> by pressing the button on the top bar. Then select a portion of text you would like to annotate and click the button that pops up with the + sign. You will be prompted with a small text editor which lets you type your annotation. Rinse and repeat. Once you're happy with your annotations, click on the <em>Review Annotations</em> button on the top bar, check that everything is ok and choose whether you think the paper should be accepted and rejected, and confirm your choice.</p>
+						<h5>Why can't I see the other reviewers annotations?</h5>
+						<p>Annotations are displayed only in specific circumstances:
+							<ul>
+								<li>If the paper has been accepted by the chair.</li>
+								<li>If the user is chair of the event the paper belongs to.</li>
+								<li>If the user is a reviewer of that paper, and has already reviewed it, to prevent the other reviews to influence him.</li>
+								<li>The paper isn't pending, and the user is either the author of the paper or a potential reviewer (PC member).</li>
+							</ul>
+						</p>
 					</div>
 				</div>
 			</div>
