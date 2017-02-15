@@ -8,6 +8,8 @@ var bearerToken = require('express-bearer-token');
 
 app.disable('x-powered-by');
 app.set('secret', config.secret);
+app.set('usersFilePath', config.usersFilePath);
+app.set('eventsFilePath', config.eventsFilePath);
 
 app.use(bodyParser.urlencoded({ extended: true })); //Used to automatically parse requests body
 app.use(bodyParser.json());

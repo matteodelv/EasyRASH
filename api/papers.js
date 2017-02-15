@@ -14,7 +14,7 @@ const LOCK_EXPIRE_TIME_MS = 3600000;
 
 //Responds with all the paper associated with a particular user
 router.get('/', function(req, res) {
-	utils.loadJsonFile('storage/events.json', (error, events) => {
+	utils.loadJsonFile(app.get('eventsFilePath'), (error, events) => {
 		if (error) res.status(error.status).json(error);
 		var submittedArticles = [];
 		var reviewableArticles = [];
@@ -37,7 +37,7 @@ router.get('/', function(req, res) {
 
 //Finds the user's role in relation to the paper
 router.get('/:id/role', function(req, res) {
-	utils.loadJsonFile('storage/events.json', (error, events) => {
+	utils.loadJsonFile(app.get('eventsFilePath'), (error, events) => {
 		console.log(req.params.id);
 		if (error) res.status(error.status).json(error);
 
@@ -61,13 +61,13 @@ router.get('/:id/role', function(req, res) {
 
 //Responds with a list of reviewer/review status tuples for the specified paper
 router.get('/:id/reviews', function(req, res) {
-	utils.loadJsonFile('storage/events.json', (err, events) => {
+	utils.loadJsonFile(app.get('eventsFilePath'), (err, events) => {
 		if (err) res.status(err.status).json(err);
 
 		var paper = utils.findSubmission(events, req.params.id);
 		var reviews = [];
 
-		utils.loadJsonFile('storage/users.json', (err, users) => {
+		utils.loadJsonFile(app.get('usersFilePath'), (err, users) => {
 			if (err) res.status(err.status).json(err);
 
 			var filePath = path.resolve('storage/papers/' + req.params.id + '.html');
@@ -114,7 +114,7 @@ router.get('/:id/reviews', function(req, res) {
 
 //Expresses a final decision about the specified paper
 router.post('/:id/judge', (req, res) => {
-	utils.loadJsonFile('storage/events.json', (error, events, save) => {
+	utils.loadJsonFile(app.get('eventsFilePath'), (error, events, save) => {
 		if (error) res.status(error.status).json(error);
 
 		var paper = utils.findSubmission(events, req.params.id);
@@ -159,7 +159,7 @@ router.delete('/:id/lock', function(req, res) {
 function checkPaperLock(paperId, userId, callback){
 	var isLocked = false;
 	var err = {};
-	eventsFilePath = 'storage/events.json';
+	eventsFilePath = app.get('eventsFilePath');
 	utils.loadJsonFile(eventsFilePath, (error, events) => {
 		err = error;
 		var submission;
@@ -183,7 +183,7 @@ function checkPaperLock(paperId, userId, callback){
 //Locks a paper to prevent other users from editing
 function lockPaper(paperId, userId, callback){
 	var err = {};
-	utils.loadJsonFile('storage/events.json', (error, events, save) => {
+	utils.loadJsonFile(app.get('eventsFilePath'), (error, events, save) => {
 		err = error;
 		if (err) return callback(err);
 		var submission = utils.findSubmission(events, paperId);
@@ -208,7 +208,7 @@ function lockPaper(paperId, userId, callback){
 //Releases the lock from a paper
 function releasePaperLock(paperId, userId, callback){
 	var err = {};
-	utils.loadJsonFile('storage/events.json', (error, events, save) => {
+	utils.loadJsonFile(app.get('eventsFilePath'), (error, events, save) => {
 		err = error;
 		if (err) return callback(err);
 		var submission = utils.findSubmission(events, paperId);
@@ -224,7 +224,7 @@ function releasePaperLock(paperId, userId, callback){
 
 //Responds with a list of papers associated with the user
 router.get("/user", function(req, res) {
-	utils.loadJsonFile('storage/events.json', (error, events) => {
+	utils.loadJsonFile(app.get('eventsFilePath'), (error, events) => {
 		if (error) res.status(error.status).json(error);
 		var result = {
 			authored_by_me: [], //Contains papers the user is author of
@@ -251,7 +251,7 @@ router.get("/user", function(req, res) {
 router.get('/:id', function(req, res) {
 	//Filter out comments by permissions: /(<script type="application\/ld\+json">)((.|\n)*?)<\/script>/igm
 	if (req.accepts(['application/xhtml+xml', 'text/html'])) {
-		utils.loadJsonFile('storage/events.json', (error, events) => {
+		utils.loadJsonFile(app.get('eventsFilePath'), (error, events) => {
 		if (error) res.status(error.status).json(error);
 			//User can get paper if it's one of its authors, one of its reviewers or one of its chairs, or if the submission has been accepted
 			var eligible = events.some(event =>
@@ -309,7 +309,7 @@ router.get('/:id', function(req, res) {
  * And writes JSON+lD info in the scripts section (inside of the head) of the RASH file
 */
 router.post('/:id/review', function(req, res) {
-	utils.loadJsonFile('storage/events.json', (error, events, save) => {
+	utils.loadJsonFile(app.get('eventsFilePath'), (error, events, save) => {
 		if (error) res.status(error.status).json(error);
 		var submission = utils.findSubmission(events, req.params.id);
 		if (!submission.reviewers.some(reviewer => reviewer === req.jwtPayload.id)) {

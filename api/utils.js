@@ -5,9 +5,6 @@
 var path = require('path');
 var fs = require('fs');
 
-exports.EVENTS_FILE_PATH = 'storage/events.json';
-exports.USERS_FILE_PATH = 'storage/users.json';
-
 exports.checkAcronymUsage = function(acronym, callback) {
 	var check = false;
 	var eventsPath = path.resolve('storage/events.json');
