@@ -10,17 +10,13 @@ var inlineAnnotationElements = ['span', 'em', 'code', 'a', 'time', 'cite', 'h1',
 
 // Release lock on current paper if there are no draft annotations
 window.onbeforeunload = function(event) {
-	console.log("onbeforeunload");
 	automaticLockReleaseForReviewers();
 
 	return undefined;	// Must be undefined for avoiding the default pop up to show
 };
 
 function automaticLockReleaseForReviewers() {
-	console.log("automaticLockReleaseForReviewers");
-	console.log("activeMode = " + activeMode);
 	if (activeMode === 'reviewer' && $('#paper-container').children().length !== 0) {
-		console.log("automaticLockReleaseForReviewers IF");
 		var paperID = document.location.pathname.split('papers/').pop().replace('/','');
 		var draftAnnotations = JSON.parse(localStorage.getItem(paperID + '/draftAnnotations'));
 		if (!draftAnnotations){ //Release lock if there are no unsaved annotations
@@ -50,57 +46,52 @@ $(document).ready(function() {
 		}
 		else {
 			var userIsRev = JSON.parse(sessionStorage.revForPaper);
-			console.log("userIsRev = " + userIsRev);
-			console.log("userRole = " + sessionStorage.userRole);
-			//if (userIsRev) {
-				console.log("is user a reviewer for this paper? " + sessionStorage.revForPaper);
-				console.log("userRole = " + sessionStorage.userRole);
-				var alreadyReviewed = JSON.parse(sessionStorage.alreadyReviewed);
-				
-				if (!userIsRev || sessionStorage.userRole === "Chair") {
-					event.preventDefault();
-					var message;
-					if (sessionStorage.userRole === 'Chair')
-						message = 'You are not allowed to enter Annotator Mode since you are Chair of the selected conference!';
-					else message = "You are not allowed to enter Annotator Mode because you don't have Reviewer rights on this paper!";
-					showNotify(message, true);
-				}
-				else if (alreadyReviewed) {
-					event.preventDefault();
-					showNotify('You have already reviewed this paper!', true);
-				}
-				else {	// L'utente è un reviewer per il paper ma prima bisogna controllare il lock sull'articolo
-					var isEnteringAnnotator = $(this).is(':checked') ? true : false;
+			var alreadyReviewed = JSON.parse(sessionStorage.alreadyReviewed);
+
+			if (!userIsRev || sessionStorage.userRole === "Chair") {
+				event.preventDefault();
+				var message;
+				if (sessionStorage.userRole === 'Chair')
+					message = 'You are not allowed to enter Annotator Mode since you are Chair of the selected conference!';
+				else message = "You are not allowed to enter Annotator Mode because you don't have Reviewer rights on this paper!";
+				showNotify(message, true);
+			}
+			else if (alreadyReviewed) {
+				event.preventDefault();
+				showNotify('You have already reviewed this paper!', true);
+			}
+			else {
+				// Logged in user is reviewer, need to check paper lock now
+				var isEnteringAnnotator = $(this).is(':checked') ? true : false;
+				var paperID = document.location.pathname.split('papers/').pop().replace('/','');
+				if (isEnteringAnnotator){
+					$.ajax({
+						method: 'PUT',
+						url: encodeURI('/api/papers/' + paperID + '/lock'),
+						success: function(result) {
+							updateModeCheckbox(result.lockAcquired);
+						},
+						error: function(error) {
+							showNotify(error.responseJSON.message, true);
+							updateModeCheckbox(false);	
+						}
+					});
+				} else {
 					var paperID = document.location.pathname.split('papers/').pop().replace('/','');
-					if (isEnteringAnnotator){
+					var draftAnnotations = JSON.parse(localStorage.getItem(paperID + 'draftAnnotations'));
+					if (!draftAnnotations){ //Release lock if there are no unsaved annotations
 						$.ajax({
-							method: 'PUT',
+							method: 'DELETE',
 							url: encodeURI('/api/papers/' + paperID + '/lock'),
 							success: function(result) {
 								updateModeCheckbox(result.lockAcquired);
 							},
 							error: function(error) {
-								showNotify(error.responseJSON.message, true);
 								updateModeCheckbox(false);	
 							}
 						});
-					} else {
-						var paperID = document.location.pathname.split('papers/').pop().replace('/','');
-						var draftAnnotations = JSON.parse(localStorage.getItem(paperID + 'draftAnnotations'));
-						if (!draftAnnotations){ //Release lock if there are no unsaved annotations
-							$.ajax({
-								method: 'DELETE',
-								url: encodeURI('/api/papers/' + paperID + '/lock'),
-								success: function(result) {
-									updateModeCheckbox(result.lockAcquired);
-								},
-								error: function(error) {
-									updateModeCheckbox(false);	
-								}
-							});
-						}
 					}
-				//}
+				}
 			}
 		}
 	});
@@ -113,10 +104,7 @@ $(document).ready(function() {
 	})
 	.on('shown.bs.popover', function(){
 		$('#filterButton').find('i').tooltip('hide');
-	})
-	/*.on('mouseover', function() { 
-		createFilterPopoverContent($content);
-	});*/
+	});
 });
 
 function createFilterPopoverContent($content) {
@@ -305,23 +293,6 @@ $(window).load(function() {
 			
 			loadDraftAnnotation(annotation);
 		});
-		//Handle click on block annotation button
-		/*
-		$addBlockAnnotationPopup.off('click').click(function(e) {
-			if (activeMode !== 'reviewer') {
-				return;
-			}
-			var currentNode;
-			var annotation = {};
-			
-			annotation.text = $addBlockAnnotationPopup.parent().text();
-			annotation.content = '';
-			annotation.type = 'block';
-			annotation.author = sessionStorage.userID.replace('mailto:', '').replace(/(@.*)/g, '').replace(/\s+/g, '-').replace(/[^a-zA-Z-]/g, '').toLowerCase();
-			annotation.startXPath = getXPath($addBlockAnnotationPopup.parent()[0]);
-
-			loadDraftAnnotation(annotation);
-		});*/
 	});
 	// Repositions the button to add an annotation
 	var repositionAddAnnotationButton = function() {
@@ -382,18 +353,6 @@ function loadDraftAnnotations() {
 			loadDraftAnnotation(draftAnnotations[annotationKey]);
 		});
 	}
-	/*
-	var $blocks = $('.paper-container>*').not('.cgen').find(blockAnnotationElements.join(', ')).not('.cgen').add($('.paper-container>*').not('.cgen'));
-	$blocks.mouseover(function(e) {
-		e.stopPropagation();
-		var $elem = $(this);
-		$elem.prepend($addBlockAnnotationPopup);
-		$addBlockAnnotationPopup.css('height', $elem.height());
-	});
-	$blocks.mouseleave(function(e){
-		e.stopPropagation();
-		$addBlockAnnotationPopup.detach();
-	});*/
 }
 
 /* Returns the first element from its given xpath */
@@ -542,7 +501,7 @@ function openReviewAnnotationsModal(){
 		$('#annotationsTable>tbody').append(annRow);
 	});
 
-	// Are annotations removed from draftannotation when deleted? O.o
+	// TODO: Are annotations removed from draftannotation when deleted? O.o
 	if (Object.keys(draftAnnotations).length === 0) {
 		$('#reviewSubmit').prop('disabled', true);
 		showErrorAlert('#reviewAnnotationsModal .modal-body', 'There aren\'t annotations to save!', false);
@@ -561,7 +520,7 @@ function sendReview(){
 		annotations: JSON.parse(localStorage.getItem(paperId + 'draftAnnotations')),
 		decision: decision
 	}
-	console.log(review);
+
 	$.ajax({
 		url: encodeURI('/api/papers/' + paperId + 'review'),
 		method: 'POST',
@@ -575,7 +534,7 @@ function sendReview(){
 		},
 		error: function(error) {
 			$('.send-review-btn').animateCss('shake');
-			showNotify(error.responseJSON.message, true);		// Controllare formato errore ritornato
+			showNotify(error.responseJSON.message, true);
 		}
 	});
 }
@@ -583,9 +542,6 @@ function sendReview(){
 function getUniqueAnnotationId() {
 	var max = 0;
 	$('.inline-annotation, .block-annotation').each(function() {
-		if (!$(this).attr('id')) {
-			console.log($(this));
-		}
 		var n = $(this).attr('id').split('fragment')[1];
 		if (n && !isNaN(parseInt(n))) {
 			max = Math.max(max, parseInt(n));
@@ -617,7 +573,6 @@ function loadAnnotations() {
 	//Find the json+ld contents
 	$addedHeadTags.filter('script[type="application/ld+json"]').each(function() {
 		var review = JSON.parse($(this).html());
-		//console.log($(this).html);
 		if (review.constructor === Array){
 			reviews.push(review);
 			var person = review.find(function(r) { return r['@type'] === 'person' });
@@ -701,7 +656,6 @@ function loadAnnotations() {
 			});
 
 			$elem.click(function(e) {
-				//$popover.webuiPopover('show');
 				e.stopPropagation();
 			});
 

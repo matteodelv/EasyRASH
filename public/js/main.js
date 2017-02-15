@@ -60,8 +60,6 @@ window.onload = function() {
 };
 
 $(document).ready(function() {
-	//moment.locale('it');
-	//$('[data-toggle="tooltip"]').tooltip(); 
 	$('body').tooltip({ selector: '[data-toggle="tooltip"]' });
 	$('#signupemail').keyup(function() {
 		var username = $(this).val().split("@")[0];
@@ -71,7 +69,6 @@ $(document).ready(function() {
 	});
 
 	//Fixes affix width changing when on top
-
 	$('[data-clampedwidth]').each(function() {
 		var elem = $(this);
 		var parentPanel = elem.data('clampedwidth');
@@ -83,9 +80,6 @@ $(document).ready(function() {
 		resizeFn();
 		$(window).resize(resizeFn);
 	});
-
-	responsiveFooter();
-	$(window).resize(responsiveFooter);
 
 	$(".scrollToTop").click(function() {
 		$("html, body").animate({ scrollTop: 0 }, 200);
@@ -407,20 +401,6 @@ function userReady(fullname, requestData) {
 		getUserPapers();
 	}
 }
-
-var responsiveFooter = function() {
-	if ($(window).width() < 768) {
-		$(".footer").css("padding-bottom", "20px");
-		$(".footer p").removeClass("pull-left");
-		$(".footer a").removeClass("pull-right");
-		$(".footer .container").addClass("text-center");
-	} else {
-		$(".footer").css("padding-bottom", "0px");
-		$(".footer p").addClass("pull-left");
-		$(".footer a").addClass("pull-right");
-		$(".footer .container").removeClass("text-center");
-	}
-};
 
 function logIn() {
 	var data = {};

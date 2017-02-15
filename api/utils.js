@@ -34,7 +34,7 @@ exports.loadJsonFile = function(file, callback) {
 			return callback(null, parsed, save);
 		}
 	} else return callback({ status: 404, message: 'Requested data file not found. Please, try again!' }, null);
-}
+};
 
 /* Finds a submission by its id in a list of events */
 exports.findSubmission = function(events, submissionUrl) {
