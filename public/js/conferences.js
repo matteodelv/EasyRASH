@@ -309,7 +309,7 @@ function buildConfAdminPanel(confData) {
 	$('#conf-admin-panel form .form-group').last().find('.btn-primary').on('click', function(e) {
 		e.preventDefault();
 
-		var data = {		// confData.acronym serve ancora?
+		var data = {
 			oldAcronym: confData.acronym
 		};
 		$('#conf-admin-panel input[name], #conf-admin-panel select[name]').each(function(index) {
@@ -450,9 +450,6 @@ function sendPaperDecision() {
 		decision: decision
 	};
 
-	console.log(decision);
-
-	//TODO: ajax call
 	$.ajax({
 		method: 'POST',
 		url: encodeURI('/api/papers/' + paperID + '/judge'),

@@ -132,7 +132,6 @@ function loadCurrentPaperContent() {
 	if (document.location.pathname.startsWith("/papers/")) {
 		if (sessionStorage.papers) {
 			var parsed = JSON.parse(sessionStorage.papers);
-			//var papers = parsed.submitted.concat(parsed.reviewable);
 			var papers = [];
 			for (var category in parsed.articles) {
 				if (parsed.articles.hasOwnProperty(category)) {
@@ -268,17 +267,14 @@ String.prototype.camelCaseToString = function() {
 function updateStatusLabel(paperUrl, updateType) {
 	if (updateType === UPDATE_ICON_PAPER_ACCEPTED){
 		var span = $('#conferenceSidebar a[href^="' + paperUrl + '"] span.fa-gavel');
-		console.log(span);
 		span.addClass('fa-check').removeClass('fa-gavel');
 	}
 	else if (updateType === UPDATE_ICON_PAPER_REJECTED){
 		var span = $('#conferenceSidebar a[href^="' + paperUrl + '"] span.fa-gavel');
-		console.log(span);
 		span.addClass('fa-times').removeClass('fa-gavel');
 	}
 	else if (updateType === UPDATE_ICON_REVIEW_SENT){
 		var span = $('#conferenceSidebar a[href^="' + paperUrl + '"] span.fa-exclamation-circle');
-		console.log(span);
 		span.addClass('fa-sticky-note').removeClass('fa-exclamation-circle');
 	}
 }
@@ -324,7 +320,7 @@ function fetchAndBuildSidebarMenu(result, loadingConf, callback) {
 		});
 	}
 
-	sessionStorage.papers = JSON.stringify(result); // NON rimuovere altrimenti gli articoli non vengono caricati
+	sessionStorage.papers = JSON.stringify(result);
 	var parentObj = "";
 
 	if (loadingConf) {
@@ -357,7 +353,6 @@ function fetchAndBuildSidebarMenu(result, loadingConf, callback) {
 					else li.insertAfter($(parentObj + ' .sidebar-brand.' + type));
 
 					li.find('a').on('click', function() {
-						console.log("id sidebar = " + li.parent().prop('id'));
 						if (li.parent().prop('id') === "sidebar") {
 							var $a = $($("#conferenceSelector a").toArray().find(function(elem) {return $(elem).data('acronym') === paper.conference;}));
 							$("#conferenceSelector .btn:first-child *:first-child").text($a.text());
@@ -413,7 +408,6 @@ function userReady(fullname, requestData) {
 	}
 }
 
-//TODO: Move to a different file
 var responsiveFooter = function() {
 	if ($(window).width() < 768) {
 		$(".footer").css("padding-bottom", "20px");
@@ -467,7 +461,7 @@ function signUp() {
 			$('.nav-tabs a[href="#signup"]').addClass('hidden');
 			$('#signUpForm .modal-body').prepend($('<div class="alert alert-warning" role="alert">We sent an email to ' + data.email + '. Check it to validate your account.</div>'));
 			$("#signUpModal").modal("hide");
-			$.notify({ //http://bootstrap-notify.remabledesigns.com/
+			$.notify({
 				message: 'We sent an email to ' + data.email + '. Read it and follow the instructions to validate your account',
 				icon: "fa fa-envelope"
 			}, {

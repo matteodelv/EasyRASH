@@ -37,7 +37,6 @@ router.get('/', function(req, res) {
 /* Finds the user's role in relation to the paper */
 router.get('/:id/role', function(req, res) {
 	utils.loadJsonFile(req.app.get('eventsFilePath'), (error, events) => {
-		console.log(req.params.id);
 		if (error) res.status(error.status).json(error);
 
 		var paper = utils.findSubmission(events, req.params.id);
@@ -95,7 +94,6 @@ router.get('/:id/reviews', function(req, res) {
 						} else {
 							reviewsJsonLd.forEach(reviewBlock => {
 								if (reviewBlock.some(elem => elem["@type"] === 'person' && elem["@id"] === reviewerId)){ //This block belongs to the matching reviewer
-									console.log('blocco di' + reviewerId + ' ' + reviewBlock);
 									var reviewInfo = reviewBlock.find(elem => elem["@type"] === 'review');
 									var status = reviewInfo["article"]["eval"]["status"];
 									review['decision'] = status === 'pso:accepted-for-publication' ? 'accepted' : 'rejected';
