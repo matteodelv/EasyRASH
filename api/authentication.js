@@ -35,7 +35,7 @@ transporter.verify(function(error, success){
 
 /* Checks whether the user credentials match ones the ones of a specific users, in that case creates a JWT and returns it */
 router.post('/signin', function(req, res) {
-	utils.loadJsonData(req.app.get('usersFilePath'), (error, users, save) => {
+	utils.loadJsonFile(req.app.get('usersFilePath'), (error, users, save) => {
 		if (error) res.status(error.status).json(error);
 
 		var user = users.find(u => u.email.toLowerCase() === (req.body.email || "").toLowerCase());
@@ -60,7 +60,7 @@ router.post('/signin', function(req, res) {
 
 /* Creates a new entry for an unverified user, generates an url to verify it, and sends an email with the verification url */
 router.post('/signup', function(req, res) {
-	utils.loadJsonData(req.app.get('usersFilePath'), (error, users, save) => {
+	utils.loadJsonFile(req.app.get('usersFilePath'), (error, users, save) => {
 		if (error) res.status(error.status).json(error);
 
 		//Consider changing this to avoid network enumeration
@@ -81,7 +81,7 @@ router.post('/signup', function(req, res) {
 			crypto.randomBytes(48, function(err, buffer) {
 				//Generate token for verification
 				var token = buffer.toString('hex');
-				utils.loadJsonData(req.app.get('usersUnverifiedFilePath'), (error, usersUnverified, save) => {
+				utils.loadJsonFile(req.app.get('usersUnverifiedFilePath'), (error, usersUnverified, save) => {
 					var newUser = {
 						id: req.body.username,
 						given_name: req.body.name,
@@ -124,7 +124,7 @@ router.post('/signup', function(req, res) {
 
 /* Verifies the unverified user and saves it in the users list */
 router.get('/verify/:token', function(req, res) {
-	utils.loadJsonData(req.app.get('usersUnverifiedFilePath'), (error, usersUnverified, save) => {
+	utils.loadJsonFile(req.app.get('usersUnverifiedFilePath'), (error, usersUnverified, save) => {
 		if (error) res.status(error.status).json(error);
 
 		var user = usersUnverified.find(u => u.verificationToken === req.params.token);
@@ -138,7 +138,7 @@ router.get('/verify/:token', function(req, res) {
 			fs.writeFile(req.app.get('usersUnverifiedFilePath'), JSON.stringify(usersUnverified, null, "\t"), function(err) {
 				if (err) res.status(400).json(error);
 
-				utils.loadJsonData(req.app.get('usersFilePath'), (error, users, save) => {
+				utils.loadJsonFile(req.app.get('usersFilePath'), (error, users, save) => {
 					if (error) res.status(error.status).json(error);
 
 					delete user.verificationToken;
