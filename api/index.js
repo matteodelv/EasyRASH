@@ -21,9 +21,9 @@ router.use(function(req, res, next) {
       jwt.verify(req.token, app.get('secret'), function(err, decoded) {
          if (err) {
             if (err.name === 'TokenExpiredError'){
-               return res.status(401).json({ success: false, message: 'Failed to authenticate token. Please try logging out and signing in again.', error: err, jwt: req.token });
+               return res.status(403).json({ success: false, message: 'Failed to authenticate token. Please try logging out and signing in again.', error: err, jwt: req.token });
             }
-            return res.status(400).json({ success: false, message: 'Failed to authenticate token. Please try logging out and signing in again.', error: err, jwt: req.token });
+            return res.status(403).json({ success: false, message: 'Failed to authenticate token. Please try logging out and signing in again.', error: err, jwt: req.token });
          } else {
             // if everything is good, save to request for use in other routes
             //jwt.refresh(decoded, 1440, app.get('secret')); //https://github.com/jppellerin/node-jsonwebtoken/tree/refresh-token

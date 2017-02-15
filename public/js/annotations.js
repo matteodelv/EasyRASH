@@ -105,41 +105,18 @@ $(document).ready(function() {
 		}
 	});
 	
-	/*$('#filterButton').webuiPopover({
-		placement: 'bottom',
-		width: 220,
-		trigger: 'click',
-		type: 'html',
-		animation: 'pop',
-		closeable: true,
-		delay: { "show": 0, "hide": 300 },
-		cache;
-		content: '<div id="popoverContent"></div>',
-		title: 'Filter Shown Annotations',
-		cache: false,
-		offsetTop: 10,
-		onShow: function() {
-			console.log("onShow");
-			createFilterPopoverContent();
-		}
-	});*/
 	var $content = $('<div id="popoverContent"></div>');
-	$('#filterButton').parent().popover({
+	$('#filterButton').popover({
 		html: true,
-		content: function(){
-			return $content;
-		}
-		
-	}).on('show.bs.popover', function() { 
+		trigger: 'focus',
+		content: $content
+	})
+	.on('shown.bs.popover', function(){
+		$('#filterButton').find('i').tooltip('hide');
+	})
+	.on('mouseover', function() { 
 		createFilterPopoverContent($content);
 	});
-	/*
-	$('#filterButton').popover({
-		trigger: 'click',
-		content: 'hello',
-		offset: '0 10'
-	})
-	*/
 });
 
 function createFilterPopoverContent($content) {
@@ -169,12 +146,15 @@ function createFilterPopoverContent($content) {
 							$td.empty().text(rev.reviewer.fullName);
 							$row.append($td);
 							$content.find('tbody').append($row);
+							$checkbox.change(function(){
+								//Add/remove class filteredOut on click
+								$('.inline-annotation.' + userIdToClass($(this).val())).toggleClass('filteredOut', !$(this).is(":checked"));
+							});
 						}
 					});
 				} else{
 					$content.empty().text('There aren\'t any annotations to filter');
 				}
-				
 			},
 			error: function(error) {
 				$content.text(JSON.parse(error.responseText).message);
@@ -283,6 +263,10 @@ function getXPath(node) {
 
 }
 
+function userIdToClass(userId){
+	return userId.replace('mailto:', '').replace(/(@.*)/g, '').replace(/\s+/g, '-').replace(/[^a-zA-Z-]/g, '').toLowerCase();
+}
+
 $(window).load(function() {
 	refreshMode();
 	selectionchange.start();
@@ -307,7 +291,7 @@ $(window).load(function() {
 
 			annotation.content = '';
 			annotation.type = 'inline';
-			annotation.author = sessionStorage.userID.replace('mailto:', '').replace(/(@.*)/g, '').replace(/\s+/g, '-').replace(/[^a-zA-Z-]/g, '').toLowerCase();
+			annotation.author = userIdToClass(sessionStorage.userID);
 			if (!currentSelection.isBackwards()){
 				annotation.startXPath = getXPath(currentSelection.anchorNode);
 				annotation.startOffset = currentSelection.anchorOffset;
@@ -687,7 +671,7 @@ function loadAnnotations() {
 			var statement = statement = ".inline-annotation";
 			annotationsById[id].forEach(function(annotation) {
 				if (annotation.author){
-					var annotationClass = annotation.author.replace('mailto:', '').replace(/(@.*)/g, '').replace(/\s+/g, '-').replace(/[^a-zA-Z-]/g, '').toLowerCase();
+					var annotationClass = userIdToClass(annotation.author);
 					$elem.addClass(annotationClass);
 					statement = statement + '.' + annotationClass;
 				}
