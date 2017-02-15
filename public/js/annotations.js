@@ -105,7 +105,7 @@ $(document).ready(function() {
 		}
 	});
 	
-	$('#filterButton').webuiPopover({
+	/*$('#filterButton').webuiPopover({
 		placement: 'bottom',
 		width: 220,
 		trigger: 'click',
@@ -113,6 +113,7 @@ $(document).ready(function() {
 		animation: 'pop',
 		closeable: true,
 		delay: { "show": 0, "hide": 300 },
+		cache;
 		content: '<div id="popoverContent"></div>',
 		title: 'Filter Shown Annotations',
 		cache: false,
@@ -121,11 +122,28 @@ $(document).ready(function() {
 			console.log("onShow");
 			createFilterPopoverContent();
 		}
+	});*/
+	var $content = $('<div id="popoverContent"></div>');
+	$('#filterButton').parent().popover({
+		html: true,
+		content: function(){
+			return $content;
+		}
+		
+	}).on('show.bs.popover', function() { 
+		createFilterPopoverContent($content);
 	});
+	/*
+	$('#filterButton').popover({
+		trigger: 'click',
+		content: 'hello',
+		offset: '0 10'
+	})
+	*/
 });
 
-function createFilterPopoverContent() {
-	if ($('#paper-container').children().length === 0) $('#popoverContent').empty().text("Please, select a paper to be able to filter annotations!");
+function createFilterPopoverContent($content) {
+	if ($('#paper-container').children().length === 0) $content.empty().text("Please, select a paper to be able to filter annotations!");
 	else {
 		var paperID = document.location.pathname.split('papers/').pop().replace('/','');
 		$.ajax({
@@ -133,28 +151,33 @@ function createFilterPopoverContent() {
 			method: 'GET',
 			success: function(result) {
 				console.log("Success");
+				if (result.reviews.some(function(review){return review.decision && review.decision !=='pending';})){
+					var table = '<table class="table table-hover"><thead><tr><th>Show</th><th>Reviewer</th></tr></thead><tbody></tbody></table>';
+					$content.empty().append(table);
 
-				$('#popoverContent').empty().append('<table class="table table-hover"><thead><tr><th>Show</th><th>Reviewer</th></tr></thead><tbody></tbody></table>');
-
-				result.reviews.forEach(function(rev) {
-					if (rev.reviewer) {
-						var $row = $('<tr></tr>');
-						var $td = $('<td></td>');
-						$td.css('text-align', 'center');
-						var $checkbox = $('<input type="checkbox" name="reviewersFiltered[]" />');
-						$checkbox.attr('value', rev.reviewer.id);
-						$checkbox.prop('checked', true);
-						$checkbox.appendTo($td);
-						$row.append($td);
-						$td = $td.clone();
-						$td.empty().text(rev.reviewer.fullName);
-						$row.append($td);
-						$('#popoverContent tbody').append($row);
-					}
-				});
+					result.reviews.forEach(function(rev) {
+						if (rev.reviewer && rev.decision && rev.decision != 'pending') {
+							var $row = $('<tr></tr>');
+							var $td = $('<td></td>');
+							$td.css('text-align', 'center');
+							var $checkbox = $('<input type="checkbox" name="reviewersFiltered[]" />');
+							$checkbox.attr('value', rev.reviewer.id);
+							$checkbox.prop('checked', true);
+							$checkbox.appendTo($td);
+							$row.append($td);
+							$td = $td.clone();
+							$td.empty().text(rev.reviewer.fullName);
+							$row.append($td);
+							$content.find('tbody').append($row);
+						}
+					});
+				} else{
+					$content.empty().text('There aren\'t any annotations to filter');
+				}
+				
 			},
 			error: function(error) {
-				$('#popoverContent').text(JSON.parse(error.responseText).message);
+				$content.text(JSON.parse(error.responseText).message);
 			}
 		});
 	}
