@@ -1,3 +1,5 @@
+'use strict';
+
 var router = require('express').Router();
 var path = require('path');
 var fs = require('fs');
@@ -393,13 +395,13 @@ router.post('/:id/review', function(req, res) {
 						var article = {};
 						review["article"] = article;
 						article["@id"] = "";
-						var eval = {};
-						eval["@id"] = reviewId + "-eval";
-						eval["@type"] = "score";
-						eval["status"] = req.body.decision === "accepted" ? "pso:accepted-for-publication" : "pso:rejected-for-publication"
-						eval["author"] = req.jwtPayload.id;
-						eval["date"] = new Date().toISOString();
-						article["eval"] = eval;
+						var evaluation = {};
+						evaluation["@id"] = reviewId + "-eval";
+						evaluation["@type"] = "score";
+						evaluation["status"] = req.body.decision === "accepted" ? "pso:accepted-for-publication" : "pso:rejected-for-publication"
+						evaluation["author"] = req.jwtPayload.id;
+						evaluation["date"] = new Date().toISOString();
+						article["eval"] = evaluation;
 						reviewBlock.push(review);
 
 						//The part about single annotations

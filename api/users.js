@@ -1,3 +1,5 @@
+'use strict';
+
 var router = require('express').Router();
 var path = require('path');
 var fs = require('fs');
@@ -51,7 +53,7 @@ router.put('/profile', function(req, res) {
 			fs.writeFile(path.resolve(app.get('usersFilePath')), JSON.stringify(users, null, '\t'), error => {
 				if (error) res.status(400).json({ message: 'An error occurred while saving profile info. Please, try again!' });
 				
-				var accessToken = jwt.sign(loggedUser, app.get('secret'), {
+				var accessToken = jwt.sign(loggedUser, req.app.get('secret'), {
 					expiresIn: 86400
 				});
 				res.json({

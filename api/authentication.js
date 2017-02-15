@@ -1,12 +1,12 @@
+'use strict';
+
 var router = require('express').Router();
 var path = require('path');
 var fs = require('fs');
 var jwt = require('jsonwebtoken');
 var crypto = require('crypto');
 var nodemailer = require('nodemailer');
-'use strict';
 
-//var transporter = nodemailer.createTransport('smtps://easyrashservice%40matteodv.me:#lickahorse19@smtp.mail.matteodv.me');
 var transporter = nodemailer.createTransport({
 	host: 'mail.matteodv.me',
 	port: 25,
@@ -32,7 +32,7 @@ router.post('/signin', function(req, res) {
 			});
 		} else {
 			// If user is found and password is right, we create a JWT
-			var accessToken = jwt.sign(user, app.get('secret'), {
+			var accessToken = jwt.sign(user, req.app.get('secret'), {
 				expiresIn: 86400 //Expires in 24 hours
 			});
 			// Return JWT and info as JSON

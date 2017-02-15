@@ -1,3 +1,4 @@
+'use strict';
 /* 
 	Helper module for recurrent server side tasks
 */

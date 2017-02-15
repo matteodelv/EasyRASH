@@ -1,6 +1,8 @@
+'use strict';
+
 var express = require('express');
 var fs = require('fs');
-app = express();
+var app = express();
 var morgan = require('morgan');
 var config = require('./config');
 var bodyParser = require('body-parser');
@@ -28,6 +30,8 @@ app.use('/js', express.static('./node_modules/babel-es6-polyfill'));
 app.use('/papers/fonts', express.static('./storage/papers/fonts'));
 app.use('/api', express.static('./rash')); //serving static files for rash as api root (?)
 
-server = app.listen(8080, "0.0.0.0", function () {
+var server = app.listen(8080, "0.0.0.0", function () {
    console.log('EasyRASH listening on port ' + server.address().port + ' hosting at ' + server.address().address);
 });
+
+module.exports = app;
