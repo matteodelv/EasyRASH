@@ -24,7 +24,7 @@ function getConferences() {
 					$("#conferenceSelector .btn:first-child *:first-child").val($(this).text());
 
 					$.ajax({
-						url: encodeURI("/api/events/" + a.data('acronym') + "/papers"),
+						url: "/api/events/" + a.data('acronym') + "/papers",
 						method: "GET",
 						success: function(result) {
 							$("#sidebar-wrapper .profile-panel .userRole").text("Role: " + result.userRole);
@@ -101,7 +101,7 @@ function showConferenceAdminPanel(acronym) {
 	if ($('#conf-admin-panel').length === 0) {
 		$.ajax({
 			method: 'GET',
-			url: encodeURI('/api/events/' + acronym),
+			url: '/api/events/' + acronym,
 			success: function(res) {
 				$pageContentWrapper = $('#page-content-wrapper #top').html();
 			
@@ -290,7 +290,7 @@ function buildConfAdminPanel(confData) {
 		e.preventDefault();
 
 		$.ajax({
-			url: encodeURI('/api/events/' + confData.acronym + '/close'),
+			url: '/api/events/' + confData.acronym + '/close',
 			method: 'PUT',
 			success: function(result) {
 				$(this).prop('disabled', true);
@@ -326,7 +326,7 @@ function buildConfAdminPanel(confData) {
 		$.ajax({
 			method:'PUT',
 			data: data,
-			url: encodeURI('/api/events/' + confData.acronym),
+			url: '/api/events/' + confData.acronym,
 			success: function(res) {
 				showNotify(res.message, false);
 
@@ -368,7 +368,7 @@ function showAssignReviewersModal() {
 		});
 		var paperID = document.location.pathname.split('papers/').pop().replace('/','');
 		$.ajax({
-			url: encodeURI('/api/events/' + sessionStorage.currentAcronym + '/' + paperID + '/reviewers'),
+			url: '/api/events/' + sessionStorage.currentAcronym + '/' + paperID + '/reviewers',
 			method: 'GET',
 			success: function(result) {
 				var dataSource = [];
@@ -398,7 +398,7 @@ function assignReviewersToPaper() {
 	};
 	$.ajax({
 		method: 'POST',
-		url: encodeURI('/api/events/' + sessionStorage.currentAcronym + '/' + paperID + '/reviewers'),
+		url: '/api/events/' + sessionStorage.currentAcronym + '/' + paperID + '/reviewers',
 		data: data,
 		success: function(result) {
 			$('#assignReviewersModal').modal('hide');
@@ -419,7 +419,7 @@ function showPaperDecisionModal() {
 		
 		$.ajax({
 			method: 'GET',
-			url: encodeURI('/api/papers/' + paperID + '/reviews'),
+			url: '/api/papers/' + paperID + '/reviews',
 			success: function(result) {
 				var pendingRevs = result.reviews.some(function(r) { return r.decision === 'pending' });
 				$('#adminPaperDecision .btn-primary').prop('disabled', pendingRevs);
@@ -455,7 +455,7 @@ function sendPaperDecision() {
 	//TODO: ajax call
 	$.ajax({
 		method: 'POST',
-		url: encodeURI('/api/papers/' + paperID + '/judge'),
+		url: '/api/papers/' + paperID + '/judge',
 		data: data,
 		success: function(result) {
 			$('#adminPaperDecision').modal('hide');

@@ -70,7 +70,7 @@ router.put('/:id/close', function(req, res) {
 	if (fs.existsSync(eventsPath)) {
 		fs.readFile(eventsPath, (error, data) => {
 			var confs = JSON.parse(data);
-			var selectedConf = confs.find(elem => elem.acronym === decodeURI(req.params.id));
+			var selectedConf = confs.find(elem => elem.acronym === req.params.id);
 			var paperCheck = selectedConf.submissions.some(paper => { return paper.status === "pending"; });
 			if (selectedConf.status === "open" && !paperCheck && selectedConf.submissions.length > 0) {
 				selectedConf.status = "closed";
@@ -93,7 +93,7 @@ router.put('/:id', function(req, res) {
 	if (fs.existsSync(eventsPath)) {
 		fs.readFile(eventsPath, (error, data) => {
 			var confs = JSON.parse(data);
-			var selectedConf = confs.find(elem => elem.acronym === decodeURI(req.params.id));
+			var selectedConf = confs.find(elem => elem.acronym === req.params.id);
 			if (selectedConf.conference !== req.body.title) selectedConf.conference = req.body.title;
 			if (selectedConf.acronym !== req.body.acronym) selectedConf.acronym = req.body.acronym;
 
@@ -115,7 +115,7 @@ router.get('/:id/papers', function(req, res) {
 	if (fs.existsSync(eventsPath)) {
 		fs.readFile(eventsPath, (err, data) => {
 			var confs = JSON.parse(data);
-			var selectedConf = confs.find(elem => elem.acronym === decodeURI(req.params.id));
+			var selectedConf = confs.find(elem => elem.acronym === req.params.id);
 			var result = {
 				selectedConf: selectedConf.conference,
 				acronym: selectedConf.acronym,
@@ -161,11 +161,11 @@ router.get('/:id/:paper/reviewers', function(req, res) {
 	if (fs.existsSync(eventsPath)) {
 		fs.readFile(eventsPath, (err, data) => {
 			var confs = JSON.parse(data);
-			var selectedConf = confs.find(elem => elem.acronym === decodeURI(req.params.id));
+			var selectedConf = confs.find(elem => elem.acronym === req.params.id);
 			if (selectedConf) {
 				if (!selectedConf.pc_members) res.json([]);
 				else {
-					var paper = selectedConf.submissions.find(paper => paper.url === decodeURI(req.params.paper));
+					var paper = selectedConf.submissions.find(paper => paper.url === req.params.paper);
 					if (paper) {
 						var reviewers = [];
 						// getting reviewers info
@@ -199,9 +199,9 @@ router.get('/:id/:paper/reviewers', function(req, res) {
 
 router.post('/:id/:paper/reviewers', function(req, res) {
 	utils.loadJsonFile('storage/events.json', (error, events) => {
-		var selectedConf = events.find(conf => conf.acronym === decodeURI(req.params.id));
+		var selectedConf = events.find(conf => conf.acronym === req.params.id);
 		if (selectedConf) {
-			var paper = selectedConf.submissions.find(p => p.url === decodeURI(req.params.paper));
+			var paper = selectedConf.submissions.find(p => p.url === req.params.paper);
 			if (paper) {
 				var newRevs = req.body['revs'];
 				paper.reviewers.push.apply(paper.reviewers, newRevs);

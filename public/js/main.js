@@ -165,7 +165,7 @@ function loadCurrentPaperContent() {
 
 				var paperID = document.location.pathname.split('papers/').pop().replace('/','');
 				$.ajax({
-					url: encodeURI('/api/papers/' + paperID + '/role'),
+					url: '/api/papers/' + paperID + '/role',
 					method: 'GET',
 					success: function(result) {
 						sessionStorage.revForPaper = result.isReviewer;
@@ -370,7 +370,7 @@ function fetchAndBuildSidebarMenu(result, loadingConf, callback) {
 							$("#conferenceSelector .btn:first-child *:first-child").val($a.text());
 
 							$.ajax({
-								url: encodeURI("/api/events/" + paper.conference + "/papers"),
+								url: '/api/events/' + paper.conference + '/papers',
 								method: "GET",
 								success: function(result) {
 									$("#sidebar-wrapper .profile-panel .userRole").text("Role: " + result.userRole);
@@ -499,7 +499,7 @@ function logOut() {
 function showUserPanel() {
 	if ($('#user-profile-panel').length === 0) {
 		$.ajax({
-			url: encodeURI('/api/users/profile'),
+			url: '/api/users/profile',
 			method: 'GET',
 			success: function(result) {
 				$pageContentWrapper = $('#page-content-wrapper #top').html();
@@ -660,7 +660,7 @@ function buildUserPanel(userInfo) {
 		$.ajax({
 			method: 'PUT',
 			data: data,
-			url: encodeURI('/api/users/profile'),
+			url: '/api/users/profile',
 			success: function(result) {
 				localStorage.accessToken = result.accessToken;
 				$.notify({ //http://bootstrap-notify.remabledesigns.com/
@@ -691,7 +691,7 @@ function buildUserPanel(userInfo) {
 
 		$.ajax({
 			method: 'PUT',
-			url: encodeURI('/api/users/profile/password'),
+			url: '/api/users/profile/password',
 			data: data,
 			success: function(result) {
 				$.notify({ //http://bootstrap-notify.remabledesigns.com/

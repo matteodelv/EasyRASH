@@ -26,7 +26,7 @@ function automaticLockReleaseForReviewers() {
 		if (!draftAnnotations){ //Release lock if there are no unsaved annotations
 			$.ajax({
 				method: 'DELETE',
-				url: encodeURI('/api/papers/' + paperID + '/lock'),
+				url: '/api/papers/' + paperID + '/lock',
 				success: function(result) {
 					updateModeCheckbox(result.lockAcquired);
 				},
@@ -75,7 +75,7 @@ $(document).ready(function() {
 					if (isEnteringAnnotator){
 						$.ajax({
 							method: 'PUT',
-							url: encodeURI('/api/papers/' + paperID + '/lock'),
+							url: '/api/papers/' + paperID + '/lock',
 							success: function(result) {
 								updateModeCheckbox(result.lockAcquired);
 							},
@@ -90,7 +90,7 @@ $(document).ready(function() {
 						if (!draftAnnotations){ //Release lock if there are no unsaved annotations
 							$.ajax({
 								method: 'DELETE',
-								url: encodeURI('/api/papers/' + paperID + '/lock'),
+								url: '/api/papers/' + paperID + '/lock',
 								success: function(result) {
 									updateModeCheckbox(result.lockAcquired);
 								},
@@ -129,7 +129,7 @@ function createFilterPopoverContent() {
 	else {
 		var paperID = document.location.pathname.split('papers/').pop().replace('/','');
 		$.ajax({
-			url: encodeURI('/api/papers/' + paperID + '/reviews'),
+			url: '/api/papers/' + paperID + '/reviews',
 			method: 'GET',
 			success: function(result) {
 				console.log("Success");
