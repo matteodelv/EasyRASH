@@ -540,14 +540,18 @@ function sendReview(){
 }
 
 function getUniqueAnnotationId() {
-	var max = 0;
+	/*var max = 0;
 	$('.inline-annotation, .block-annotation').each(function() {
 		var n = $(this).attr('id').split('fragment')[1];
 		if (n && !isNaN(parseInt(n))) {
 			max = Math.max(max, parseInt(n));
 		}
-	});
-	return 'fragment' + (max + 1);
+	});*/
+	var index = 1;
+	while ($('#fragment' + index).length !== 0){
+		index++;
+	}
+	return 'fragment' + (index);
 }
 
 function getNodeIndex(node) {

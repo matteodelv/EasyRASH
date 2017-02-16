@@ -382,7 +382,7 @@ router.post('/:id/review', function(req, res) {
 
 
 							var annotationElement = doc.createElement('span');
-							annotationElement.setAttribute('id', '#' + req.body.annotations[a].id + '-' + (matchCount+1));
+							annotationElement.setAttribute('id', req.body.annotations[a].id.replace('#', ''));
 
 							//Split closing tag
 							console.log('END XPATH: "%s" - OFFSET: %s', query(req.body.annotations[a].endXPath), req.body.annotations[a].endOffset);
@@ -453,7 +453,7 @@ router.post('/:id/review', function(req, res) {
 							annotation["@id"] = id;
 							annotationIds.push(id);
 							annotation["text"] = req.body.annotations[a].content;
-							annotation["ref"] = '#' + req.body.annotations[a].id + '-' + (matchCount+1); 
+							annotation["ref"] = '#' + req.body.annotations[a].id; 
 							annotation["author"] = req.jwtPayload.id;
 							annotation["date"] = new Date().toISOString();
 							reviewBlock.push(annotation);

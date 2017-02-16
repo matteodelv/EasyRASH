@@ -35,16 +35,127 @@
       <meta property="prism:keyword" content="Scholarly HTML"/>
       <meta property="prism:keyword" content="RASH"/>
    <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"><![CDATA[ ]]></script>
-   </head>
+<script type="application/ld+json">[
+	{
+		"@type": "review",
+		"@id": "#review1",
+		"article": {
+			"@id": "",
+			"eval": {
+				"@id": "#review1-eval",
+				"@type": "score",
+				"status": "pso:accepted-for-publication",
+				"author": "john.constantine",
+				"date": "2017-02-16T15:27:21.272Z"
+			}
+		},
+		"comments": [
+			"#review1-c1",
+			"#review1-c2"
+		]
+	},
+	{
+		"@type": "comment",
+		"@id": "#review1-c1",
+		"text": "annotation 1",
+		"ref": "#fragment1",
+		"author": "john.constantine",
+		"date": "2017-02-16T15:27:21.273Z"
+	},
+	{
+		"@type": "comment",
+		"@id": "#review1-c2",
+		"text": "annotation 2",
+		"ref": "#fragment2",
+		"author": "john.constantine",
+		"date": "2017-02-16T15:27:21.273Z"
+	},
+	{
+		"@type": "person",
+		"@id": "john.constantine",
+		"name": "John Constantine",
+		"as": {
+			"@id": "#role1",
+			"@type": "role",
+			"role_type": "pro:reviewer",
+			"in": ""
+		},
+		"foaf:mbox": {
+			"@id": "mailto:john.constantine@hell.com"
+		}
+	}
+]</script><script type="application/ld+json">[
+	{
+		"@type": "review",
+		"@id": "#review2",
+		"article": {
+			"@id": "",
+			"eval": {
+				"@id": "#review2-eval",
+				"@type": "score",
+				"status": "pso:rejected-for-publication",
+				"author": "arabella.strange",
+				"date": "2017-02-16T15:28:17.386Z"
+			}
+		},
+		"comments": [
+			"#review2-c1",
+			"#review2-c2"
+		]
+	},
+	{
+		"@type": "comment",
+		"@id": "#review2-c1",
+		"text": "Cool trendy",
+		"ref": "#fragment3",
+		"author": "arabella.strange",
+		"date": "2017-02-16T15:28:17.386Z"
+	},
+	{
+		"@type": "comment",
+		"@id": "#review2-c2",
+		"text": "What regards?",
+		"ref": "#fragment4",
+		"author": "arabella.strange",
+		"date": "2017-02-16T15:28:17.386Z"
+	},
+	{
+		"@type": "person",
+		"@id": "arabella.strange",
+		"name": "Arabella Strange",
+		"as": {
+			"@id": "#role1",
+			"@type": "role",
+			"role_type": "pro:reviewer",
+			"in": ""
+		},
+		"foaf:mbox": {
+			"@id": "mailto:arabella.strange@york.com"
+		}
+	}
+]</script><script type="application/ld+json">{
+	"@type": "decision",
+	"@id": "#decision1",
+	"article": {
+		"@id": "",
+		"eval": {
+			"@id": "#decision1-eval",
+			"@type": "score",
+			"status": "pso:accepted-for-publication",
+			"author": "jessica.jones",
+			"date": "2017-02-16T15:28:45.953Z"
+		}
+	}
+}</script></head>
    <body>
       <section id="sec-abstract" role="doc-abstract">
          <h1>Abstract</h1>
-         <p>In this poster paper we introduce the <em>RASH Online Conversion Service</em>, i.e., a Web application that allows the conversion of ODT documents into RASH, a HTML-based markup language for writing scholarly articles, and from RASH into LaTeX. This tool allows authors with no experience in HTML to easily produce HTML-based papers and supports the publishing process by generating also a LaTeX version according to the Springer LNCS and ACM ICPS layouts.</p>
+         <p>In this poster paper we introduce the <em>RASH Online Conversion Service</em>, i.e., a Web application that allows the conversion of ODT documents into RASH, a HTML-based <span id="fragment1">markup</span> language for writing scholarly articles, and from RASH into LaTeX. This tool allows authors with no experience in HTML to easily produce HTML-based papers and supports the publishing process by generating also a LaTeX version according to the Springer LNCS and ACM ICPS layouts.</p>
       </section>
       <section id="sec-introduction">
          <h1>Introduction</h1>
-         <p>The use of HTML as format for writing scholarly papers and submitting them to scholarly venues is a very popular, discussed and trendy topic within the scholarly domain. This is demonstrated by the existence of several posts within technical mailing lists of the Web community<a href="#ftn0"> </a>, by the birth of W3C community groups on such topic<a href="#ftn3"> </a>, by the development of HTML-based formats for scholarly articles<a href="#ftn4"> </a>, and by the increasing number of events that are experimenting with HTML-based formats for submissions, such as the SAVE-SD<a href="#ftn5"> </a> and LDOW<a href="#ftn6"> </a> workshops at WWW 2016, and the Extended Semantic Web Conference<a href="#ftn7"> </a>.</p>
-         <p>In order to foster a wider adoption of these formats, frameworks for HTML-based papers should support the needs of all the actors involved in the production, delivery and fruition of scholarly articles, with particular regards to authors and publishers. Hence, this solution calls for a number of requirements that go well beyond those used on the Web. </p>
+         <p>The use of HTML as format for writing scholarly papers and submitting them to scholarly venues is a very popular, discussed and <span id="fragment3">trendy topic</span> within the scholarly domain. This is demonstrated by the existence of several posts within technical mailing lists of the Web community<a href="#ftn0"> </a>, by the birth of W3C <span id="fragment2">community groups</span> on such topic<a href="#ftn3"> </a>, by the development of HTML-based formats for scholarly articles<a href="#ftn4"> </a>, and by the increasing number of events that are experimenting with HTML-based formats for submissions, such as the SAVE-SD<a href="#ftn5"> </a> and LDOW<a href="#ftn6"> </a> workshops at WWW 2016, and the Extended Semantic Web Conference<a href="#ftn7"> </a>.</p>
+         <p>In order to foster a wider adoption of these formats, frameworks for HTML-based papers should support the needs of all the actors involved in the production, delivery and fruition of scholarly articles, with <span id="fragment4">particular regards</span> to authors and publishers. Hence, this solution calls for a number of requirements that go well beyond those used on the Web. </p>
          <p>First of all, it is vital to support authors with a variety of tools to provide for an easy transition to the new format. To this end, authors should be allowed to keep using well-known current word processors rather than adopting HTML and/or pure text editors. We thus need to support the conversion from the main word processor formats (e.g., ODT and OOXML) to HTML formats, in particular when authors use only basic features, such as standard styles for paragraphs and tables. In addition, authors should be given the option to focus on the content and let appropriate tools handle the presentation layer after the conversion into the HTML-based format.</p>
          <p>Second, frameworks for HTML-based papers should enable papers to be processed in a way that is compliant with existing and well-established publication workflows. Hence, they should be able to be easily formatted according to publishers' guidelines. Of course, publishers, conference, workshop organisers, and even authors would find easier to work with formats they are familiar with, such as LaTeX. To this end, modern HTML formats for research papers should also allow to be converted to standard formats currently adopted by publishers (e.g., LaTeX) and to support specific layouts (e.g., ACM ICPS).</p>
          <p>In order to address the aforementioned requirements, we developed the <em>RASH Framework</em> 
