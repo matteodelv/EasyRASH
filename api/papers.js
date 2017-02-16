@@ -14,7 +14,7 @@ var utils = require('./utils.js');
 /* Responds with all the paper associated with a particular user */
 router.get('/', function(req, res) {
 	utils.loadJsonFile(req.app.get('eventsFilePath'), (error, events) => {
-		if (error) res.status(error.status).json(error);
+		if (error) return res.status(error.status).json(error);
 		var submittedArticles = [];
 		var reviewableArticles = [];
 		events.forEach(event => {
@@ -27,7 +27,7 @@ router.get('/', function(req, res) {
 				}
 			});
 		});
-		res.json({
+		return res.json({
 			submitted: submittedArticles,
 			reviewable: reviewableArticles
 		});
@@ -37,7 +37,7 @@ router.get('/', function(req, res) {
 /* Finds the user's role in relation to the paper */
 router.get('/:id/role', function(req, res) {
 	utils.loadJsonFile(req.app.get('eventsFilePath'), (error, events) => {
-		if (error) res.status(error.status).json(error);
+		if (error) return res.status(error.status).json(error);
 
 		var paper = utils.findSubmission(events, req.params.id);
 
@@ -52,21 +52,21 @@ router.get('/:id/role', function(req, res) {
 				if (paper.reviewedBy.indexOf(req.jwtPayload.id) !== -1) result.alreadyReviewed = true;
 			}
 
-			res.json(result);
-		} else res.status(404).json({ message: 'Current paper not found. Unable to verify reviewer rights!' });
+			return res.json(result);
+		} else return res.status(404).json({ message: 'Current paper not found. Unable to verify reviewer rights!' });
 	});
 });
 
 /* Responds with a list of reviewer/review status tuples for the specified paper */
 router.get('/:id/reviews', function(req, res) {
 	utils.loadJsonFile(req.app.get('eventsFilePath'), (err, events) => {
-		if (err) res.status(err.status).json(err);
+		if (err) return res.status(err.status).json(err);
 
 		var paper = utils.findSubmission(events, req.params.id);
 		var reviews = [];
 
 		utils.loadJsonFile(req.app.get('usersFilePath'), (err, users) => {
-			if (err) res.status(err.status).json(err);
+			if (err) return res.status(err.status).json(err);
 
 			var filePath = path.resolve('storage/papers/' + req.params.id + '.html');
 			var reviewsJsonLd = [];
@@ -103,9 +103,9 @@ router.get('/:id/reviews', function(req, res) {
 						reviews.push(review);
 					});
 
-					res.json({ reviews: reviews });
+					return res.json({ reviews: reviews });
 				});
-			} else res.status(404).json({ message: 'Requested RASH file not found on server.' });
+			} else return res.status(404).json({ message: 'Requested RASH file not found on server.' });
 		});
 	});
 });
@@ -113,33 +113,33 @@ router.get('/:id/reviews', function(req, res) {
 /* Expresses a final decision about the specified paper */
 router.post('/:id/judge', (req, res) => {
 	utils.loadJsonFile(req.app.get('eventsFilePath'), (error, events, save) => {
-		if (error) res.status(error.status).json(error);
+		if (error) return res.status(error.status).json(error);
 
 		var paper = utils.findSubmission(events, req.params.id);
 		if (paper) {
-			if (paper.authors.indexOf(req.jwtPayload.id) !== -1) res.status(400).json({ message: 'You are not allowed to judge this paper because you are one of its Authors, even though you are Chair!' });
+			if (paper.authors.indexOf(req.jwtPayload.id) !== -1) return res.status(400).json({ message: 'You are not allowed to judge this paper because you are one of its Authors, even though you are Chair!' });
 			
 			paper.status = req.body.decision;
 			save();
-			res.json({ message: 'Paper decision saved correctly!' });
-		} else res.status(404).json({ message: 'There was a problem looking for the paper. Please, try again!' });
+			return res.json({ message: 'Paper decision saved correctly!' });
+		} else return res.status(404).json({ message: 'There was a problem looking for the paper. Please, try again!' });
 	});
 });
 
 /* Requests to lock a paper to prevent other users from editing */
 router.put('/:id/lock', function(req, res) {
 	checkPaperLock(req.app, req.params.id, req.jwtPayload.id, (err, isLocked) => {
-		if (err) throw err;
+		if (err) return res.status(409).json(err);
 
 		if (isLocked) {
-			res.status(409).json({ lockAcquired: false, message: 'Another reviewer is currently reviewing this paper. Please, try again later! ' });
+			return res.status(409).json({ lockAcquired: false, message: 'Another reviewer is currently reviewing this paper. Please, try again later! ' });
 		}
 		else {
 			lockPaper(req.app, req.params.id, req.jwtPayload.id, (err) => {
 				if (err) {
-					res.status(409).json({lockAcquired: false,  message: 'Unable to acquire lock on the paper for reviewing it. Please, try again later! ' });
+					return res.status(409).json({lockAcquired: false,  message: 'Unable to acquire lock on the paper for reviewing it. Please, try again later! ' });
 				} else {
-					res.json({ lockAcquired: true });
+					return res.json({ lockAcquired: true });
 				}
 			});
 		}
@@ -149,7 +149,7 @@ router.put('/:id/lock', function(req, res) {
 /* Releases the lock from a paper */
 router.delete('/:id/lock', function(req, res) {
 	releasePaperLock(req.app, req.params.id, req.jwtPayload.id, (err) => {
-		res.status(200).send();
+		return res.status(200).send();
 	});
 });
 
@@ -222,7 +222,7 @@ function releasePaperLock(app, paperId, userId, callback){
 /* Responds with a list of papers associated with the user */
 router.get("/user", function(req, res) {
 	utils.loadJsonFile(req.app.get('eventsFilePath'), (error, events) => {
-		if (error) res.status(error.status).json(error);
+		if (error) return res.status(error.status).json(error);
 		var result = {
 			authored_by_me: [], //Contains papers the user is author of
 			pending_reviews: [] //Contains the papers the user has yet to review
@@ -240,7 +240,7 @@ router.get("/user", function(req, res) {
 				}
 			});
 		});
-		res.json(result);
+		return res.json(result);
 	});
 });
 
@@ -249,7 +249,7 @@ router.get('/:id', function(req, res) {
 	//Filter out comments by permissions
 	if (req.accepts(['application/xhtml+xml', 'text/html'])) {
 		utils.loadJsonFile(req.app.get('eventsFilePath'), (error, events) => {
-		if (error) res.status(error.status).json(error);
+		if (error) return res.status(error.status).json(error);
 			//User can get paper if it's one of its authors, one of its reviewers or one of its chairs, or if the submission has been accepted
 			var eligible = events.some(event =>
 				event.submissions.some(submission => {
@@ -289,16 +289,16 @@ router.get('/:id', function(req, res) {
 							var annotationsRegex = new RegExp(/(?:<script)(?:[^.]*)(?:type="application\/ld\+json")(?:>)((\s|\S)*?)(?:<\/script>)/igm);
 							var xmlCommentsRegex = new RegExp(/(<!--)((\s|\S)*?)(-->)/igm);
 							var clean = data.replace(annotationsRegex, '').replace(xmlCommentsRegex, '').replace(emptyLineRegex, '');
-							res.send(clean);
+							return res.send(clean);
 						} else {
-							res.send(data.replace(emptyLineRegex, ''));
+							return res.send(data.replace(emptyLineRegex, ''));
 						}
 					});
 
-				} else res.status(404).json({ message: 'Requested RASH file not found on server.' });
-			} else res.status(403).json({ message: '403 Forbidden' });
+				} else return res.status(404).json({ message: 'Requested RASH file not found on server.' });
+			} else return res.status(403).json({ message: '403 Forbidden' });
 		});
-	} else res.status(406).json({ message: '406 - Not acceptable: ' + req.get('Accept') + ' not acceptable' });
+	} else return res.status(406).json({ message: '406 - Not acceptable: ' + req.get('Accept') + ' not acceptable' });
 });
 
 /* Posts a review for the specified paper, using a list of annotations 
@@ -307,21 +307,21 @@ router.get('/:id', function(req, res) {
 */
 router.post('/:id/review', function(req, res) {
 	utils.loadJsonFile(req.app.get('eventsFilePath'), (error, events, save) => {
-		if (error) res.status(error.status).json(error);
+		if (error) return res.status(error.status).json(error);
 		var submission = utils.findSubmission(events, req.params.id);
 		if (!submission.reviewers.some(reviewer => reviewer === req.jwtPayload.id)) {
 			//Not allowed to review
-			res.status(403).json({message: "Error. You are not allowed to review this paper."});
+			return res.status(403).json({message: "Error. You are not allowed to review this paper."});
 		} else {
 			if (submission.reviewedBy.some(reviewer => reviewer === req.jwtPayload.id)) {
 				//Already reviewed
-				res.status(403).json({message: "Error. You have already reviewed this paper."});
+				return res.status(403).json({message: "Error. You have already reviewed this paper."});
 			} else {
 				//Good to go
 				var filePath = path.resolve('storage/papers/' + req.params.id + '.html');
 				if (fs.existsSync(filePath)) {
 					fs.readFile(filePath, function(err, html) {
-						if (err) res.status(500).json({message: 'Something went wrong when trying to post your review. Please try again.'});
+						if (err) return res.status(500).json({message: 'Something went wrong when trying to post your review. Please try again.'});
 						var doc = new dom().parseFromString(html.toString());
 						var select = xpath.useNamespaces({ "x": "http://www.w3.org/1999/xhtml" });
 						Object.keys(req.body.annotations).forEach(a => {
@@ -449,8 +449,8 @@ router.post('/:id/review', function(req, res) {
 						save();
 						//Release lock 
 						releasePaperLock(req.app, req.params.id, req.jwtPayload.id, (err) => {
-							if (err) res.status(409).json({message: err.toString()}); 
-							else res.json({ message: 'Paper reviewed successfully.' });
+							if (err) return res.status(409).json({message: err.toString()}); 
+							else return res.json({ message: 'Paper reviewed successfully.' });
 						});
 					});
 				}

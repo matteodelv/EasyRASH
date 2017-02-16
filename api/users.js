@@ -9,7 +9,7 @@ var jwt = require('jsonwebtoken');
 /* Returns the entire list of users with their info */
 router.get('/', function(req, res) {
 	utils.loadJsonFile(req.app.get('usersFilePath'), (error, users, save) => {
-		if (error) res.status(error.status).json(error);
+		if (error) return res.status(error.status).json(error);
 
 		var result = [];
 		users.forEach(user => {
@@ -21,28 +21,28 @@ router.get('/', function(req, res) {
 			});
 		});
 		result = utils.sortUsersAlphabetically(result);
-		res.json(result);
+		return res.json(result);
 	});
 });
 
 /* Returns all info about the logged in user */
 router.get('/profile', function(req, res) {
 	utils.loadJsonFile(req.app.get('usersFilePath'), (error, users, save) => {
-		if (error) res.status(error.status).json(error);
+		if (error) return res.status(error.status).json(error);
 
 		var loggedUser = users.find(u => u.id === req.jwtPayload.id);
 		if (loggedUser) {
 			delete loggedUser.id;
 			delete loggedUser.pass;
-			res.json(loggedUser);
-		} else res.status(404).json({ message: 'Unable to find logged user info!' });
+			return res.json(loggedUser);
+		} else return res.status(404).json({ message: 'Unable to find logged user info!' });
 	});
 });
 
 /* Updates profile info of the logged in user */
 router.put('/profile', function(req, res) {
 	utils.loadJsonFile(req.app.get('usersFilePath'), (error, users, save) => {
-		if (error) res.status(error.status).json(error);
+		if (error) return res.status(error.status).json(error);
 
 		var loggedUser = users.find(u => u.id === req.jwtPayload.id);
 		if (loggedUser) {
@@ -51,12 +51,12 @@ router.put('/profile', function(req, res) {
 			if (req.body['sex']) loggedUser.sex = req.body['sex'];
 
 			fs.writeFile(path.resolve(req.app.get('usersFilePath')), JSON.stringify(users, null, '\t'), error => {
-				if (error) res.status(400).json({ message: 'An error occurred while saving profile info. Please, try again!' });
+				if (error) return res.status(400).json({ message: 'An error occurred while saving profile info. Please, try again!' });
 				
 				var accessToken = jwt.sign(loggedUser, req.req.app.get('secret'), {
 					expiresIn: 86400
 				});
-				res.json({
+				return res.json({
 					success: true,
 					message: 'User profile correctly updated!',
 					id: loggedUser.id,
@@ -65,30 +65,30 @@ router.put('/profile', function(req, res) {
 					accessToken: accessToken
 				});
 			});
-		} else res.status(404).json({ message: 'Unable to find logged user info!' });
+		} else return res.status(404).json({ message: 'Unable to find logged user info!' });
 	});
 });
 
 /* Updates password of the logged in user */
 router.put('/profile/password', function(req, res) {
 	utils.loadJsonFile(req.app.get('usersFilePath'), (error, users, save) => {
-		if (error) res.status(error.status).json(error);
+		if (error) return res.status(error.status).json(error);
 		
 		if (!req.body['newPassword'] || !req.body['newPasswordVerify']) 
-			res.status(400).json({ message: 'One or both fields were empty. Please, try again!' });
+			return res.status(400).json({ message: 'One or both fields were empty. Please, try again!' });
 		else if (req.body['newPassword'] !== req.body['newPasswordVerify'])
-			res.status(400).json({ message: 'New passwords didn\'t match. Please, try again!' });
+			return res.status(400).json({ message: 'New passwords didn\'t match. Please, try again!' });
 		else {
 			var loggedUser = users.find(u => u.id === req.jwtPayload.id);
 			if (loggedUser) {
 				loggedUser.pass = req.body['newPassword'];
 
 				fs.writeFile(path.resolve(req.app.get('usersFilePath')), JSON.stringify(users, null, '\t'), error => {
-					if (error) res.status(400).json({ message: 'An error occurred while saving the updated password. Please, try again! '});
+					if (error) return res.status(400).json({ message: 'An error occurred while saving the updated password. Please, try again! '});
 					
-					res.json({ message: "Password correctly updated!" });
+					return res.json({ message: "Password correctly updated!" });
 				});
-			} else res.status(404).json({ message: 'Unable to find logged user info!' });
+			} else return res.status(404).json({ message: 'Unable to find logged user info!' });
 		}
 	});
 });
@@ -97,13 +97,13 @@ router.put('/profile/password', function(req, res) {
 router.get('/:id', function(req, res){
 	if (req.accepts(['application/json'])){
 		utils.loadJsonFile(req.app.get('usersFilePath'), (error, users, save) => {
-			if (error) res.status(error.status).json(error);
+			if (error) return res.status(error.status).json(error);
 
 			var user = users.find(x => x.id === req.params.id);
-			if (user) res.json(user.email);
-			else res.status(404).json({ message: 'Unable to find specified user!' });
+			if (user) return res.json(user.email);
+			else return res.status(404).json({ message: 'Unable to find specified user!' });
 		});
-	} else res.status(406).json({ message: 'Unable to fulfill the request: JSON not accepted!' });
+	} else return res.status(406).json({ message: 'Unable to fulfill the request: JSON not accepted!' });
 });
 
 module.exports = router;

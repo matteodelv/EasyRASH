@@ -8,7 +8,7 @@ var utils = require('./utils.js');
 /* Responds with all the info regarding events */
 router.get('/', function(req, res) {
 	utils.loadJsonFile(req.app.get('eventsFilePath'), (error, events) => {
-		if (error) res.status(error.status).json(error);
+		if (error) return res.status(error.status).json(error);
 		var conferences = [];
 		events.forEach(event => {
 			var c = {
@@ -18,24 +18,24 @@ router.get('/', function(req, res) {
 			};
 			conferences.push(c);
 		});
-		res.json(conferences);
+		return res.json(conferences);
 	});
 });
 
 /* Responds with information regarding a specific event */
 router.get('/:id', function(req, res) {
 	utils.loadJsonFile(req.app.get('eventsFilePath'), (error, events) => {
-		if (error) res.status(error.status).json(error);
+		if (error) return res.status(error.status).json(error);
 		var selectedConf = events.find(elem => elem.acronym === req.params.id);
-		if (selectedConf) res.json({ success: true, conference: selectedConf });
-		else res.status(404).json({ success: false, message: 'Error: Conference not found.' });
+		if (selectedConf) return res.json({ success: true, conference: selectedConf });
+		else return res.status(404).json({ success: false, message: 'Error: Conference not found.' });
 	});
 });
 
 /* Creates a new event */
 router.post('/', function(req, res) {
 	utils.loadJsonFile(req.app.get('eventsFilePath'), (error, events, save) => {
-		if (error) res.status(error.status).json(error);
+		if (error) return res.status(error.status).json(error);
 		if (events.every(event => {event.acronym !== acronym})){
 			var newConf = {
 				conference: req.body.title,
@@ -46,8 +46,8 @@ router.post('/', function(req, res) {
 			};
 			events.push(newConf);
 			save();
-			res.json({ success: true, message: 'Conference correctly created! Redirecting to admin panel...' });
-		} else res.status(409).json({ success: false, message: 'Chosen acronym already in use! Please, try again.' });
+			return res.json({ success: true, message: 'Conference correctly created! Redirecting to admin panel...' });
+		} else return res.status(409).json({ success: false, message: 'Chosen acronym already in use! Please, try again.' });
 	});
 	//
 
@@ -56,22 +56,22 @@ router.post('/', function(req, res) {
 // Close Conference identified by :id
 router.put('/:id/close', function(req, res) {
 	utils.loadJsonFile(req.app.get('eventsFilePath'), (error, events, save) => {
-		if (error) res.status(error.status).json(error);
+		if (error) return res.status(error.status).json(error);
 		var selectedConf = events.find(elem => elem.acronym === req.params.id);
 		var paperCheck = selectedConf.submissions.some(paper => { return paper.status === "pending"; });
 		if (selectedConf.status === "open" && !paperCheck && selectedConf.submissions.length > 0) {
 			selectedConf.status = "closed";
 			save();
-			res.json({ success: true, message: 'Conference successfully closed!' });
+			return res.json({ success: true, message: 'Conference successfully closed!' });
 		}
-		else res.status(409).json({ success: false, message: 'Conditions to close the conference are not met. This is an error condition. Try again!'})
+		else return res.status(409).json({ success: false, message: 'Conditions to close the conference are not met. This is an error condition. Try again!'})
 	});
 });
 
 /* Update Conference :id with data as argument */
 router.put('/:id', function(req, res) {
 	utils.loadJsonFile(req.app.get('eventsFilePath'), (error, events, save) => {
-		if (error) res.status(error.status).json(error);
+		if (error) return res.status(error.status).json(error);
 		var selectedConf = events.find(elem => elem.acronym === req.params.id);
 		if (selectedConf.conference !== req.body.title) selectedConf.conference = req.body.title;
 		if (selectedConf.acronym !== req.body.acronym) selectedConf.acronym = req.body.acronym;
@@ -80,14 +80,14 @@ router.put('/:id', function(req, res) {
 		selectedConf.pc_members.push.apply(selectedConf.pc_members, req.body['reviewers']);
 
 		save();
-		res.json({ success: true, message: 'Conference correctly updated!' });
+		return res.json({ success: true, message: 'Conference correctly updated!' });
 	});
 });
 
 /* Responds with the papers of the specified conference */
 router.get('/:id/papers', function(req, res) {
 	utils.loadJsonFile(req.app.get('eventsFilePath'), (error, events, save) => {
-		if (error) res.status(error.status).json(error);
+		if (error) return res.status(error.status).json(error);
 		var selectedConf = events.find(elem => elem.acronym === req.params.id);
 		var result = {
 			selectedConf: selectedConf.conference,
@@ -124,24 +124,24 @@ router.get('/:id/papers', function(req, res) {
 				result.papers = asReader;
 			}
 		}
-		res.json(result);
+		return res.json(result);
 	});
 });
 
 /* Reponds with the reviewers available for the specified paper */
 router.get('/:id/:paper/reviewers', function(req, res) {
 	utils.loadJsonFile(req.app.get('eventsFilePath'), (error, events, save) => {
-		if (error) res.status(error.status).json(error);
+		if (error) return res.status(error.status).json(error);
 		var selectedConf = events.find(elem => elem.acronym === req.params.id);
 		if (selectedConf) {
-			if (!selectedConf.pc_members) res.json([]);
+			if (!selectedConf.pc_members) return res.json([]);
 			else {
 				var paper = selectedConf.submissions.find(paper => paper.url === req.params.paper);
 				if (paper) {
 					var reviewers = [];
 					// getting reviewers info
 					utils.loadJsonFile(req.app.get('usersFilePath'), (error, users, save) => {
-						if (error) res.status(error.status).json(error);
+						if (error) return res.status(error.status).json(error);
 						selectedConf.pc_members.forEach(user => {
 							var selUser = users.find(u => u.id === user);
 							if (selUser && paper.authors.indexOf(selUser.id) === -1) {
@@ -158,7 +158,7 @@ router.get('/:id/:paper/reviewers', function(req, res) {
 					});
 
 					reviewers = utils.sortUsersAlphabetically(reviewers);
-					res.json(reviewers);
+					return res.json(reviewers);
 				}
 			}
 		}
@@ -168,7 +168,7 @@ router.get('/:id/:paper/reviewers', function(req, res) {
 /* Assigns the reviewers to the specified paper */
 router.post('/:id/:paper/reviewers', function(req, res) {
 	utils.loadJsonFile(req.app.get('eventsFilePath'), (error, events, save) => {
-		if (error) res.status(error.status).json(error);
+		if (error) return res.status(error.status).json(error);
 		var selectedConf = events.find(conf => conf.acronym === req.params.id);
 		if (selectedConf) {
 			var paper = selectedConf.submissions.find(p => p.url === req.params.paper);
@@ -179,9 +179,9 @@ router.post('/:id/:paper/reviewers', function(req, res) {
 				if (paper.reviewers.length < 2) return res.status(400).send({ message: 'Each paper must have two or more reviewers' });
 
 				save();
-				res.json({ success: true, message: 'Reviewers correctly assigned to paper!' });
-			} else res.status(404).json({ message: 'Paper not found. Please, try again!' });
-		} else res.status(404).json({ message: 'Conference not found. Please, try again!' });
+				return res.json({ success: true, message: 'Reviewers correctly assigned to paper!' });
+			} else return res.status(404).json({ message: 'Paper not found. Please, try again!' });
+		} else return res.status(404).json({ message: 'Conference not found. Please, try again!' });
 	});
 });
 
