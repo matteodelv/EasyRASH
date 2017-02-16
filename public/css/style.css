@@ -552,6 +552,16 @@ body { padding-right: 0 !important }
 	border-radius: 0.2em;
 }
 
+.topnav .nav>li>a{
+	padding: 0px 10px;
+}
+
+nav.topnav .nav.navbar-nav{
+	margin: 0px;
+}
+
+
+
 /* Fix for long strings */
 article * { 
 
