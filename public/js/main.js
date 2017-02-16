@@ -459,6 +459,11 @@ function signUp() {
 }
 
 function logOut() {
+	Object.keys(localStorage).forEach(function(key) {
+		if (key.lastIndexOf('draftAnnotations') !== -1) {
+			localStorage.removeItem(key);
+		}
+	});
 	localStorage.accessToken = null;
 	window.location.replace("/");
 	return false;
