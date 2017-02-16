@@ -128,6 +128,12 @@ a.btn-md:active i {
 
 /* Top navbar */
 
+@media (max-width: 992px) {
+	.topnav {
+		margin-bottom:0;
+	}
+}
+
 .topnav {
 	border: 0;
 }
