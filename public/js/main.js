@@ -135,7 +135,7 @@ function loadCurrentPaperContent() {
 
 			var paper = papers.find(function(paper) {
 				//Remove pound part
-				if (document.location.pathname.replace(/\/$/, '').lastIndexOf(paper.url) !== -1)
+				if (document.location.pathname.replace(/\/$/, '').lastIndexOf(paper.url) !== -1){
 					return paper;
 				}
 			});
