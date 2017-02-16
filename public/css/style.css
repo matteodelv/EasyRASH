@@ -182,7 +182,8 @@ a.btn-md:active i {
 
 .paper-container {
 	min-height: 100vh;
-	padding: 0em 2.5em 2em 2.5em;
+	padding-top:0;
+	padding-bottom:2em;
 }
 
 .page-content{
@@ -195,8 +196,8 @@ a.btn-md:active i {
 
 .paper-container>section, .paper-container>header {
 	position: relative;
-	padding-left: 20px;
-	padding-right: 20px;
+	padding-left: 3.5em;
+	padding-right: 3.5em;
 }
 
 .paper-container>section * {

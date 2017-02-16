@@ -462,7 +462,7 @@ function rasherize() {
                     if (footnote_element.length > 0 && footnote_element.parent("section[role=doc-footnotes]").length > 0) {
                         var count = $(current_id).prevAll("section").length + 1;
                         $(this).after("<sup class=\"fn cgen\">" + (prev_el.hasClass("fn") ? "," : "") +
-                            "<a name=\"fn_pointer_" + current_id.replace("#", "") +
+                            "<a id=\"fn_pointer_" + current_id.replace("#", "") +
                             "\" href=\"" + current_id + "\"" +
                             "\" title=\"" + $(current_id).text().replace(/\s+/g, " ").trim() + "\">" + count + "</a></sup>");
                         $(this).remove()
