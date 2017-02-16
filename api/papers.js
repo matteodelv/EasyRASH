@@ -93,10 +93,12 @@ router.get('/:id/reviews', function(req, res) {
 							review['decision'] = 'pending';
 						} else {
 							reviewsJsonLd.forEach(reviewBlock => {
-								if (reviewBlock.some(elem => elem["@type"] === 'person' && elem["@id"] === reviewerId)){ //This block belongs to the matching reviewer
-									var reviewInfo = reviewBlock.find(elem => elem["@type"] === 'review');
-									var status = reviewInfo["article"]["eval"]["status"];
-									review['decision'] = status === 'pso:accepted-for-publication' ? 'accepted' : 'rejected';
+								if (reviewBlock.constructor === Array){
+									if (reviewBlock.some(elem => elem["@type"] === 'person' && elem["@id"] === reviewerId)){ //This block belongs to the matching reviewer
+										var reviewInfo = reviewBlock.find(elem => elem["@type"] === 'review');
+										var status = reviewInfo["article"]["eval"]["status"];
+										review['decision'] = status === 'pso:accepted-for-publication' ? 'accepted' : 'rejected';
+									}
 								}
 							});
 						}
@@ -119,8 +121,45 @@ router.post('/:id/judge', (req, res) => {
 		if (paper) {
 			if (paper.authors.indexOf(req.jwtPayload.id) !== -1) return res.status(400).json({ message: 'You are not allowed to judge this paper because you are one of its Authors, even though you are Chair!' });
 			
-			paper.status = req.body.decision;
-			save();
+			var decision = {};
+			decision["@context"] = req.app.get('jsonLDcontext');
+			decision["@type"] = "decision";
+			var decisionId = "#decision1";
+			decision["@id"] = decisionId;
+			var article = {};
+			decision["article"] = article;
+			article["@id"] = "";
+			var evaluation = {};
+			evaluation["@id"] = decisionId + "-eval";
+			evaluation["@type"] = "score";
+			evaluation["status"] = req.body.decision === "accepted" ? "pso:accepted-for-publication" : "pso:rejected-for-publication"
+			evaluation["author"] = req.jwtPayload.id;
+			evaluation["date"] = new Date().toISOString();
+			article["eval"] = evaluation;
+
+			var filePath = path.resolve('storage/papers/' + req.params.id + '.html');
+			if (fs.existsSync(filePath)) {
+				fs.readFile(filePath, function(err, html) {
+					if (err) return res.status(500).json({message: 'Something went wrong when trying to post your decision. Please try again.'});
+					var doc = new dom().parseFromString(html.toString());
+					var select = xpath.useNamespaces({ "x": "http://www.w3.org/1999/xhtml" });
+					var jsonLDBlock = doc.createElement('script');
+					jsonLDBlock.setAttribute('type', 'application/ld+json');
+
+					//Append everything
+					var jsonText = doc.createTextNode(JSON.stringify(decision, null, "\t"));
+					jsonLDBlock.appendChild(jsonText);
+					var head = select("//x:head", doc)[0];
+					head.appendChild(jsonLDBlock);
+
+					//Write back to RASH file
+					fs.writeFileSync(filePath, serializer.serializeToString(doc));
+
+					paper.status = req.body.decision;
+					save();
+				});
+			}
+			
 			return res.json({ message: 'Paper decision saved correctly!' });
 		} else return res.status(404).json({ message: 'There was a problem looking for the paper. Please, try again!' });
 	});
@@ -324,6 +363,12 @@ router.post('/:id/review', function(req, res) {
 						if (err) return res.status(500).json({message: 'Something went wrong when trying to post your review. Please try again.'});
 						var doc = new dom().parseFromString(html.toString());
 						var select = xpath.useNamespaces({ "x": "http://www.w3.org/1999/xhtml" });
+
+						var annotationsRegex = new RegExp(/(?:<script)(?:[^.]*)(?:type="application\/ld\+json")(?:>)((\s|\S)*?)(?:<\/script>)/igm);
+						var matches = html.toString().match(annotationsRegex);
+						var matchCount = matches ? matches.length : 0;
+						var reviewId = "#review" + (matchCount + 1);
+
 						Object.keys(req.body.annotations).forEach(a => {
 
 							//Case where the annotation is linked to a pre-existing block id
@@ -335,8 +380,9 @@ router.post('/:id/review', function(req, res) {
 								return xpath.split('/').map(tag => tag === "" ? "" : (tag.indexOf("text()") !== -1 ? tag : "x:" + tag)).join('/');
 							}
 
+
 							var annotationElement = doc.createElement('span');
-							annotationElement.setAttribute('id', req.body.annotations[a].id);
+							annotationElement.setAttribute('id', '#' + req.body.annotations[a].id + '-' + (matchCount+1));
 
 							//Split closing tag
 							console.log('END XPATH: "%s" - OFFSET: %s', query(req.body.annotations[a].endXPath), req.body.annotations[a].endOffset);
@@ -382,10 +428,7 @@ router.post('/:id/review', function(req, res) {
 						var review = {};
 						review["@context"] = req.app.get('jsonLDcontext');
 						review["@type"] = "review";
-						var annotationsRegex = new RegExp(/(?:<script)(?:[^.]*)(?:type="application\/ld\+json")(?:>)((\s|\S)*?)(?:<\/script>)/igm);
-						var matches = html.toString().match(annotationsRegex);
-						var matchCount = matches ? matches.length : 0;
-						var reviewId = "#review" + (matchCount + 1);
+						
 						review["@id"] = reviewId;
 						var article = {};
 						review["article"] = article;
