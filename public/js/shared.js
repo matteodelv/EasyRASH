@@ -24,7 +24,7 @@ function showErrorAlert(selector, message, timed) {
 			$(alertSelector).fadeIn(PANEL_TRANSITION_TIME).slideUp(500, function() {
 				$(this).addClass('hidden'); 
 			});
-		}, 3000);
+		}, 5000);
 	}
 }
 
@@ -37,7 +37,7 @@ function showNotify(message, isError) {
 		icon: icon
 	}, {
 		type: type,
-		delay: 3000,
+		delay: 5000,
 		mouse_over: 'pause',
 		z_index: 1051
 	});

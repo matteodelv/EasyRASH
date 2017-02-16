@@ -453,7 +453,7 @@ router.post('/:id/review', function(req, res) {
 							annotation["@id"] = id;
 							annotationIds.push(id);
 							annotation["text"] = req.body.annotations[a].content;
-							annotation["ref"] = req.body.annotations[a].id; //TODO: This should be done server side
+							annotation["ref"] = '#' + req.body.annotations[a].id + '-' + (matchCount+1); 
 							annotation["author"] = req.jwtPayload.id;
 							annotation["date"] = new Date().toISOString();
 							reviewBlock.push(annotation);
