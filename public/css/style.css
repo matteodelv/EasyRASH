@@ -182,12 +182,6 @@ a.btn-md:active i {
 
 .paper-container {
 	min-height: 100vh;
-<<<<<<< Updated upstream
-	padding-top:0;
-	padding-bottom:2em;
-=======
-	padding: 0% 4% 2% 4%;
->>>>>>> Stashed changes
 }
 
 .page-content{
@@ -200,8 +194,14 @@ a.btn-md:active i {
 
 .paper-container>section, .paper-container>header {
 	position: relative;
-	padding-left: 3.5em;
-	padding-right: 3.5em;
+	padding: 0em 3.5em 0em 3.5em;
+}
+
+@media only screen and (max-width: 576px) {
+    .paper-container>section, .paper-container>header {
+	position: relative;
+	padding: 0em 2em 0em 2em;
+}
 }
 
 .paper-container>section * {
@@ -546,7 +546,8 @@ body { padding-right: 0 !important }
 	border-radius: 0.2em;
 }
 
-* {
+/* Fix for long strings */
+article * { 
 
   /* These are technically the same, but use both */
   overflow-wrap: break-word;
