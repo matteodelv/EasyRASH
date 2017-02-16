@@ -563,7 +563,7 @@ nav.topnav .nav.navbar-nav{
 
 
 /* Fix for long strings */
-article * { 
+article a, article li { 
 
   /* These are technically the same, but use both */
   overflow-wrap: break-word;
