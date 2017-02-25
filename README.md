@@ -23,5 +23,5 @@ __NB:__ *IP address* and *port* used by the web application can be changed in `a
 __NB:__ *Users email verification service* has to be set up accordingly to your email settings. To do that, please edit `nodemailer.createTransport()` located in `api/authentication.js`
 
 ### COPYRIGHT
-Our project is released under MIT license (please refear to LICENSE).  
+Our project is released under MIT license (please refer to LICENSE).  
 Copyright on example papers provided to create EasyRASH belongs to their respective authors.
