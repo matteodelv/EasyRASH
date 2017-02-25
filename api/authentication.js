@@ -9,13 +9,14 @@ var nodemailer = require('nodemailer');
 var utils = require('./utils.js');
 
 //Object that handles the email service
+// Fill in with your email service config (more info on nodemailer support)
 var transporter = nodemailer.createTransport({
-	host: 'mail.matteodv.me',
+	host: '',
 	port: 25,
 	secure: false,
 	auth: {
-		user: "easyrashservice@matteodv.me",
-		pass: "#lickahorse19"
+		user: '',
+		pass: ''
 	},
 	tls: {
 		rejectUnauthorized:false
