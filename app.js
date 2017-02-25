@@ -1,3 +1,11 @@
+/*
+ *	APP.JS
+ *
+ *	Authors:
+ *	Matteo Del Vecchio
+ *	Filippo Vigani
+ */
+
 'use strict';
 
 var express = require('express');

@@ -1,3 +1,11 @@
+/*
+ *	UTILS.JS
+ *
+ *	Authors:
+ *	Matteo Del Vecchio
+ *	Filippo Vigani
+ */
+
 'use strict';
 /* 
 	Helper module for recurrent server side tasks

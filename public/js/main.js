@@ -1,3 +1,11 @@
+/*
+ *	MAIN.JS
+ *
+ *	Authors:
+ *	Matteo Del Vecchio
+ *	Filippo Vigani
+ */
+
 //JQuery animation of an element
 $.fn.extend({
 	animateCss: function(animationName) {

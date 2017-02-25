@@ -1,3 +1,11 @@
+/*
+ *	AUTHENTICATION.JS
+ *
+ *	Authors:
+ *	Matteo Del Vecchio
+ *	Filippo Vigani
+ */
+
 'use strict';
 
 var router = require('express').Router();

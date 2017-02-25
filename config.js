@@ -1,3 +1,11 @@
+/*
+ *	CONFIG.JS
+ *
+ *	Authors:
+ *	Matteo Del Vecchio
+ *	Filippo Vigani
+ */
+
 module.exports = {
     'secret': 'undeltaplanovolasopraunpratorosso',
     'usersFilePath': 'storage/users.json',

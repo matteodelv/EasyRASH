@@ -1,3 +1,11 @@
+/*
+ *	CONFERENCES.JS
+ *
+ *	Authors:
+ *	Matteo Del Vecchio
+ *	Filippo Vigani
+ */
+
 var $pageContentWrapper;
 
 $(document).ready(function() {

@@ -10,7 +10,11 @@
     "type": "git",
     "url": "git+https://gitlab.com/Veega/easyrash.git"
   },
-  "author": "",
+  "author": "Filippo Vigani <pippoviga1995@gmail.com>",
+  "contributors": [{
+    "name": "Matteo Del Vecchio",
+    "email": "matteo@matthewlabs.com"
+  }],
   "license": "ISC",
   "homepage": "https://gitlab.com/Veega/easyrash/",
   "dependencies": {

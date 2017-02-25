@@ -1,3 +1,11 @@
+/*
+ *  SIDEBAR.CSS
+ *
+ *  Authors:
+ *  Matteo Del Vecchio
+ *  Filippo Vigani
+ */
+
 @media (min-width: 992px) {
     .sidebar {
         position: fixed;

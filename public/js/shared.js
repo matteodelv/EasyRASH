@@ -1,4 +1,12 @@
 /*
+ *	SHARED.JS
+ *
+ *	Authors:
+ *	Matteo Del Vecchio
+ *	Filippo Vigani
+ */
+
+/*
 	Shared support functions
 */
 

@@ -1,3 +1,11 @@
+/*
+ *	ANNOTATIONS.JS
+ *
+ *	Authors:
+ *	Matteo Del Vecchio
+ *	Filippo Vigani
+ */
+
 var currentSelection;
 var $addAnnotationPopup = $('<button id="add-annotation-btn" class="add-annotation-btn no_select hidden"><i class="fa fa-plus" aria-hidden="true"></i></button>');
 var $addBlockAnnotationPopup = $('<button id="add-block-annotation-btn" class="add-block-annotation-btn no_select"><i class="fa fa-plus" aria-hidden="true"></i></button>');
